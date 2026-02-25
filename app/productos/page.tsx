@@ -9,7 +9,12 @@ export const metadata = {
 }
 
 export default async function ProductosPage() {
-  const products: SanityProduct[] = await client.fetch(allProductsQuery)
+  let products: SanityProduct[] = []
+  try {
+    products = await client.fetch(allProductsQuery)
+  } catch {
+    products = []
+  }
 
   return (
     <>

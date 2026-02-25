@@ -44,7 +44,12 @@ const purposes = [
 ]
 
 export default async function Home() {
-  const products: SanityProduct[] = await client.fetch(productsQuery)
+  let products: SanityProduct[] = []
+  try {
+    products = await client.fetch(productsQuery)
+  } catch {
+    products = []
+  }
 
   return (
     <>
