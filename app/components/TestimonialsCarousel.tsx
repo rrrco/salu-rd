@@ -5,19 +5,19 @@ import { useState, useEffect, useRef } from 'react'
 const testimonials = [
   {
     name: 'Dr. Valentina Ruiz',
-    location: 'Buenos Aires',
+    location: 'República Dominicana',
     avatar: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=160&q=80',
     quote: '"SALU ha sido nuestro proveedor de cabecera durante más de tres años. Su gama de productos es completa, los precios son competitivos y el equipo técnico siempre nos ayuda a tomar las mejores decisiones para nuestros pacientes. La entrega es rápida y confiable — exactamente lo que una clínica ocupada necesita."',
   },
   {
     name: 'Carlos Medina',
-    location: 'Bogotá',
+    location: 'República Dominicana',
     avatar: 'https://images.unsplash.com/photo-1558788353-f76d92427f16?w=160&q=80',
     quote: '"Como distribuidor veterinario, la disponibilidad de productos y la consistencia de calidad lo son todo. SALU cumple en ambos aspectos cada vez. Su línea antiparasitaria y catálogo de vacunas son los mejores del mercado latinoamericano. Una operación verdaderamente profesional."',
   },
   {
     name: 'Dra. Ana Lima',
-    location: 'Santiago',
+    location: 'República Dominicana',
     avatar: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=160&q=80',
     quote: '"Cambiamos nuestro hospital a la línea de antibióticos y cuidado de heridas de SALU el año pasado y los resultados clínicos han sido excelentes. La relación calidad-precio es sobresaliente y su equipo de atención al cliente responde en menos de una hora. Altamente recomendable para cualquier práctica veterinaria."',
   },

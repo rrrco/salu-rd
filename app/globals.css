@@ -83,7 +83,8 @@ button { cursor: pointer; border: none; background: none; }
 /* ============================================================
    CONTACT
 ============================================================ */
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: stretch; }
+.contact-left { display: flex; flex-direction: column; justify-content: center; }
 .cinfo {
   display: flex; align-items: center; gap: 18px;
   padding: 20px 0;
@@ -121,18 +122,67 @@ button { cursor: pointer; border: none; background: none; }
   border: 2px solid transparent;
   transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   display: flex; flex-direction: column;
+  min-height: 500px;
 }
 .prod-card:hover { border-color: #2AACB8; }
 .prod-img-area {
-  height: 150px;
+  height: 380px;
+  min-height: 380px;
   background: linear-gradient(135deg, #EBF8F9 0%, #C2EDF1 100%);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
+  position: relative;
+}
+.prod-img-area::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.10);
+  pointer-events: none;
 }
 .prod-img-area img { width: 100%; height: 100%; object-fit: cover; }
 .prod-body { padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
 .prod-name { font-size: 13px; font-weight: 500; color: #222222; line-height: 1.4; }
 .prod-body .btn { width: 100%; }
+
+/* ============================================================
+   PRODUCTS — 3-COL (landing page)
+============================================================ */
+.prod-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 48px; }
+
+/* ============================================================
+   SEARCH BAR
+============================================================ */
+.search-bar {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+.search-bar input {
+  font-family: inherit;
+  font-size: 14px;
+  color: #3D3D3D;
+  background: #fff;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 0;
+  padding: 12px 16px 12px 44px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+.search-bar input:focus { border-color: #2AACB8; }
+.search-bar input::placeholder { color: #999; }
+.search-bar-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
 
 /* ============================================================
    PURPOSE
@@ -218,6 +268,7 @@ button { cursor: pointer; border: none; background: none; }
 ============================================================ */
 @media (max-width: 1100px) {
   .prod-grid { grid-template-columns: repeat(2, 1fr); }
+  .prod-grid-3 { grid-template-columns: repeat(2, 1fr); }
   .contact-grid { grid-template-columns: 1fr; gap: 44px; }
   .animal-grid {
     grid-template-columns: 1fr;
@@ -259,6 +310,7 @@ button { cursor: pointer; border: none; background: none; }
   .stats-bar { width: calc(100% - 30px); margin: 16px auto 0; }
 
   .prod-grid { grid-template-columns: 1fr; }
+  .prod-grid-3 { grid-template-columns: 1fr; }
   .car-slide { padding: 0 8px; }
   .car-btn { width: 36px; height: 36px; }
   .tcard { padding: 30px 20px; }
