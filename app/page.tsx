@@ -141,7 +141,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '48px' }}>
+          <div className="prod-grid-3">
             {products.map((p) => (
               <article key={p._id} className="prod-card" style={{ minHeight: '500px' }}>
                 <div className="prod-img-area" style={{ height: '380px', minHeight: '380px' }}>
