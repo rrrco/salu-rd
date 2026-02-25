@@ -1,105 +1,91 @@
 import TestimonialsCarousel from './components/TestimonialsCarousel'
 import ContactForm from './components/ContactForm'
+import { client } from './lib/sanity'
+import { productsQuery } from './lib/queries'
 
-const products = [
-  {
-    name: 'Antibióticos de Amplio Espectro',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Antibiotic capsule" role="img">
-        <ellipse cx="36" cy="36" rx="28" ry="14" fill="none" />
-        <path d="M8,36 A28,14 0 0,1 64,36" fill="rgba(42,172,184,0.15)" stroke="#2AACB8" strokeWidth="3" />
-        <line x1="36" y1="22" x2="36" y2="50" />
-        <path d="M8,36 A28,14 0 0,0 64,36 A28,14 0 0,0 8,36 Z" fill="none" />
-        <line x1="22" y1="30" x2="22" y2="42" opacity="0.4" />
-        <line x1="50" y1="30" x2="50" y2="42" opacity="0.4" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Tratamientos Antiparasitarios',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Shield with checkmark" role="img">
-        <path d="M36,8 L60,18 L60,36 C60,50 48,62 36,66 C24,62 12,50 12,36 L12,18 Z" />
-        <polyline points="27,37 33,43 47,29" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Vacunas Esenciales y No Esenciales',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Syringe" role="img">
-        <rect x="20" y="26" width="30" height="18" rx="0" />
-        <line x1="14" y1="35" x2="20" y2="35" />
-        <rect x="10" y="30" width="4" height="10" rx="0" strokeWidth="2.5" />
-        <line x1="50" y1="35" x2="62" y2="35" />
-        <line x1="28" y1="26" x2="28" y2="44" opacity="0.4" />
-        <line x1="36" y1="26" x2="36" y2="44" opacity="0.4" />
-        <line x1="44" y1="26" x2="44" y2="44" opacity="0.4" />
-        <rect x="20" y="30" width="16" height="12" fill="rgba(42,172,184,0.2)" stroke="none" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Suplementos Nutricionales',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Pill bottle" role="img">
-        <rect x="22" y="26" width="28" height="36" rx="2" />
-        <rect x="26" y="18" width="20" height="10" rx="2" />
-        <line x1="36" y1="34" x2="36" y2="46" />
-        <line x1="30" y1="40" x2="42" y2="40" />
-        <line x1="26" y1="23" x2="46" y2="23" opacity="0.5" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Cuidado de Heridas y Antisépticos',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-label="Medical cross" role="img">
-        <rect x="28" y="14" width="16" height="44" rx="3" />
-        <rect x="14" y="28" width="44" height="16" rx="3" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Sedantes y Anestésicos',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="IV drip bag" role="img">
-        <rect x="22" y="10" width="28" height="36" rx="8" />
-        <line x1="22" y1="32" x2="50" y2="32" opacity="0.5" />
-        <rect x="22" y="32" width="28" height="14" rx="0" fill="rgba(42,172,184,0.15)" stroke="none" />
-        <circle cx="36" cy="10" r="3" fill="none" />
-        <line x1="36" y1="46" x2="36" y2="58" />
-        <rect x="31" y="55" width="10" height="8" rx="2" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Antiinflamatorios y Analgésicos',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Leaf" role="img">
-        <path d="M36,62 C36,62 12,48 12,28 C12,18 22,10 36,10 C50,10 60,18 60,28 C60,48 36,62 36,62 Z" />
-        <line x1="36" y1="10" x2="36" y2="62" />
-        <line x1="36" y1="26" x2="22" y2="38" opacity="0.5" />
-        <line x1="36" y1="26" x2="50" y2="38" opacity="0.5" />
-        <line x1="36" y1="38" x2="24" y2="48" opacity="0.35" />
-        <line x1="36" y1="38" x2="48" y2="48" opacity="0.35" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Soluciones Oftálmicas y Óticas',
-    icon: (
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Eye" role="img">
-        <path d="M10,36 C10,36 20,18 36,18 C52,18 62,36 62,36 C62,36 52,54 36,54 C20,54 10,36 10,36 Z" />
-        <circle cx="36" cy="36" r="10" />
-        <circle cx="36" cy="36" r="4" fill="rgba(42,172,184,0.2)" />
-        <line x1="36" y1="18" x2="36" y2="14" opacity="0.5" />
-        <line x1="28" y1="20" x2="26" y2="16" opacity="0.35" />
-        <line x1="44" y1="20" x2="46" y2="16" opacity="0.35" />
-      </svg>
-    ),
-  },
-]
+type SanityProduct = {
+  _id: string
+  name: string
+  slug?: { current: string }
+  iconKey?: string
+  imageUrl?: string
+}
+
+const ICONS: Record<string, React.JSX.Element> = {
+  antibiotics: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Antibiotic capsule" role="img">
+      <ellipse cx="36" cy="36" rx="28" ry="14" fill="none" />
+      <path d="M8,36 A28,14 0 0,1 64,36" fill="rgba(42,172,184,0.15)" stroke="#2AACB8" strokeWidth="3" />
+      <line x1="36" y1="22" x2="36" y2="50" />
+      <path d="M8,36 A28,14 0 0,0 64,36 A28,14 0 0,0 8,36 Z" fill="none" />
+      <line x1="22" y1="30" x2="22" y2="42" opacity="0.4" />
+      <line x1="50" y1="30" x2="50" y2="42" opacity="0.4" />
+    </svg>
+  ),
+  antiparasitic: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Shield with checkmark" role="img">
+      <path d="M36,8 L60,18 L60,36 C60,50 48,62 36,66 C24,62 12,50 12,36 L12,18 Z" />
+      <polyline points="27,37 33,43 47,29" />
+    </svg>
+  ),
+  vaccines: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Syringe" role="img">
+      <rect x="20" y="26" width="30" height="18" rx="0" />
+      <line x1="14" y1="35" x2="20" y2="35" />
+      <rect x="10" y="30" width="4" height="10" rx="0" strokeWidth="2.5" />
+      <line x1="50" y1="35" x2="62" y2="35" />
+      <line x1="28" y1="26" x2="28" y2="44" opacity="0.4" />
+      <line x1="36" y1="26" x2="36" y2="44" opacity="0.4" />
+      <line x1="44" y1="26" x2="44" y2="44" opacity="0.4" />
+      <rect x="20" y="30" width="16" height="12" fill="rgba(42,172,184,0.2)" stroke="none" />
+    </svg>
+  ),
+  supplements: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Pill bottle" role="img">
+      <rect x="22" y="26" width="28" height="36" rx="2" />
+      <rect x="26" y="18" width="20" height="10" rx="2" />
+      <line x1="36" y1="34" x2="36" y2="46" />
+      <line x1="30" y1="40" x2="42" y2="40" />
+      <line x1="26" y1="23" x2="46" y2="23" opacity="0.5" />
+    </svg>
+  ),
+  wounds: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-label="Medical cross" role="img">
+      <rect x="28" y="14" width="16" height="44" rx="3" />
+      <rect x="14" y="28" width="44" height="16" rx="3" />
+    </svg>
+  ),
+  sedatives: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="IV drip bag" role="img">
+      <rect x="22" y="10" width="28" height="36" rx="8" />
+      <line x1="22" y1="32" x2="50" y2="32" opacity="0.5" />
+      <rect x="22" y="32" width="28" height="14" rx="0" fill="rgba(42,172,184,0.15)" stroke="none" />
+      <circle cx="36" cy="10" r="3" fill="none" />
+      <line x1="36" y1="46" x2="36" y2="58" />
+      <rect x="31" y="55" width="10" height="8" rx="2" />
+    </svg>
+  ),
+  antiinflammatory: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Leaf" role="img">
+      <path d="M36,62 C36,62 12,48 12,28 C12,18 22,10 36,10 C50,10 60,18 60,28 C60,48 36,62 36,62 Z" />
+      <line x1="36" y1="10" x2="36" y2="62" />
+      <line x1="36" y1="26" x2="22" y2="38" opacity="0.5" />
+      <line x1="36" y1="26" x2="50" y2="38" opacity="0.5" />
+      <line x1="36" y1="38" x2="24" y2="48" opacity="0.35" />
+      <line x1="36" y1="38" x2="48" y2="48" opacity="0.35" />
+    </svg>
+  ),
+  ophthalmic: (
+    <svg width="56" height="56" viewBox="0 0 72 72" fill="none" stroke="#2AACB8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Eye" role="img">
+      <path d="M10,36 C10,36 20,18 36,18 C52,18 62,36 62,36 C62,36 52,54 36,54 C20,54 10,36 10,36 Z" />
+      <circle cx="36" cy="36" r="10" />
+      <circle cx="36" cy="36" r="4" fill="rgba(42,172,184,0.2)" />
+      <line x1="36" y1="18" x2="36" y2="14" opacity="0.5" />
+      <line x1="28" y1="20" x2="26" y2="16" opacity="0.35" />
+      <line x1="44" y1="20" x2="46" y2="16" opacity="0.35" />
+    </svg>
+  ),
+}
 
 const purposes = [
   {
@@ -140,7 +126,9 @@ const purposes = [
   },
 ]
 
-export default function Home() {
+export default async function Home() {
+  const products: SanityProduct[] = await client.fetch(productsQuery)
+
   return (
     <>
       {/* ── 1. HERO ── */}
@@ -154,14 +142,14 @@ export default function Home() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          padding: '60px 20px 96px',
+          padding: '60px 20px 72px',
         }}
       >
         <div className="hero-logo" style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '28px' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/salu-img.png" width={80} height={90} alt="SALU animal logo" style={{ filter: 'brightness(0) invert(1)', flexShrink: 0 }} />
           <div className="logo-wordmark" style={{ textAlign: 'left' }}>
-            <div className="logo-name" style={{ fontSize: '52px', fontWeight: 700, color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>SALU</div>
+            <div className="logo-name" style={{ fontSize: '40px', fontWeight: 700, color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>SALU</div>
             <div className="logo-sub" style={{ fontSize: '15px', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.82)', marginTop: '4px', letterSpacing: '0.3px' }}>División Veterinaria</div>
           </div>
         </div>
@@ -169,7 +157,7 @@ export default function Home() {
         <p className="hero-sub" style={{ fontSize: '15px', fontWeight: 500, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)', marginBottom: '16px' }}>
           Tu socio de confianza en salud animal
         </p>
-        <h1 className="hero-h1" style={{ fontSize: '52px', fontWeight: 700, fontStyle: 'italic', color: '#fff', lineHeight: 1.14, maxWidth: '860px', marginBottom: '22px', letterSpacing: '-0.5px' }}>
+        <h1 className="hero-h1" style={{ fontSize: '36px', fontWeight: 700, fontStyle: 'italic', color: '#fff', lineHeight: 1.14, maxWidth: '860px', marginBottom: '22px', letterSpacing: '-0.5px' }}>
           Productos y medicamentos veterinarios premium para cada práctica
         </h1>
         <p className="hero-desc" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.88)', maxWidth: '720px', lineHeight: '1.75', marginBottom: '36px' }}>
@@ -193,12 +181,12 @@ export default function Home() {
       </div>
 
       {/* ── 2. CONTACT ── */}
-      <section id="contact" style={{ background: '#fff', padding: '100px 30px' }}>
+      <section id="contact" style={{ background: '#fff', padding: '72px 30px' }}>
         <div className="wrap">
           <div className="contact-grid">
             {/* Left: Info */}
             <div className="contact-left">
-              <h2 style={{ fontSize: '32px', fontWeight: 700, color: '#222222', marginBottom: '36px' }}>Respuesta rápida</h2>
+              <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#222222', marginBottom: '36px' }}>Respuesta rápida</h2>
 
               {[
                 {
@@ -227,7 +215,7 @@ export default function Home() {
       </section>
 
       {/* ── 3. PRODUCTS ── */}
-      <section id="products" style={{ background: '#0A6973', padding: '80px 30px' }}>
+      <section id="products" style={{ background: '#0A6973', padding: '60px 30px' }}>
         <div className="wrap">
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
@@ -237,9 +225,16 @@ export default function Home() {
           </div>
 
           <div className="prod-grid">
-            {products.map((p, i) => (
-              <article key={i} className="prod-card">
-                <div className="prod-img-area">{p.icon}</div>
+            {products.map((p) => (
+              <article key={p._id} className="prod-card">
+                <div className="prod-img-area">
+                  {p.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.imageUrl} alt={p.name} />
+                  ) : (
+                    ICONS[p.iconKey ?? ''] ?? ICONS['antibiotics']
+                  )}
+                </div>
                 <div className="prod-body">
                   <div className="prod-name">{p.name}</div>
                   <a href="#contact" className="btn">COTIZACIÓN GRATIS</a>
@@ -255,7 +250,7 @@ export default function Home() {
       </section>
 
       {/* ── 4. PURPOSE ── */}
-      <section id="purpose" style={{ background: '#fff', padding: '100px 30px' }}>
+      <section id="purpose" style={{ background: '#fff', padding: '72px 30px' }}>
         <div className="wrap">
           <h2 className="sec-title">Nuestro Propósito</h2>
           <div className="sec-divider" />
@@ -278,20 +273,9 @@ export default function Home() {
 
       {/* ── 5. ANIMAL ── */}
       <section id="animal" style={{ background: '#EBF8F9', overflow: 'hidden' }}>
-        <div
-          className="animal-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            alignItems: 'flex-end',
-            padding: '80px 30px 0',
-            maxWidth: '1290px',
-            margin: '0 auto',
-            gap: '40px',
-          }}
-        >
-          <div className="animal-left" style={{ paddingBottom: '80px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#222222', lineHeight: 1.25, marginBottom: '20px' }}>
+        <div className="animal-grid">
+          <div className="animal-left" style={{ paddingBottom: '72px' }}>
+            <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#222222', lineHeight: 1.25, marginBottom: '20px' }}>
               Soluciones completas para la salud animal
             </h2>
             <p style={{ fontSize: '14px', color: '#3D3D3D', lineHeight: '1.78', marginBottom: '30px' }}>
@@ -307,14 +291,13 @@ export default function Home() {
               alt="Healthy dog — SALU veterinary solutions"
               width={520}
               loading="lazy"
-              style={{ maxWidth: '520px', marginTop: '-30px', display: 'block', marginLeft: 'auto' }}
             />
           </div>
         </div>
       </section>
 
       {/* ── 6. TESTIMONIALS ── */}
-      <section id="testimonials" style={{ background: '#fff', padding: '100px 30px' }}>
+      <section id="testimonials" style={{ background: '#fff', padding: '72px 30px' }}>
         <div className="wrap">
           <h2 className="sec-title">Lo que dicen nuestros socios veterinarios</h2>
           <div className="sec-divider" />
@@ -323,13 +306,13 @@ export default function Home() {
       </section>
 
       {/* ── 7. CTA ── */}
-      <section id="cta" style={{ background: 'linear-gradient(135deg, #062428 0%, #0A4D55 50%, #0E7A86 100%)', padding: '100px 30px' }}>
+      <section id="cta" style={{ background: 'linear-gradient(135deg, #062428 0%, #0A4D55 50%, #0E7A86 100%)', padding: '72px 30px' }}>
         <div style={{ maxWidth: '1290px', margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ marginBottom: '28px' }} aria-hidden="true">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/salu-img.png" width={60} height={68} alt="" style={{ filter: 'brightness(0) invert(1)', opacity: 0.55 }} />
           </div>
-          <h2 className="cta-inner" style={{ fontSize: '40px', fontWeight: 700, color: '#fff', maxWidth: '660px', lineHeight: 1.25, marginBottom: '36px', textAlign: 'center' }}>
+          <h2 className="cta-inner" style={{ fontSize: '30px', fontWeight: 700, color: '#fff', maxWidth: '660px', lineHeight: 1.25, marginBottom: '36px', textAlign: 'center' }}>
             ¿Listo para abastecer tu práctica con productos veterinarios premium?<br />Asóciate con SALU hoy.
           </h2>
           <a href="#contact" className="btn btn-lg">OBTENER COTIZACIÓN</a>
