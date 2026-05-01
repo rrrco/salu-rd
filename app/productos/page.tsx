@@ -3,6 +3,8 @@ import { allProductsQuery } from '../lib/queries'
 import { SanityProduct } from '../lib/icons'
 import CatalogClient from '../components/CatalogClient'
 
+export const revalidate = 60
+
 export const metadata = {
   title: 'Catálogo de Productos | SALU División Veterinaria',
   description: 'Explora el catálogo completo de productos farmacéuticos, biológicos y consumibles veterinarios de SALU.',

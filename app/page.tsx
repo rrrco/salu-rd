@@ -4,6 +4,8 @@ import { client } from './lib/sanity'
 import { productsQuery } from './lib/queries'
 import { ICONS, SanityProduct } from './lib/icons'
 
+export const revalidate = 60
+
 const purposes = [
   {
     title: 'Satisfacción del Cliente',
