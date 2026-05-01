@@ -5,7 +5,7 @@
 - 500+ clientes atendidos
 - BORRAR PAISES
 
-- salusrldv@gmail.com
+- salusrl.dv@gmail.com
 - +1 809 442 0017
 
 - importancia de satisfaccion del cliente 
