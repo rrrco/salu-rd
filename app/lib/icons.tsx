@@ -2,6 +2,7 @@ export type SanityProduct = {
   _id: string
   name: string
   slug?: { current: string }
+  description?: string
   iconKey?: string
   imageUrl?: string
 }

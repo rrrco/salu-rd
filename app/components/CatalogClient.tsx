@@ -50,6 +50,7 @@ export default function CatalogClient({ products }: { products: SanityProduct[] 
               </div>
               <div className="prod-body">
                 <div className="prod-name">{p.name}</div>
+                {p.description && <p className="prod-desc">{p.description}</p>}
                 <a href="/#contact" className="btn">COTIZACIÓN GRATIS</a>
               </div>
             </article>
