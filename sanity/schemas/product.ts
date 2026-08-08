@@ -17,6 +17,12 @@ export default defineType({
       options: { source: 'name' },
     }),
     defineField({
+      name: 'description',
+      title: 'Descripción',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
       name: 'iconKey',
       title: 'Ícono',
       type: 'string',

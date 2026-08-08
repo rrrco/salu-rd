@@ -161,6 +161,7 @@ export default async function Home() {
                 </div>
                 <div className="prod-body">
                   <div className="prod-name">{p.name}</div>
+                  {p.description && <p className="prod-desc">{p.description}</p>}
                   <a href="#contact" className="btn">COTIZACIÓN GRATIS</a>
                 </div>
               </article>
