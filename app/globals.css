@@ -454,7 +454,14 @@
   mix-blend-mode: multiply;
 }
 
-/* Copy over a photo always sits on a scrim, never on the raw image. */
+/* Copy over a photo always sits on a scrim, never on the raw image.
+
+   Mobile first. Below `sm` the band is 4:5, so the photo is a narrow centre
+   crop and the copy runs the full width of the gutter. A left-weighted
+   horizontal gradient breaks down there: squeezed into ~390px it leaves the end
+   of every line sitting on nearly-clear photo. Small screens get a near-flat
+   wash instead, eased off at the edges so it still reads as a photograph and
+   not a grey box. */
 .photo-scrim::before {
   content: "";
   position: absolute;
@@ -462,12 +469,30 @@
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(
-    100deg,
-    rgb(6 36 40 / 0.88) 0%,
-    rgb(6 36 40 / 0.72) 34%,
-    rgb(6 36 40 / 0.28) 68%,
-    rgb(6 36 40 / 0.15) 100%
+    180deg,
+    rgb(6 36 40 / 0.66) 0%,
+    rgb(6 36 40 / 0.86) 34%,
+    rgb(6 36 40 / 0.86) 68%,
+    rgb(6 36 40 / 0.66) 100%
   );
+}
+
+/* From `sm` the band opens to 16:9 and then 21:9, and the copy is capped at
+   46ch against the left edge. Back to the left-weighted gradient, but heavier
+   under the copy than before: 0.88 over a busy herd left the lead paragraph
+   only just legible. The falloff is pulled earlier so the extra weight is spent
+   behind the text rather than washing across the vet on the right. */
+@media (width >= 40rem) {
+  .photo-scrim::before {
+    background: linear-gradient(
+      100deg,
+      rgb(6 36 40 / 0.94) 0%,
+      rgb(6 36 40 / 0.9) 30%,
+      rgb(6 36 40 / 0.52) 54%,
+      rgb(6 36 40 / 0.2) 76%,
+      rgb(6 36 40 / 0.12) 100%
+    );
+  }
 }
 
 /* ============================================================================
