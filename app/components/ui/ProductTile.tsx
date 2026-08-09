@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { ButtonLink } from '@/components/ui/button'
 import { WhatsappLogo } from '@phosphor-icons/react/ssr'
 import { CategoryIcon } from '../../lib/icons'
@@ -7,14 +8,45 @@ import { urlFor, blurOf } from '../../lib/image'
 import type { SanityProduct } from '../../lib/types'
 
 /**
+ * Upgrade hover and touchstart to a full prefetch.
+ *
+ * The overlay is a dynamic route, so Next's default prefetch stops at the
+ * nearest `loading.js` and this route has none: nothing useful arrives before
+ * the click. Hovering is the cheapest signal of intent there is, so the fetch
+ * starts while the pointer is still travelling and the panel is already in
+ * memory by the time the button goes down. Requires
+ * `experimental.dynamicOnHover` in next.config.ts; both halves are needed.
+ *
+ * Spread rather than written inline because `next/link` is aliased to the App
+ * Router implementation at build time, which supports this prop, while the
+ * types it ships are the Pages Router ones, which do not declare it. Verified
+ * against next@16.1.6 (`create-compiler-aliases.js` maps `link` to
+ * `next/dist/client/app-dir/link`). Recheck this on a major Next upgrade: if
+ * the prop is dropped, the tiles quietly stop prefetching.
+ *
+ * Prefetching is production-only. In `next dev` this does nothing, so measure
+ * against `next build && next start`.
+ */
+const PREFETCH_ON_INTENT = { unstable_dynamicOnHover: true }
+
+/**
  * Tier 2 imagery: uniformity.
  *
  * The available product photography has backgrounds and mixed lighting, so the
- * tile does the normalising. Fixed 1:1 frame, `object-cover`, one gradient
- * ground. No cutouts required.
+ * tile does the normalising. Fixed 4:5 frame, `object-contain`, white ground.
+ * No cutouts required.
  *
  * A product with no image falls through to its `iconKey` icon, so the grid can
  * never break, whatever the CMS contains.
+ *
+ * The whole tile is a link to the product, via a stretched pseudo-element on
+ * the heading rather than an anchor wrapped around the card. One link, one
+ * accessible name (the product name), a card-sized hit target, and the
+ * WhatsApp button stays a sibling instead of an anchor nested inside another.
+ *
+ * A product with no slug has nowhere to go, so it loses the link *and* the
+ * hover affordances. A border that lifts to accent on a card that cannot be
+ * clicked promises something that never happens (DESIGN.md 9).
  */
 export function ProductTile({
   product,
@@ -27,6 +59,7 @@ export function ProductTile({
 }) {
   const hasImage = Boolean(product.image?.asset)
   const blur = blurOf(product.image)
+  const href = product.slug?.current ? `/productos/${product.slug.current}` : null
 
   return (
     <article
@@ -34,11 +67,14 @@ export function ProductTile({
         // `on-light` keeps the tile a white card even inside a dark band, which
         // is the composition the brand has always used and avoids the tile
         // splitting into a light image half and a dark text half.
-        'on-light group flex h-full flex-col overflow-hidden rounded-lg',
+        'on-light group relative flex h-full flex-col overflow-hidden rounded-lg',
         'border border-border bg-surface',
-        'transition-[border-color,box-shadow] duration-[180ms] ease-[var(--ease-out)]',
-        'hover-fine:border-accent',
-        'hover-fine:shadow-md',
+        'transition-[border-color,box-shadow,transform] duration-[180ms] ease-[var(--ease-out)]',
+        href ? 'hover-fine:border-accent hover-fine:shadow-md' : '',
+        // Press feedback on the card itself, scoped to the tile link so tapping
+        // the WhatsApp button does not shrink the whole card underneath it.
+        href ? 'has-[[data-tile-link]:active]:scale-[0.99] has-[[data-tile-link]:active]:duration-[100ms]' : '',
+        'motion-reduce:transition-[border-color,box-shadow]',
       ].join(' ')}
     >
       {/* A 4:5 frame, matching the source shots (941x1136). The previous square
@@ -65,7 +101,7 @@ export function ProductTile({
             className={[
               'object-contain',
               'transition-transform duration-[420ms] ease-[var(--ease-out)]',
-              'hover-fine:group-hover:scale-[1.03]',
+              href ? 'hover-fine:group-hover:scale-[1.03]' : '',
               'motion-reduce:transform-none',
             ].join(' ')}
           />
@@ -77,15 +113,37 @@ export function ProductTile({
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <h3 className="text-h3 font-medium text-fg">{product.name}</h3>
+        <h3 className="text-h3 font-medium text-fg">
+          {href ? (
+            <Link
+              href={href}
+              data-tile-link
+              {...PREFETCH_ON_INTENT}
+              className={[
+                'after:absolute after:inset-0 after:content-[""]',
+                'transition-colors duration-[180ms] ease-[var(--ease-out)]',
+                'hover-fine:text-accent',
+                // The ring belongs on the stretched pseudo-element, so keyboard
+                // focus outlines the whole card rather than the heading text.
+                'focus-visible:outline-none',
+                'focus-visible:after:rounded-lg focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-[var(--color-focus)]',
+              ].join(' ')}
+            >
+              {product.name}
+            </Link>
+          ) : (
+            product.name
+          )}
+        </h3>
         {product.description && (
           <p className="line-clamp-3 text-sm text-fg-muted">{product.description}</p>
         )}
-        {/* Primary, and prefilled with this product's name: the chat opens
-            already saying what the buyer was looking at. */}
+        {/* Sits above the stretched link so it stays its own target, and it is
+            prefilled with this product's name: the chat opens already saying
+            what the buyer was looking at. */}
         <ButtonLink
           href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
-          className="mt-auto w-full"
+          className="relative z-10 mt-auto w-full"
         >
           <WhatsappLogo size={16} aria-hidden="true" />
           Cotizar

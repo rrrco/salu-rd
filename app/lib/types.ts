@@ -13,6 +13,8 @@ export type SanityImage = {
   alt?: string
 }
 
+/** Shape returned by `productFields`: everything a catalog tile needs, nothing
+ *  more. The grid ships one of these per product, so it stays deliberately thin. */
 export type SanityProduct = {
   _id: string
   name: string
@@ -20,6 +22,16 @@ export type SanityProduct = {
   description?: string
   iconKey?: string
   image?: SanityImage
+}
+
+/** Shape returned by `productDetailFields`. Every added field is optional: a
+ *  product with none of them still renders as image, description and CTA. */
+export type SanityProductDetail = SanityProduct & {
+  presentation?: string
+  activeIngredient?: string
+  species?: string[]
+  administration?: string
+  gallery?: SanityImage[]
 }
 
 /** Product categories. Values match the `iconKey` option list in the Sanity
@@ -36,3 +48,34 @@ export const CATEGORIES = [
 ] as const
 
 export type CategoryKey = (typeof CATEGORIES)[number]['key']
+
+/** Target species. Values match the `species` option list in the Sanity schema
+ *  exactly, same contract as `CATEGORIES` above. */
+export const SPECIES = [
+  { key: 'bovino', label: 'Bovino' },
+  { key: 'porcino', label: 'Porcino' },
+  { key: 'equino', label: 'Equino' },
+  { key: 'canino', label: 'Canino' },
+  { key: 'felino', label: 'Felino' },
+  { key: 'aves', label: 'Aves' },
+  { key: 'ovino-caprino', label: 'Ovino y caprino' },
+] as const
+
+/** Routes of administration. Values match the `administration` option list. */
+export const ADMINISTRATION = [
+  { key: 'oral', label: 'Oral' },
+  { key: 'inyectable', label: 'Inyectable' },
+  { key: 'topica', label: 'Tópica' },
+  { key: 'intramamaria', label: 'Intramamaria' },
+  { key: 'oftalmica', label: 'Oftálmica' },
+] as const
+
+/** Falls back to the raw value so a key added in Studio but not here still
+ *  renders something legible instead of disappearing. */
+export function labelOf(
+  list: ReadonlyArray<{ key: string; label: string }>,
+  value?: string
+) {
+  if (!value) return undefined
+  return list.find((item) => item.key === value)?.label ?? value
+}

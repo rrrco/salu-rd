@@ -90,6 +90,21 @@ P('tile heading ink-900 on white', fg, card, 4.5)
 P('tile body ink-600 on white', fgMuted, card, 4.5)
 P('tile border on white', borderStrong, card, 3)
 
+console.log('-- product dialog (panel over the scrim) --')
+/* The scrim is teal-950 over the catalog, which is paper behind white tiles.
+   Paper is the lighter of the two, so it is the harder boundary: if the panel
+   separates from that, it separates from everything.
+
+   45% was the first choice and measured 2.87:1, under the 3:1 WCAG 1.4.11 asks
+   for a control boundary. 50% is the floor that clears it, measured without the
+   backdrop blur so the ratio holds where the filter is unsupported. */
+const scrim = mix('#062428', paper, 0.5)
+P('dialog panel boundary vs scrim', card, scrim, 3)
+P('category badge accent-deep on teal-100', accentDark, teal100, 4.5)
+P('spec label ink-500 on white panel', fgSubtle, card, 4.5)
+P('spec divider on white panel', borderStrong, card, 3)
+P('active thumbnail border accent on white', accent, card, 3)
+
 console.log('-- form --')
 P('error text on white card', '#b42318', card, 4.5)
 P('error border on white card', '#b42318', card, 3)

@@ -39,8 +39,15 @@ Sanity Studio is embedded at `/studio`. The only document type is `product`
 
 `iconKey` values must stay in sync across three files: the schema's option list,
 `CATEGORIES` in `app/lib/types.ts`, and `CATEGORY_ICONS` in `app/lib/icons.tsx`.
-A product with no image falls back to its category icon, so the grid renders
-whatever the CMS contains.
+The same contract applies to `species` and `administration`, which are mirrored
+by `SPECIES` and `ADMINISTRATION` in `app/lib/types.ts`. A product with no image
+falls back to its category icon, so the grid renders whatever the CMS contains.
+
+`slug` is required and is the product's URL. Renaming one breaks any link
+already shared with a customer. Every other field added since the first build
+(`presentation`, `activeIngredient`, `species`, `administration`, `gallery`) is
+optional, and the product view drops the rows it has no data for rather than
+rendering an empty table.
 
 Stats, purpose pillars, testimonials and contact details are not in the CMS.
 They live in `app/lib/site.ts` and the section components.
@@ -57,7 +64,12 @@ layout shift.
 ```
 app/
   actions/contact.ts        server action: validate, rate limit, send via Resend
+  productos/
+    page.tsx                catalog grid
+    [slug]/                 standalone product page
+    @modal/(.)[slug]/       the same product, intercepted as a dialog
   components/
+    product/                ProductDetail, ProductSpecs, ProductMedia, gallery, modal
     sections/               one file per landing page section
     site/                   Nav, Footer, WhatsAppFab, Logo
     ui/                     Button, Field, Section, ProductTile, PhotoSlot, Reveal, CountUp
