@@ -9,15 +9,19 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@sanity/client": "^7.15.0",
     "@sanity/image-url": "^2.0.3",
     "@sanity/vision": "^5.10.0",
+    "motion": "^13.0.0",
     "next": "16.1.6",
     "next-sanity": "^9.0.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "resend": "^6.18.1",
     "sanity": "^5.10.0",
-    "styled-components": "^6.3.10"
+    "styled-components": "^6.3.10",
+    "zod": "^4.4.3"
   },
   "overrides": {
     "mux-embed": "^5.17.6"

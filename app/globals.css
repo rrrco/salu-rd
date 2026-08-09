@@ -1,346 +1,424 @@
 @import "tailwindcss";
 
-/* ============================================================
-   RESET & BASE
-============================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  color: #3D3D3D;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+/* `_design/` holds the previous system's prototype and style guide, kept as a
+   historical audit. Tailwind scans the project by default and was generating
+   real utilities from the code samples in that documentation, shipping dead CSS
+   for a design language this site no longer uses. */
+@source not "../_design";
+
+/* Hover states only where there is a real pointer.
+   Touch devices fire :hover on tap, which leaves the style stuck until the user
+   taps elsewhere. Use `hover-fine:` instead of bare `hover:` for anything that
+   moves or changes color on hover. */
+@custom-variant hover-fine {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
 }
-img { display: block; max-width: 100%; }
-a { text-decoration: none; color: inherit; }
-button { cursor: pointer; border: none; background: none; }
 
-/* ============================================================
-   LAYOUT
-============================================================ */
-.wrap { max-width: 1290px; margin: 0 auto; padding: 0 30px; }
+/* ============================================================================
+   SALU División Veterinaria - design tokens
+   Spec: /DESIGN.md. Components reference semantics, never raw ramp steps.
+   ========================================================================= */
 
-/* ============================================================
-   BUTTONS
-============================================================ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #2AACB8;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  border-radius: 0;
-  padding: 0 28px;
-  height: 44px;
-  transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
+@theme {
+  /* --- Teal ramp. Every step sampled from the original build. ------------ */
+  --color-teal-950: #062428;
+  --color-teal-900: #082e32;
+  --color-teal-800: #0a4d55;
+  --color-teal-700: #0a6973;
+  --color-teal-600: #0e7a86;
+  --color-teal-500: #18909e;
+  --color-teal-400: #2aacb8; /* BRAND PRIMARY - logo silhouette */
+  --color-teal-300: #4dc4ce; /* accent on dark bands, icon/border hover */
+  --color-teal-200: #c2edf1;
+  --color-teal-100: #ebf8f9;
+  --color-teal-50: #e6f4f6;
+
+  /* --- Neutral ramp. Cool, teal-harmonised. One family only. ------------- */
+  --color-ink-950: #0b1314;
+  --color-ink-900: #16201f;
+  --color-ink-600: #47585a;
+  --color-ink-500: #5e7072;
+  --color-ink-400: #7a8c8e;
+  --color-ink-200: #d9e3e4;
+  --color-ink-100: #edf2f2;
+  --color-ink-50: #f7fafa;
+
+  /* --- Semantic layer. This is what components consume. ------------------ */
+  --color-bg: #fbfcfc;
+  --color-surface: #ffffff;
+  --color-surface-sunken: var(--color-ink-50);
+  --color-fg: var(--color-ink-900);
+  --color-fg-muted: var(--color-ink-600);
+  /* ink-400 measures 3.4:1 on paper, which fails AA for text. Captions and
+     placeholders use ink-500 (5.1:1); ink-400 survives only as a border. */
+  --color-fg-subtle: var(--color-ink-500);
+  --color-fg-inverse: #ffffff;
+
+  /* Brand fill and accent: #00818F.
+     
+     This replaced #2AACB8 (the raw logo turquoise) and closed the one standing
+     accessibility exception in the system. White on the old turquoise measured
+     2.73:1 and the turquoise as text on paper measured 2.66:1, both well under
+     the 4.5:1 AA asks for. #00818F is the same hue, one notch deeper, and lands
+     at 4.63:1 and 4.50:1 respectively. Nothing on the site now trades
+     legibility for brand.
+
+     The logo mark keeps its original turquoise; the ramp keeps teal-400 for
+     the hero gradient and light tints. */
+  --color-brand: #00818f;
+  /* Deepens on hover, so a white label gains contrast as the user engages
+     rather than losing it. 6.40:1. */
+  --color-brand-hover: var(--color-teal-700);
+  --color-on-brand: #ffffff;
+  --color-accent: #00818f;
+  --color-accent-hover: var(--color-teal-700);
+  --color-accent-deep: var(--color-teal-700);
+
+  /* `border` is decorative (dividers, card edges). `border-strong` carries the
+     boundary of an interactive control and meets 3:1 per WCAG 1.4.11. */
+  --color-border: var(--color-ink-200);
+  --color-border-strong: var(--color-ink-400);
+  /* Focus is functional, not brand expression: a deeper teal so the ring stays
+     visible on light surfaces (4.9:1) where the brand turquoise would not. */
+  --color-focus: var(--color-teal-600);
+  --color-error: #b42318;
+
+  /* --- Type -------------------------------------------------------------
+     San Francisco, via the platform stack. Apple's guidance is to reach for the
+     system face before a custom one: SF already ships optical sizing (Display
+     above ~20pt, Text below, switched automatically), per-size tracking tables
+     and legibility tuning that a webfont cannot match. It also costs zero bytes
+     and never flashes.
+
+     Off Apple, the fallback is Poppins rather than Segoe UI or Roboto. Poppins
+     is the face the brand shipped with originally, and its geometric, rounded
+     letterforms echo the logo silhouette, so Windows and Android get something
+     deliberate instead of whatever the OS happens to bundle.
+
+     Order matters: `-apple-system` resolves first on Apple, so the font matcher
+     never selects Poppins there and the browser never downloads it. See the
+     `preload: false` note in layout.tsx. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-poppins),
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, "Cascadia Mono",
+    "Roboto Mono", monospace;
+
+  --text-display: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lead: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lead--line-height: 1.7;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.7;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.6;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+
+  /* --- Shape. containers 16 / interactive 10 / inputs 6 / badges pill ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* --- Elevation. Teal-tinted, never pure black on light. ---------------- */
+  --shadow-sm: 0 1px 2px rgb(11 19 20 / 0.04), 0 2px 8px rgb(10 105 115 / 0.05);
+  --shadow-md: 0 2px 4px rgb(11 19 20 / 0.04), 0 8px 24px rgb(10 105 115 / 0.07);
+  --shadow-lg: 0 4px 8px rgb(11 19 20 / 0.05), 0 16px 48px rgb(10 105 115 / 0.1);
+  --shadow-accent: 0 4px 20px rgb(0 129 143 / 0.35);
+
+  /* --- Motion. `transition: all` and `ease-in` are banned. See DESIGN.md - */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* --- Layout ----------------------------------------------------------- */
+  --container-content: 1240px;
 }
-.btn:hover { background: #4DC4CE; }
-.btn.btn-lg { height: 50px; padding: 0 36px; }
 
-/* ============================================================
-   SECTION TITLES
-============================================================ */
-.sec-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #222222;
-  line-height: 1.2;
-  margin-bottom: 10px;
+/* Durations and measures live outside @theme: they are read directly in CSS,
+   not needed as utility namespaces. */
+:root {
+  --dur-press: 140ms;
+  --dur-hover: 180ms;
+  --dur-enter: 240ms;
+  --dur-panel: 320ms;
+  --space-section: clamp(4rem, 2rem + 8vw, 7.5rem);
+  --space-gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
+  --width-prose: 65ch;
+  --nav-h: 68px;
 }
-.sec-title.white { color: #fff; }
-.sec-divider { width: 48px; height: 4px; background: #2AACB8; margin-bottom: 32px; }
-.sec-divider.white { background: #fff; }
 
-/* ============================================================
-   STATS BAR
-============================================================ */
-.stats-bar {
+/* ============================================================================
+   Base
+   ========================================================================= */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Anchor targets clear the sticky nav */
+    scroll-padding-top: calc(var(--nav-h) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Weight 600 across every heading. SF Semibold has presence without the
+     blockiness of Bold, and weight carries hierarchy more gracefully than size
+     alone. Optical sizing lets SF swap to the Display cut at large sizes, where
+     the letterforms are drawn tighter and finer on purpose. */
+  h1, h2, h3, h4 {
+    color: var(--color-fg);
+    font-weight: 600;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Never remove focus without replacing it. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-teal-200);
+    color: var(--color-ink-900);
+  }
+
+  /* Numerals never shift layout width during count-up. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+/* ============================================================================
+   Dark band scope
+
+   Utilities in v4 compile to var(--color-*), so remapping the semantic names
+   on an ancestor re-themes every descendant. Sections never flip theme; these
+   are dark *surfaces* inside a light page.
+   ========================================================================= */
+
+.on-dark {
+  --color-bg: var(--color-teal-700);
+  --color-surface: color-mix(in oklab, var(--color-teal-900) 45%, transparent);
+  --color-surface-sunken: color-mix(in oklab, var(--color-teal-950) 35%, transparent);
+  --color-fg: #ffffff;
+  --color-fg-muted: var(--color-teal-200);
+  --color-fg-subtle: color-mix(in oklab, var(--color-teal-200) 70%, transparent);
+  --color-fg-inverse: var(--color-ink-900);
+  /* One step brighter on dark ground: teal-400 sits too close to the teal-700
+     band to separate, teal-300 reads clearly and is still unmistakably the
+     brand turquoise. Brand fills stay teal-400 on every surface. */
+  --color-accent: var(--color-teal-300);
+  --color-accent-hover: var(--color-teal-200);
+  --color-border: color-mix(in oklab, #ffffff 22%, transparent);
+  /* 68% is the floor for a 3:1 control boundary against the brightest point
+     of the hero gradient. Measured, not picked by eye. */
+  --color-border-strong: color-mix(in oklab, #ffffff 68%, transparent);
+  --color-focus: var(--color-teal-200);
+  color: var(--color-fg);
+}
+
+/* Opt a subtree back into the light palette from inside a dark band.
+   Product tiles use this: white cards on deep teal is the composition the brand
+   has always had, and it stops the tile splitting into a light image half and a
+   dark text half. */
+.on-light {
+  --color-bg: #fbfcfc;
+  --color-surface: #ffffff;
+  --color-surface-sunken: var(--color-ink-50);
+  --color-fg: var(--color-ink-900);
+  --color-fg-muted: var(--color-ink-600);
+  --color-fg-subtle: var(--color-ink-500);
+  --color-fg-inverse: #ffffff;
+  --color-accent: var(--color-teal-400);
+  --color-accent-hover: var(--color-teal-300);
+  --color-border: var(--color-ink-200);
+  --color-border-strong: var(--color-ink-400);
+  --color-focus: var(--color-teal-600);
+  color: var(--color-fg);
+}
+
+/* ============================================================================
+   Hero surface
+
+   The original hero was a single 4-stop linear gradient: confident, but flat,
+   and it read as a 2016 template. This keeps the same deep-teal-to-turquoise
+   journey and rebuilds it with depth: a dark base, a luminous bloom rising from
+   below the stats panel, and a soft highlight off the top right. Layered
+   radials, not a mesh gradient.
+   ========================================================================= */
+
+.hero-surface {
+  background:
+    radial-gradient(
+      115% 72% at 50% 116%,
+      color-mix(in oklab, var(--color-teal-400) 25%, transparent) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      68% 52% at 84% -10%,
+      color-mix(in oklab, var(--color-teal-500) 30%, transparent) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      168deg,
+      var(--color-teal-950) 0%,
+      var(--color-teal-800) 54%,
+      var(--color-teal-700) 100%
+    );
+}
+
+/* ============================================================================
+   Glass material
+
+   Apple's translucent functional layer: a panel that brings structure without
+   stealing focus. Replaces the original's opaque white card with a hard black
+   shadow. The inset top highlight is light catching the top edge of a real
+   material; without it the surface reads as flat tint rather than glass.
+
+   This is a DARK material, not a lightening one. A white scrim would brighten
+   the gradient underneath and drop the numerals to 3.3:1. Darkening takes them
+   to 7.2:1, and a heavier material reading as structural is Apple's own
+   convention anyway.
+   ========================================================================= */
+
+.glass-panel {
+  background: rgb(6 36 40 / 0.32);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.24),
+    0 24px 64px rgb(6 36 40 / 0.38);
+}
+
+/* Translucency is a preference, not a given. Both fallbacks go solid and keep
+   the same footprint so nothing shifts. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel {
+    background: var(--color-teal-900);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass-panel {
+    background: var(--color-teal-950);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: rgb(255 255 255 / 0.5);
+  }
+}
+
+/* ============================================================================
+   Imagery - Tier 1 editorial treatment
+
+   The available photography has backgrounds and mixed lighting. Rather than
+   cutting subjects out, a shared tint and desaturation makes mixed sources
+   read as one set. See DESIGN.md section 7.
+   ========================================================================= */
+
+.photo-editorial {
   position: relative;
-  z-index: 10;
-  max-width: 1100px;
-  width: calc(100% - 60px);
-  margin: -80px auto 0;
-  background: #fff;
-  box-shadow: 0 8px 48px rgba(0,0,0,0.15);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-.stat-item {
-  padding: 24px 16px;
-  text-align: center;
-  border-right: 1px solid #efefef;
-}
-.stat-item:last-child { border-right: none; }
-.stat-num { font-size: 42px; font-weight: 700; color: #2AACB8; line-height: 1; margin-bottom: 8px; }
-.stat-lbl { font-size: 13px; font-weight: 500; color: #3D3D3D; line-height: 1.3; }
-
-/* ============================================================
-   CONTACT
-============================================================ */
-.contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: stretch; }
-.contact-left { display: flex; flex-direction: column; justify-content: center; }
-.cinfo {
-  display: flex; align-items: center; gap: 18px;
-  padding: 20px 0;
-  border-bottom: 1.5px dashed rgba(42,172,184,0.35);
-}
-.cinfo:first-of-type { padding-top: 0; }
-.cinfo-icon {
-  width: 50px; height: 50px; border-radius: 50%;
-  background: #2AACB8;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.cinfo-label { font-size: 13px; font-weight: 600; color: #222222; text-transform: uppercase; letter-spacing: 0.4px; }
-.cinfo-value { font-size: 15px; font-weight: 400; color: #3D3D3D; }
-.form-input {
-  font-family: inherit;
-  font-size: 14px;
-  color: #3D3D3D;
-  background: #f5f7f7;
-  border: 1.5px solid #f5f7f7;
-  border-radius: 0;
-  padding: 12px 16px;
-  outline: none;
-  transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  width: 100%;
-}
-.form-input:focus { border-color: #2AACB8; background: #fff; }
-
-/* ============================================================
-   PRODUCTS
-============================================================ */
-.prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px; }
-.prod-card {
-  background: #fff;
-  border: 2px solid transparent;
-  transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  display: flex; flex-direction: column;
-  min-height: 500px;
-}
-.prod-card:hover { border-color: #2AACB8; }
-.prod-img-area {
-  height: 380px;
-  min-height: 380px;
-  background: linear-gradient(135deg, #EBF8F9 0%, #C2EDF1 100%);
-  display: flex; align-items: center; justify-content: center;
+  isolation: isolate;
   overflow: hidden;
-  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--color-teal-100) 0%,
+    var(--color-teal-200) 100%
+  );
 }
-.prod-img-area::after {
-  content: '';
+
+.photo-editorial > img {
+  filter: saturate(0.88);
+}
+
+.photo-editorial::after {
+  content: "";
   position: absolute;
   inset: 0;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.10);
+  z-index: 1;
   pointer-events: none;
-}
-.prod-img-area img { width: 100%; height: 100%; object-fit: cover; }
-.prod-body { padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
-.prod-name { font-size: 13px; font-weight: 500; color: #222222; line-height: 1.4; }
-.prod-desc {
-  font-size: 12px;
-  color: #6b6b6b;
-  line-height: 1.5;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.prod-body .btn { width: 100%; }
-
-/* ============================================================
-   PRODUCTS — 3-COL (landing page)
-============================================================ */
-.prod-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 48px; }
-@media (max-width: 800px) {
-  .prod-grid-3 { grid-template-columns: 1fr; }
+  background: color-mix(in oklab, var(--color-teal-700) 15%, transparent);
+  mix-blend-mode: multiply;
 }
 
-/* ============================================================
-   SEARCH BAR
-============================================================ */
-.search-bar {
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-  margin: 0 auto 32px;
-}
-.search-bar input {
-  font-family: inherit;
-  font-size: 14px;
-  color: #3D3D3D;
-  background: #fff;
-  border: 1.5px solid rgba(255,255,255,0.3);
-  border-radius: 0;
-  padding: 12px 16px 12px 44px;
-  outline: none;
-  width: 100%;
-  transition: border-color 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-.search-bar input:focus { border-color: #2AACB8; }
-.search-bar input::placeholder { color: #999; }
-.search-bar-icon {
+/* Copy over a photo always sits on a scrim, never on the raw image. */
+.photo-scrim::before {
+  content: "";
   position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
-  display: flex;
-  align-items: center;
+  background: linear-gradient(
+    100deg,
+    rgb(6 36 40 / 0.88) 0%,
+    rgb(6 36 40 / 0.72) 34%,
+    rgb(6 36 40 / 0.28) 68%,
+    rgb(6 36 40 / 0.15) 100%
+  );
 }
 
-/* ============================================================
-   PURPOSE
-============================================================ */
-.purpose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 52px; }
-.pur-card { background: #2AACB8; padding: 32px 28px; color: #fff; }
-.pur-icon { margin-bottom: 24px; }
-.pur-card h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 14px; line-height: 1.25; }
-.pur-card p { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.94); line-height: 1.75; }
+/* ============================================================================
+   Accessibility
+   ========================================================================= */
 
-/* ============================================================
-   TESTIMONIALS — CAROUSEL
-============================================================ */
-.car-outer { position: relative; overflow: hidden; }
-.car-track { display: flex; will-change: transform; }
-.car-slide { min-width: 100%; padding: 0 20px; }
-.tcard {
-  background: #fff; border: 1px solid #efefef;
-  box-shadow: 0 4px 28px rgba(0,0,0,0.07);
-  padding: 36px 32px; text-align: center;
-  max-width: 680px; margin: 0 auto;
-}
-.tcard-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #2AACB8; object-fit: cover; margin: 0 auto 18px; }
-.tcard-name { font-size: 15px; font-weight: 700; color: #222222; margin-bottom: 4px; }
-.tcard-loc { font-size: 13px; font-weight: 500; color: #2AACB8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-.tcard-stars { font-size: 18px; color: #f5a623; letter-spacing: 2px; margin-bottom: 18px; }
-.tcard-quote { font-size: 14px; font-style: italic; color: #3D3D3D; line-height: 1.82; }
-.car-btn {
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid #2AACB8;
-  background: transparent; color: #2AACB8;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  flex-shrink: 0;
-}
-.car-btn:hover { background: #2AACB8; color: #fff; }
-.car-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #d0d0d0; cursor: pointer;
-  transition: all 0.3s ease;
-  border: none; padding: 0;
-}
-.car-dot.active { background: #2AACB8; width: 24px; border-radius: 4px; }
-
-/* ============================================================
-   ANIMAL SECTION
-============================================================ */
-.animal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: flex-end;
-  padding: 72px 30px 0;
-  max-width: 1290px;
-  margin: 0 auto;
-  gap: 40px;
-}
-.animal-img {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  display: block;
-  margin-left: auto;
-  margin-top: -30px;
-}
-
-/* ============================================================
-   WHATSAPP FAB
-============================================================ */
-.wa-fab {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 58px; height: 58px; border-radius: 50%;
-  background: #2AACB8;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(42,172,184,0.40);
-  z-index: 1000;
-  transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-.wa-fab:hover { background: #4DC4CE; transform: scale(1.08); }
-
-/* ============================================================
-   RESPONSIVE — ≤1100px
-============================================================ */
-@media (max-width: 1100px) {
-  .prod-grid { grid-template-columns: repeat(2, 1fr); }
-  .contact-grid { grid-template-columns: 1fr; gap: 44px; }
-  .animal-grid {
-    grid-template-columns: 1fr;
+/* Reduced motion means fewer and gentler animations, not zero feedback:
+   opacity and color transitions survive, movement does not. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  .animal-img {
-    max-height: 360px;
-    object-fit: cover;
-    width: 100%;
-    margin-top: 0;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  .animal-left { padding-bottom: 0 !important; }
 }
 
-/* ============================================================
-   RESPONSIVE — ≤900px
-============================================================ */
-@media (max-width: 900px) {
-  .purpose-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 640px) {
-  .stats-bar { grid-template-columns: 1fr; }
-  .stat-item { border-right: none; border-bottom: 1px solid #efefef; }
-  .stat-item:last-child { border-bottom: none; }
-}
-
-/* ============================================================
-   RESPONSIVE — ≤640px
-============================================================ */
-@media (max-width: 640px) {
-  .hero-logo { flex-direction: column; align-items: center; }
-  .logo-wordmark { text-align: center !important; }
-  .logo-name { font-size: 38px !important; }
-  .hero-h1 { font-size: 28px !important; }
-
-  .stat-num { font-size: 44px !important; }
-  .stat-lbl { font-size: 14px; }
-  .stat-item { padding: 24px 12px; }
-  .stats-bar { width: calc(100% - 30px); margin: 16px auto 0; }
-
-  .prod-grid { grid-template-columns: 1fr; }
-  .car-slide { padding: 0 8px; }
-  .car-btn { width: 36px; height: 36px; }
-  .tcard { padding: 30px 20px; }
-
-  #hero, #contact, #products, #purpose, #testimonials, #cta {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    padding-top: 60px !important;
-    padding-bottom: 60px !important;
-  }
-  .sec-title { font-size: 22px !important; }
-
-  .contact-form-card { padding: 30px 20px 32px !important; }
-  .animal-grid { padding: 60px 20px 0 !important; }
-  .animal-left h2 { font-size: 22px !important; }
-  .cta-inner h2 { font-size: 26px !important; }
-}
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-@media (max-width: 640px) {
-  .form-row { grid-template-columns: 1fr; }
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
