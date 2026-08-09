@@ -1,109 +1,127 @@
 'use client'
 
-import { useState } from 'react'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { CheckCircle, WarningCircle } from '@phosphor-icons/react/ssr'
+import { Button } from './ui/Button'
+import { Field, TextArea, Honeypot } from './ui/Field'
+import { submitContact, type ContactState } from '../actions/contact'
+import { SITE } from '../lib/site'
 
+const initialState: ContactState = { status: 'idle' }
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button type="submit" size="lg" className="w-full" disabled={pending}>
+      {pending ? 'Enviando' : 'Enviar mensaje'}
+    </Button>
+  )
+}
+
+/**
+ * The previous version of this form had `action="#"` and a reCAPTCHA that was a
+ * `useState` div, so every submission was silently discarded. It now posts to a
+ * server action that validates and sends real mail.
+ *
+ * Field `name` attributes are unchanged from the previous build so nothing
+ * downstream has to be updated.
+ */
 export default function ContactForm() {
-  const [checked, setChecked] = useState(false)
+  const [state, formAction] = useActionState(submitContact, initialState)
 
-  const toggle = () => setChecked(c => !c)
+  if (state.status === 'success') {
+    return (
+      <div
+        role="status"
+        className="flex flex-col items-start gap-4"
+      >
+        <CheckCircle size={40} aria-hidden="true" className="text-accent" />
+        <h3 className="text-h3 font-semibold">Mensaje enviado</h3>
+        <p className="text-fg-muted">
+          Gracias por escribirnos. Te responderemos a la brevedad. Si necesitas
+          una respuesta inmediata, escríbenos por WhatsApp al {SITE.phoneDisplay}.
+        </p>
+      </div>
+    )
+  }
 
   return (
-    <div className="contact-form-card" style={{ background: '#fff', boxShadow: '0 4px 40px rgba(0,0,0,0.10)', padding: '46px 40px 48px' }}>
-      <h3 style={{ fontSize: '26px', fontWeight: 700, color: '#222222', marginBottom: '28px' }}>
-        Mantengámonos en contacto
-      </h3>
-      <form action="#" method="post" noValidate>
+    <form
+      action={formAction}
+      noValidate
+      className="relative flex flex-col gap-5"
+    >
+      <Honeypot />
 
-        <div className="form-row">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '12px', fontWeight: 600, color: '#222222', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-              Nombre completo
-            </label>
-            <input type="text" name="name" placeholder="Tu nombre" autoComplete="name" className="form-input" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '12px', fontWeight: 600, color: '#222222', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-              Correo electrónico *
-            </label>
-            <input type="email" name="email" placeholder="tu@correo.com" required autoComplete="email" className="form-input" />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '12px', fontWeight: 600, color: '#222222', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-              Teléfono / WhatsApp *
-            </label>
-            <input type="tel" name="phone" placeholder="+54 11 ..." required autoComplete="tel" className="form-input" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '12px', fontWeight: 600, color: '#222222', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-              Organización *
-            </label>
-            <input type="text" name="organisation" placeholder="Clínica / Hospital / Distribuidor" required className="form-input" />
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 600, color: '#222222', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-            Mensaje *
-          </label>
-          <textarea
-            name="message"
-            placeholder="Cuéntanos cómo podemos ayudar a tu práctica..."
-            required
-            className="form-input"
-            style={{ resize: 'vertical', minHeight: '110px' }}
-          />
-        </div>
-
-        {/* Fake reCAPTCHA */}
-        <div
-          role="group"
-          aria-label="Verificación reCAPTCHA"
-          style={{ display: 'flex', alignItems: 'center', gap: '14px', border: '1px solid #d3d3d3', padding: '16px 18px', marginBottom: '20px', background: '#f9f9f9' }}
+      {state.status === 'error' && state.message ? (
+        <p
+          role="alert"
+          className="flex items-start gap-2.5 rounded-sm border border-[var(--color-error)] bg-[color-mix(in_oklab,var(--color-error)_6%,transparent)] p-3 text-sm text-[var(--color-error)]"
         >
-          <div
-            role="checkbox"
-            aria-checked={checked}
-            tabIndex={0}
-            aria-label="No soy un robot"
-            onClick={toggle}
-            onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle() } }}
-            style={{
-              width: '24px', height: '24px',
-              border: checked ? '2px solid #2AACB8' : '2px solid #c1c1c1',
-              borderRadius: '3px',
-              flexShrink: 0,
-              cursor: 'pointer',
-              background: checked ? '#2AACB8' : '#fff',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.12s ease',
-            }}
-          >
-            {checked && (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="2,7 5.5,10.5 12,3.5" />
-              </svg>
-            )}
-          </div>
-          <span style={{ fontSize: '14px', color: '#555', flex: 1 }}>No soy un robot</span>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-            <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="32" cy="32" r="30" fill="#4A90D9" opacity="0.15" />
-              <path d="M32 10 C20 10 11 19 11 31 C11 40 16 48 24 52 L24 42 C20 40 18 36 18 31 C18 23 24 17 32 17 C40 17 46 23 46 31 C46 36 44 40 40 42 L40 52 C48 48 53 40 53 31 C53 19 44 10 32 10 Z" fill="#4A90D9" opacity="0.7" />
-              <path d="M32 22 C26 22 22 26 22 32 C22 36 24 39 28 41 L28 34 L36 34 L36 41 C40 39 42 36 42 32 C42 26 38 22 32 22 Z" fill="#4A90D9" />
-            </svg>
-            <span style={{ fontSize: '8px', color: '#555', letterSpacing: '0.2px', textAlign: 'center', lineHeight: '1.4' }}>
-              reCAPTCHA<br />Privacy · Terms
-            </span>
-          </div>
-        </div>
+          <WarningCircle size={18} aria-hidden="true" className="mt-0.5 shrink-0" />
+          {state.message}
+        </p>
+      ) : null}
 
-        <button type="submit" className="btn btn-lg" style={{ width: '100%' }}>
-          ENVIAR MENSAJE
-        </button>
-      </form>
-    </div>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          id="name"
+          label="Nombre completo"
+          required
+          autoComplete="name"
+          defaultValue={state.values?.name}
+          error={state.errors?.name}
+        />
+        <Field
+          id="email"
+          label="Correo electrónico"
+          type="email"
+          required
+          autoComplete="email"
+          inputMode="email"
+          defaultValue={state.values?.email}
+          error={state.errors?.email}
+        />
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          id="phone"
+          label="Teléfono o WhatsApp"
+          type="tel"
+          required
+          autoComplete="tel"
+          inputMode="tel"
+          placeholder="+1 809 000 0000"
+          defaultValue={state.values?.phone}
+          error={state.errors?.phone}
+        />
+        <Field
+          id="organisation"
+          label="Organización"
+          required
+          autoComplete="organization"
+          placeholder="Clínica, hospital o distribuidor"
+          defaultValue={state.values?.organisation}
+          error={state.errors?.organisation}
+        />
+      </div>
+
+      <TextArea
+        id="message"
+        label="Mensaje"
+        rows={4}
+        placeholder="Cuéntanos cómo podemos ayudar a tu práctica"
+        defaultValue={state.values?.message}
+        error={state.errors?.message}
+      />
+
+      <SubmitButton />
+
+      <p className="text-xs text-fg-subtle">
+        También puedes escribirnos a {SITE.email} o por WhatsApp al {SITE.phoneDisplay}.
+      </p>
+    </form>
   )
 }

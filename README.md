@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SALU División Veterinaria
 
-## Getting Started
+Marketing site for SALU División Veterinaria, a B2B veterinary pharmaceutical
+distributor in the Dominican Republic. Next.js App Router, Tailwind v4, Sanity CMS.
 
-First, run the development server:
+## Design
+
+**[`DESIGN.md`](./DESIGN.md) is the spec.** Read it before changing anything
+visual. Colors, type, spacing, radius, shadow and motion are all tokens defined
+in `app/globals.css`; components consume the semantic names, never raw values.
+
+`_design/` holds the original single-file prototype and a style guide for the
+system this replaced. Historical reference only.
+
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Required | Notes |
+|---|---|---|
+| `RESEND_API_KEY` | For the contact form | Without it the form renders and validates but cannot send, and shows the email and WhatsApp fallback instead. |
+| `CONTACT_FROM_EMAIL` | Optional | Verified Resend sender, e.g. `SALU <web@yourdomain.com>`. Falls back to Resend's shared onboarding sender. |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Optional | Defaults to the project ID in `sanity.config.ts`. |
+| `NEXT_PUBLIC_SANITY_DATASET` | Optional | Defaults to `production`. |
 
-## Learn More
+## Content
 
-To learn more about Next.js, take a look at the following resources:
+Sanity Studio is embedded at `/studio`. The only document type is `product`
+(`sanity/schemas/product.ts`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`iconKey` values must stay in sync across three files: the schema's option list,
+`CATEGORIES` in `app/lib/types.ts`, and `CATEGORY_ICONS` in `app/lib/icons.tsx`.
+A product with no image falls back to its category icon, so the grid renders
+whatever the CMS contains.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Stats, purpose pillars, testimonials and contact details are not in the CMS.
+They live in `app/lib/site.ts` and the section components.
 
-## Deploy on Vercel
+## Photography
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Three editorial photos go in `public/photos/`. See the README there for the shot
+list and ratios. The site reserves each slot and shows a labelled placeholder
+until the file exists, so adding a photo requires no code change and causes no
+layout shift.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Structure
+
+```
+app/
+  actions/contact.ts        server action: validate, rate limit, send via Resend
+  components/
+    sections/               one file per landing page section
+    site/                   Nav, Footer, WhatsAppFab, Logo
+    ui/                     Button, Field, Section, ProductTile, PhotoSlot, Reveal, CountUp
+  lib/
+    site.ts                 contact details, nav links, stats
+    types.ts                Sanity types and the category list
+    image.ts                urlFor() wrapper, honours hotspot
+    icons.tsx               iconKey to Phosphor icon map
+    queries.ts              GROQ
+    sanity.ts               client
+  globals.css               all design tokens
+```
