@@ -13,6 +13,7 @@ export function Section({
   className,
   bleed = false,
   labelledBy,
+  barColor,
 }: {
   id?: string
   children: ReactNode
@@ -20,11 +21,15 @@ export function Section({
   /** Full-bleed background; the inner container still constrains content. */
   bleed?: boolean
   labelledBy?: string
+  /** Hex this band should tint the WebKit browser bars with when it touches
+   *  a screen edge. Read by BrowserBars.tsx. Defaults to the paper ground. */
+  barColor?: string
 }) {
   return (
     <section
       id={id}
       aria-labelledby={labelledBy}
+      data-bar-color={barColor ?? '#fbfcfc'}
       className={[bleed ? '' : 'py-(--space-section)', className].filter(Boolean).join(' ')}
     >
       {bleed ? (

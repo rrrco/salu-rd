@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
 
@@ -15,16 +15,28 @@ import './globals.css'
  */
 const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
-  // 700 is here for the hero headline. Without a real Bold cut the browser
-  // synthesises one by smearing the Semibold, which looks muddy at display size.
-  weight: ['400', '500', '600', '700'],
+  // 700 is here for the hero headline, 800 for the stat numerals. Without the
+  // real cut the browser synthesises one by smearing the nearest weight, which
+  // looks muddy at display size.
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   preload: false,
   variable: '--font-poppins',
 })
 import { Nav } from './components/site/Nav'
 import { Footer } from './components/site/Footer'
+import { BrowserBars } from './components/site/BrowserBars'
 import { WhatsAppFab } from './components/site/WhatsAppFab'
+
+/**
+ * iOS Safari paints the status-bar inset from `theme-color`, not from the
+ * page's html background - without it the strip defaults to white. The home
+ * hero runs full-bleed dark, so the site default is the hero's darkest stop;
+ * light-topped routes (productos) override this with their own `viewport`.
+ */
+export const viewport: Viewport = {
+  themeColor: '#062428',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://saludivisionveterinaria.com'),
@@ -71,8 +83,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido
         </a>
         <Nav />
-        <main id="main">{children}</main>
+        {/* main carries the paper ground; body deliberately holds the footer's
+            teal-50 so the canvas below the page matches it (globals.css). */}
+        <main id="main" className="bg-bg">{children}</main>
         <Footer />
+        <BrowserBars />
         <WhatsAppFab />
       </body>
     </html>

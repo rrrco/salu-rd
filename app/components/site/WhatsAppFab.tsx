@@ -23,7 +23,7 @@ export function WhatsAppFab() {
         'hover-fine:bg-brand-hover',
         'hover-fine:scale-[1.06]',
         'active:scale-[0.97]',
-        'motion-reduce:transition-none motion-reduce:hover:scale-100',
+        'motion-reduce:transition-none motion-reduce:hover-fine:scale-100',
       ].join(' ')}
     >
       <WhatsappLogo size={28} aria-hidden="true" />

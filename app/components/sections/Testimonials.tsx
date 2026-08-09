@@ -1,4 +1,5 @@
 import { Quotes } from '@phosphor-icons/react/ssr'
+import { Card } from '@/components/ui/card'
 import { Section, SectionHead } from '../ui/Section'
 import { Reveal } from '../ui/Reveal'
 
@@ -54,7 +55,7 @@ function initialsOf(name: string) {
 
 export function Testimonials() {
   return (
-    <Section id="testimonials" labelledBy="testimonials-title" className="bg-teal-50">
+    <Section id="testimonials" labelledBy="testimonials-title" barColor="#e6f4f6" className="bg-teal-50">
       <Reveal>
         <SectionHead
           id="testimonials-title"
@@ -66,13 +67,12 @@ export function Testimonials() {
       <div className="mt-14 grid items-stretch gap-5 md:grid-cols-3">
         {TESTIMONIALS.map((testimonial, i) => (
           <Reveal key={testimonial.name} delay={i * 0.08} className="h-full">
-            <figure
-              /* No hover state. The card is not a link and does nothing when
-                 clicked, so a lift or a border change would promise an
-                 interaction that does not exist. Every animation needs a
-                 reason; "it looks nice" is not one. */
-              className="flex h-full flex-col gap-5 rounded-lg border border-border bg-surface p-8 shadow-sm"
-            >
+            {/* No hover state. The card is not a link and does nothing when
+                clicked, so a lift or a border change would promise an
+                interaction that does not exist. Every animation needs a
+                reason; "it looks nice" is not one. */}
+            <Card asChild className="h-full gap-5 p-8">
+              <figure>
               <Quotes
                 size={22}
 
@@ -96,7 +96,8 @@ export function Testimonials() {
                   <span className="truncate text-sm text-fg-muted">{testimonial.role}</span>
                 </span>
               </figcaption>
-            </figure>
+              </figure>
+            </Card>
           </Reveal>
         ))}
       </div>

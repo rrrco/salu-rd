@@ -150,6 +150,38 @@
   --container-content: 1240px;
 }
 
+/* ============================================================================
+   shadcn/ui bridge - aliases only, zero new colors.
+
+   `inline` matters: utilities compile straight to the underlying semantic var
+   (bg-primary -> var(--color-brand)), so the `.on-dark` / `.on-light` scope
+   remapping below flows through every shadcn component automatically.
+
+   Deliberately NOT defined:
+   - --color-accent{,-foreground}: the repo's `accent` (brand teal) means the
+     opposite of shadcn's `accent` (hover-muted surface). Installed components
+     using shadcn's accent get restyled to repo tokens instead.
+   - --radius: the repo's --radius-sm/md/lg/full already govern shape.
+   ========================================================================= */
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-fg);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-fg);
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: var(--color-on-brand);
+  --color-secondary: var(--color-surface-sunken);
+  --color-secondary-foreground: var(--color-fg);
+  --color-muted: var(--color-surface-sunken);
+  --color-muted-foreground: var(--color-fg-muted);
+  --color-destructive: var(--color-error);
+  --color-input: var(--color-border-strong);
+  --color-ring: var(--color-focus);
+}
+
 /* Durations and measures live outside @theme: they are read directly in CSS,
    not needed as utility namespaces. */
 :root {
@@ -173,10 +205,39 @@
     /* Anchor targets clear the sticky nav */
     scroll-padding-top: calc(var(--nav-h) + 1rem);
     -webkit-text-size-adjust: 100%;
+    /* The ground behind the page's TOP edge (iOS uses the html background for
+       the top overscroll/inset region). The home hero runs full-bleed to the
+       viewport top, so a top rubber-band reveals the hero's own deep teal,
+       not a white flash. */
+    background-color: var(--color-teal-950);
+  }
+
+  /* Per-route overscroll ground. Safari has not reliably honored
+     `overscroll-behavior` on the document scroller, so the ground must match
+     whatever each route puts at the viewport top: teal-950 for the home hero
+     (default above), and any page that opens light declares itself with
+     `data-overscroll-ground="light"`. */
+  html:has([data-overscroll-ground='light']) {
+    background-color: var(--color-teal-50);
+  }
+
+  /* Rubber-banding is platform grammar on touch; keep it there and rely on
+     the color-matched grounds. On desktop the bounce serves nothing, so it
+     is disabled where a real pointer exists. */
+  @media (hover: hover) and (pointer: fine) {
+    html,
+    body {
+      overscroll-behavior-y: none;
+    }
   }
 
   body {
-    background-color: var(--color-bg);
+    /* The ground behind the page's BOTTOM edge (iOS extends the body
+       background below the document). The last thing on every route is the
+       teal-50 footer, so the canvas beneath it must be the same teal-50 -
+       the page's paper ground is painted by <main> instead (layout.tsx). */
+    background-color: var(--color-teal-50);
+    min-height: 100svh;
     color: var(--color-fg);
     font-family: var(--font-sans);
     font-size: var(--text-body);
@@ -280,7 +341,19 @@
    ========================================================================= */
 
 .hero-surface {
+  /* Two-part composition. The topmost layer is a short vertical fade that
+     pins the hero's first slice to a uniform teal-950 across the full width,
+     so the iOS status bar (theme-color #062428) continues the surface with
+     no seam at either corner. It dissolves by ~24% height into the original
+     design underneath: the 168deg diagonal journey, the top-right highlight,
+     and the luminous bloom rising from below the stats panel. */
   background:
+    linear-gradient(
+      180deg,
+      var(--color-teal-950) 0%,
+      var(--color-teal-950) 6%,
+      transparent 32%
+    ),
     radial-gradient(
       115% 72% at 50% 116%,
       color-mix(in oklab, var(--color-teal-400) 25%, transparent) 0%,
@@ -300,6 +373,26 @@
 }
 
 /* ============================================================================
+   Nav surface (scrolled)
+
+   The sticky bar's face once the page scrolls: a slice of the hero rather
+   than a flat fill. Teal-950 holds the top edge (continuous with the iOS
+   status bar / theme-color #062428), the 168deg drift warms it toward the
+   bottom, and a faint bloom rises on the right - the same vocabulary as
+   .hero-surface, compressed to bar height.
+   ========================================================================= */
+
+.nav-surface {
+  /* Same 180deg vocabulary as the hero's top slice - no diagonal, no bloom -
+     so the bar reads as the hero's dark band that stayed pinned. */
+  background: linear-gradient(
+    180deg,
+    var(--color-teal-950) 0%,
+    var(--color-teal-900) 100%
+  );
+}
+
+/* ============================================================================
    Glass material
 
    Apple's translucent functional layer: a panel that brings structure without
@@ -307,37 +400,23 @@
    shadow. The inset top highlight is light catching the top edge of a real
    material; without it the surface reads as flat tint rather than glass.
 
-   This is a DARK material, not a lightening one. A white scrim would brighten
-   the gradient underneath and drop the numerals to 3.3:1. Darkening takes them
-   to 7.2:1, and a heavier material reading as structural is Apple's own
-   convention anyway.
+   Now a solid white card: teal-700 numerals on white measure 6.40:1 (see
+   scripts/contrast-audit.mjs). The blur is gone with the translucency - a
+   backdrop-filter behind an opaque fill is GPU work nobody can see. Border,
+   inset highlight and shadow are unchanged - they describe the pane's edge
+   and depth, not its fill.
    ========================================================================= */
 
 .glass-panel {
-  background: rgb(6 36 40 / 0.32);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  background: #ffffff;
   border: 1px solid rgb(255 255 255 / 0.14);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.24),
     0 24px 64px rgb(6 36 40 / 0.38);
 }
 
-/* Translucency is a preference, not a given. Both fallbacks go solid and keep
-   the same footprint so nothing shifts. */
-@media (prefers-reduced-transparency: reduce) {
-  .glass-panel {
-    background: var(--color-teal-900);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-}
-
 @media (prefers-contrast: more) {
   .glass-panel {
-    background: var(--color-teal-950);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     border-color: rgb(255 255 255 / 0.5);
   }
 }
@@ -389,6 +468,101 @@
     rgb(6 36 40 / 0.28) 68%,
     rgb(6 36 40 / 0.15) 100%
   );
+}
+
+/* ============================================================================
+   Radix state animations
+
+   Radix waits for `animationend` before unmounting closing content, so exit
+   states need CSS *animations*, not transitions. Height 0 -> measured height
+   is the one sanctioned height animation in the system (DESIGN.md 4.3): the
+   value is deterministic via Radix's measured custom property, and the panel
+   is already most of the way open by the time the eye follows it down.
+
+   Exit is faster than enter: closing is the system acknowledging a decision
+   already made, so it should get out of the way.
+   ========================================================================= */
+
+@keyframes collapsible-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* The mobile nav sheet materialises rather than appearing: a short fade with
+   a few pixels of travel, so the eye is led down into the list instead of
+   having it cut in. Never from scale(0) or a full off-screen slide. */
+@keyframes nav-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nav-sheet-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Sheet links cascade in. Each link sets `--i`; the 40ms step is short enough
+   that the list reads as one movement, long enough to show reading order.
+   `backwards` fill keeps links invisible through their delay. */
+@keyframes nav-link-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   Page transition
+
+   Applied by app/template.tsx, which remounts per navigation. Opacity only:
+   the reveal system owns vertical movement, and multiplied opacity reads fine
+   where compounded translation reads as double travel.
+   ========================================================================= */
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-enter {
+  animation: page-enter 240ms var(--ease-out);
 }
 
 /* ============================================================================

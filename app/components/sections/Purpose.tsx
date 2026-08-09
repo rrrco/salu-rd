@@ -1,5 +1,6 @@
 import { ShieldCheck, Truck, Microscope } from '@phosphor-icons/react/ssr'
 import type { Icon } from '@phosphor-icons/react'
+import { Card } from '@/components/ui/card'
 import { Section, SectionHead } from '../ui/Section'
 import { PhotoSlot } from '../ui/PhotoSlot'
 import { Reveal } from '../ui/Reveal'
@@ -31,13 +32,13 @@ const PILLARS: { title: string; body: string; icon: Icon }[] = [
 function Pillar({ pillar }: { pillar: (typeof PILLARS)[number] }) {
   const Icon = pillar.icon
   return (
-    <div className="flex h-full flex-col gap-4 rounded-lg border border-border bg-teal-50 p-8">
+    <Card className="h-full gap-4 bg-teal-50 p-8 shadow-none">
       <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand">
         <Icon size={22} weight={ICON_WEIGHT} aria-hidden="true" />
       </span>
       <h3 className="text-h3 font-semibold">{pillar.title}</h3>
       <p className="text-sm text-fg-muted">{pillar.body}</p>
-    </div>
+    </Card>
   )
 }
 

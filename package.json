@@ -13,14 +13,18 @@
     "@sanity/client": "^7.15.0",
     "@sanity/image-url": "^2.0.3",
     "@sanity/vision": "^5.10.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "motion": "^13.0.0",
     "next": "16.1.6",
     "next-sanity": "^9.0.0",
+    "radix-ui": "^1.6.7",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "resend": "^6.18.1",
     "sanity": "^5.10.0",
     "styled-components": "^6.3.10",
+    "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },
   "overrides": {

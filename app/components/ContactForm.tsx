@@ -3,8 +3,9 @@
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { CheckCircle, WarningCircle } from '@phosphor-icons/react/ssr'
-import { Button } from './ui/Button'
-import { Field, TextArea, Honeypot } from './ui/Field'
+import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Field, TextArea, Honeypot } from '@/components/ui/field'
 import { submitContact, type ContactState } from '../actions/contact'
 import { SITE } from '../lib/site'
 
@@ -55,13 +56,10 @@ export default function ContactForm() {
       <Honeypot />
 
       {state.status === 'error' && state.message ? (
-        <p
-          role="alert"
-          className="flex items-start gap-2.5 rounded-sm border border-[var(--color-error)] bg-[color-mix(in_oklab,var(--color-error)_6%,transparent)] p-3 text-sm text-[var(--color-error)]"
-        >
-          <WarningCircle size={18} aria-hidden="true" className="mt-0.5 shrink-0" />
-          {state.message}
-        </p>
+        <Alert variant="destructive">
+          <WarningCircle size={18} aria-hidden="true" />
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="grid gap-5 sm:grid-cols-2">

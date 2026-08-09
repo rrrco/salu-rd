@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Dev-only: lets phones on the LAN load dev assets (Next 16 blocks
+  // cross-origin dev requests by default). No effect on production builds.
+  allowedDevOrigins: ['192.168.1.24', 'localhost'],
   transpilePackages: [
     'sanity',
     '@sanity/ui',

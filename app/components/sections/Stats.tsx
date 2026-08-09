@@ -41,13 +41,18 @@ export function HeroStats() {
           key={stat.label}
           className={[
             'flex flex-col items-center gap-1 px-3 py-6 text-center sm:px-8 sm:py-8',
-            i > 0 ? 'border-l border-white/12' : '',
+            /* ink-200, not white: a white divider vanishes on the white fill. */
+            i > 0 ? 'border-l border-border' : '',
           ].join(' ')}
         >
-          <dd className="text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-semibold leading-none tracking-[-0.035em] text-white">
+          <dd className="text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-extrabold leading-none tracking-[-0.035em] text-accent-deep">
             <CountUp value={stat.value} suffix={stat.suffix} />
           </dd>
-          <dt className="text-xs text-teal-100 sm:text-sm">{stat.label}</dt>
+          {/* accent-deep, matching the numerals - and deliberately not a
+              fg-* token: the panel lives inside the hero's `.on-dark` scope,
+              which remaps fg-muted to a pale teal that vanishes on the white
+              card. accent-deep is not remapped by `.on-dark`. */}
+          <dt className="text-xs text-accent-deep sm:text-sm">{stat.label}</dt>
         </div>
       ))}
     </motion.dl>

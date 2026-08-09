@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { WhatsappLogo } from '@phosphor-icons/react/ssr'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
 import { Reveal } from '../ui/Reveal'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
@@ -17,6 +17,7 @@ export function CtaBand() {
     <section
       id="cta"
       aria-labelledby="cta-title"
+      data-bar-color="#0a4d55"
       className="on-dark bg-[linear-gradient(135deg,var(--color-teal-950)_0%,var(--color-teal-800)_50%,var(--color-teal-600)_100%)]"
     >
       <div className="mx-auto max-w-(--container-content) px-(--space-gutter) py-(--space-section)">

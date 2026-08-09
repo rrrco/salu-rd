@@ -1,5 +1,5 @@
 import { ArrowRight } from '@phosphor-icons/react/ssr'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
 import { ProductTile } from '../ui/ProductTile'
 import { SectionHead } from '../ui/Section'
 import { Reveal } from '../ui/Reveal'
@@ -20,7 +20,7 @@ import type { SanityProduct } from '../../lib/types'
  */
 export function FeaturedProducts({ products }: { products: SanityProduct[] }) {
   return (
-    <section id="products" className="bg-teal-50">
+    <section id="products" data-bar-color="#e6f4f6" className="bg-teal-50">
       <div className="mx-auto max-w-(--container-content) px-(--space-gutter) py-(--space-section)">
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
           <SectionHead
