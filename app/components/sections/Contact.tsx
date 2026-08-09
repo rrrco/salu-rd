@@ -1,8 +1,9 @@
 import { EnvelopeSimple, WhatsappLogo, ArrowUpRight } from '@phosphor-icons/react/ssr'
+import { Card } from '@/components/ui/card'
 import ContactForm from '../ContactForm'
 import { Section, SectionHead } from '../ui/Section'
 import { Reveal } from '../ui/Reveal'
-import { Disclosure } from '../ui/Disclosure'
+import { Disclosure } from '@/components/ui/disclosure'
 import { SITE, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
 /**
@@ -49,7 +50,7 @@ export function Contact() {
               'hover-fine:shadow-[0_12px_28px_rgb(6_36_40/0.26),inset_0_1px_0_rgb(255_255_255/0.22)]',
               'active:translate-y-0 active:scale-[0.99]',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]',
-              'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+              'motion-reduce:transition-none motion-reduce:hover-fine:translate-y-0',
             ].join(' ')}
           >
             <span className="flex items-start justify-between gap-4">
@@ -76,15 +77,15 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.08} className="flex h-full flex-col gap-6">
-          <a
-            href={`mailto:${SITE.email}`}
+          <Card asChild
             className={[
-              'group flex items-center gap-4 rounded-lg border border-border bg-surface p-6 shadow-sm',
+              'group flex-row items-center gap-4 p-6',
               'transition-[border-color,transform,box-shadow] duration-[180ms] ease-[var(--ease-out)]',
               'hover-fine:border-accent hover-fine:-translate-y-0.5 hover-fine:shadow-md',
-              'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+              'motion-reduce:transition-none motion-reduce:hover-fine:translate-y-0',
             ].join(' ')}
           >
+          <a href={`mailto:${SITE.email}`}>
             <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-teal-100 text-accent-deep">
               <EnvelopeSimple size={24} aria-hidden="true" />
             </span>
@@ -101,6 +102,7 @@ export function Contact() {
               className="ml-auto shrink-0 text-fg-subtle transition-transform duration-[180ms] ease-[var(--ease-out)] hover-fine:group-hover:-translate-y-0.5 hover-fine:group-hover:translate-x-0.5 motion-reduce:transition-none"
             />
           </a>
+          </Card>
 
           {/* Collapsed by default. The form is the slow path, so it should not
               out-shout the fast one just by being the tallest thing on screen. */}

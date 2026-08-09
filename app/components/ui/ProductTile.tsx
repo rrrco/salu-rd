@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { ButtonLink } from './Button'
+import { ButtonLink } from '@/components/ui/button'
 import { WhatsappLogo } from '@phosphor-icons/react/ssr'
 import { CategoryIcon } from '../../lib/icons'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
@@ -92,20 +92,5 @@ export function ProductTile({
         </ButtonLink>
       </div>
     </article>
-  )
-}
-
-/** Matches the tile's shape so the grid does not reflow while loading. */
-export function ProductTileSkeleton() {
-  return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface">
-      <div className="aspect-[4/5] animate-pulse bg-surface-sunken" />
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="h-5 w-3/4 animate-pulse rounded-sm bg-surface-sunken" />
-        <div className="h-4 w-full animate-pulse rounded-sm bg-surface-sunken" />
-        <div className="h-4 w-2/3 animate-pulse rounded-sm bg-surface-sunken" />
-        <div className="mt-auto h-11 w-full animate-pulse rounded-md bg-surface-sunken" />
-      </div>
-    </div>
   )
 }

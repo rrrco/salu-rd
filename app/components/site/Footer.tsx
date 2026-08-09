@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { EnvelopeSimple, WhatsappLogo, MapPin } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
 import { SITE, NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
 /**
@@ -19,7 +19,7 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border bg-teal-50">
+    <footer data-bar-color="#e6f4f6" className="border-t border-border bg-teal-50">
       <div className="mx-auto max-w-(--container-content) px-(--space-gutter) py-16">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1.2fr]">
           <div className="flex flex-col items-start gap-5">

@@ -267,6 +267,17 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 
 ## 5. Component contracts
 
+> **Implementation note (shadcn/ui migration).** UI primitives now live in
+> `components/ui/` and are built on shadcn/ui (Radix primitives + CVA + `cn()`),
+> installed via `npx shadcn@latest add` and then restyled to this document.
+> The tokens above are unchanged: shadcn's variable names are aliased to the
+> semantic tokens in an `@theme inline` bridge in `app/globals.css`, so
+> `.on-dark` / `.on-light` remapping flows through every component. The
+> contracts below still govern; when regenerating or adding a shadcn
+> component, re-apply the restyle rules (no `dark:`, no bare `hover:` — use
+> `hover-fine:` — named-property transitions on `--ease-out`, token radii,
+> Phosphor icons, repo focus outline).
+
 ### Button
 
 Three variants, two sizes. `--radius-md`. Sentence case, sans face, weight 600, `0.02em` tracking.

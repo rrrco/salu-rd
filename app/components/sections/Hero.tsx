@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { WhatsappLogo } from '@phosphor-icons/react/ssr'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
 import { RevealGroup, RevealItem } from '../ui/Reveal'
 import { HeroStats } from './Stats'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
@@ -27,6 +27,7 @@ export function Hero() {
   return (
     <section
       id="hero"
+      data-bar-color="#062428"
       className="hero-surface on-dark relative -mt-(--nav-h) flex min-h-[100dvh] flex-col overflow-hidden pt-(--nav-h)"
     >
       <div className="mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-(--space-gutter)">

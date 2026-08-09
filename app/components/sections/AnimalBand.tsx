@@ -1,5 +1,5 @@
 import { WhatsappLogo } from '@phosphor-icons/react/ssr'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 import { PhotoSlot } from '../ui/PhotoSlot'
 
@@ -16,7 +16,7 @@ import { PhotoSlot } from '../ui/PhotoSlot'
  */
 export function AnimalBand() {
   return (
-    <section id="animal" aria-labelledby="animal-title" className="on-dark relative">
+    <section id="animal" aria-labelledby="animal-title" data-bar-color="#062428" className="on-dark relative">
       <PhotoSlot
         src="/photos/animal.jpg"
         alt=""

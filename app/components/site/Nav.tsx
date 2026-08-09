@@ -2,30 +2,47 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { List, X, WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { List, WhatsappLogo } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
-import { ButtonLink } from '../ui/Button'
+import { ButtonLink } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetCloseButton,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from '@/components/ui/sheet'
 import { NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+
+/** Cascade delay for the sheet links, applied via CSS custom property so the
+ *  stagger runs off the main thread. */
+const linkCascade = (index: number): CSSProperties =>
+  ({ '--i': index }) as CSSProperties
+
+const linkCascadeClass = [
+  'animate-[nav-link-in_300ms_var(--ease-out)_backwards]',
+  '[animation-delay:calc(40ms+var(--i)*40ms)]',
+].join(' ')
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const sentinel = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
-  const reduce = useReducedMotion()
 
   /**
-   * The home hero runs full-bleed to the top of the viewport and the nav sits
-   * over it, so at rest the bar is transparent with light-on-dark contents.
-   * Once the reader scrolls past the hero it becomes the translucent light bar.
+   * The nav is a dark-band element everywhere it has a face: transparent over
+   * the home hero (which supplies the dark ground itself), and a solid
+   * teal-950 bar once scrolled - on any route. It never flips to a light bar;
+   * the only light state is the top of light-topped routes (productos), where
+   * it stays transparent with dark contents.
    *
-   * Derived during render rather than tracked in state: it is a function of two
-   * values we already have, and an effect would introduce a frame where the nav
-   * is styled for the wrong background.
+   * Derived during render rather than tracked in state: it is a function of
+   * values we already have, and an effect would introduce a frame where the
+   * nav is styled for the wrong background.
    */
-  const overHero = pathname === '/' && !scrolled && !open
+  const dark = pathname === '/' || scrolled
 
   /**
    * IntersectionObserver on a sentinel, not a scroll listener. A scroll handler
@@ -42,34 +59,18 @@ export function Nav() {
     return () => io.disconnect()
   }, [])
 
-  /** Escape closes the mobile sheet; body scroll locks while it is open. */
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
-    }
-  }, [open])
-
   return (
     <>
       <div ref={sentinel} aria-hidden="true" className="absolute top-0 h-px w-full" />
 
       <header
         className={[
-          'sticky top-0 z-40 w-full',
-          'transition-[background-color,border-color,backdrop-filter] duration-[240ms] ease-[var(--ease-out)]',
-          overHero ? 'on-dark border-b border-transparent bg-transparent' : '',
-          !overHero && scrolled
-            ? 'border-b border-border bg-[color-mix(in_oklab,var(--color-bg)_70%,transparent)] backdrop-blur-xl backdrop-saturate-150'
-            : '',
-          !overHero && !scrolled ? 'border-b border-transparent bg-transparent' : '',
+          'sticky top-0 z-40 w-full border-b border-transparent',
+          'transition-[background-color,box-shadow] duration-[240ms] ease-[var(--ease-out)]',
+          dark ? 'on-dark' : '',
+          scrolled
+            ? 'nav-surface shadow-[0_2px_12px_rgb(6_36_40/0.25)]'
+            : 'bg-transparent',
         ].filter(Boolean).join(' ')}
       >
         <nav
@@ -77,7 +78,7 @@ export function Nav() {
           className="mx-auto flex h-[var(--nav-h)] max-w-(--container-content) items-center justify-between px-(--space-gutter)"
         >
           <Link href="/" aria-label="SALU División Veterinaria, inicio">
-            <Logo onDark={overHero} />
+            <Logo onDark={dark} />
           </Link>
 
           {/* Desktop: one line, always. */}
@@ -104,89 +105,58 @@ export function Nav() {
             </ButtonLink>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="nav-mobile"
-            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
-            className="flex size-11 items-center justify-center rounded-md text-fg active:scale-[0.97] lg:hidden"
-          >
-            {open ? <X size={22} aria-hidden="true" /> : <List size={22} aria-hidden="true" />}
-          </button>
-        </nav>
-      </header>
-
-      {/* Mobile sheet. Rendered outside the sticky header so the backdrop covers
-          the full viewport rather than being clipped by the header bounds. */}
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            id="nav-mobile"
-            className="fixed inset-0 z-30 bg-bg pt-[var(--nav-h)] lg:hidden"
-            /* The sheet materialises rather than appearing: a short fade with a
-               few pixels of travel, so the eye is led down into the list instead
-               of having it cut in. */
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={
-              reduce
-                ? { opacity: 0, transition: { duration: 0.12 } }
-                : { opacity: 0, y: -8, transition: { duration: 0.16, ease: [0.23, 1, 0.32, 1] } }
-            }
-            transition={{ duration: reduce ? 0.15 : 0.24, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <motion.div
-              className="flex flex-col gap-1 px-(--space-gutter) py-8"
-              /* Links cascade in at 40ms. Short enough that the list feels
-                 like one movement, long enough to show reading order. */
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: reduce ? 0 : 0.04, delayChildren: 0.04 } },
-              }}
+          {/* Mobile sheet. Radix Dialog supplies the focus trap, Escape
+              handling and body scroll lock the previous hand-rolled menu
+              managed (or missed) itself. */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger
+              aria-label="Abrir menú"
+              className="flex size-11 cursor-pointer items-center justify-center rounded-md text-fg active:scale-[0.97] lg:hidden"
             >
-              {NAV_LINKS.map((link) => (
-                <motion.div
-                  key={link.href}
-                  variants={{
-                    hidden: { opacity: 0, y: reduce ? 0 : 8 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                >
+              <List size={22} aria-hidden="true" />
+            </SheetTrigger>
+
+            <SheetContent aria-describedby={undefined} className="lg:hidden">
+              <SheetTitle className="sr-only">Menú principal</SheetTitle>
+
+              {/* The sheet's own top bar mirrors the header's geometry so the
+                  close control sits visually where the hamburger was - and,
+                  unlike the hamburger, inside the focus trap. */}
+              <div className="mx-auto flex h-[var(--nav-h)] w-full max-w-(--container-content) shrink-0 items-center justify-between px-(--space-gutter)">
+                <Link href="/" aria-label="SALU División Veterinaria, inicio" onClick={() => setOpen(false)}>
+                  <Logo />
+                </Link>
+                <SheetCloseButton label="Cerrar menú" />
+              </div>
+
+              <div className="flex flex-col gap-1 px-(--space-gutter) py-8">
+                {NAV_LINKS.map((link, index) => (
                   <Link
+                    key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b border-border py-4 text-h3 text-fg"
+                    style={linkCascade(index)}
+                    className={`block border-b border-border py-4 text-h3 text-fg ${linkCascadeClass}`}
                   >
                     {link.label}
                   </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: reduce ? 0 : 8 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-              >
-                <ButtonLink
-                  href={whatsappUrl(WHATSAPP_MESSAGES.general)}
-                  size="lg"
-                  className="mt-6 w-full"
-                  onClick={() => setOpen(false)}
-                >
-                  <WhatsappLogo size={18} aria-hidden="true" />
-                  Cotizar por WhatsApp
-                </ButtonLink>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
+                ))}
+                <div style={linkCascade(NAV_LINKS.length)} className={linkCascadeClass}>
+                  <ButtonLink
+                    href={whatsappUrl(WHATSAPP_MESSAGES.general)}
+                    size="lg"
+                    className="mt-6 w-full"
+                    onClick={() => setOpen(false)}
+                  >
+                    <WhatsappLogo size={18} aria-hidden="true" />
+                    Cotizar por WhatsApp
+                  </ButtonLink>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </nav>
+      </header>
     </>
   )
 }
