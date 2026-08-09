@@ -1,10 +1,5 @@
 # Working rules
 
-The transferable rules from the Savia AGENTS.md, without the parts that explain
-that project. Nothing here describes this codebase — it is only how to behave
-while changing it. **you** is the agent reading this; **we** or **the developer**
-is the single maintainer you are talking to.
-
 Treat all of it as good defaults rather than hard rules. The developer's stated
 preference overrides anything here. If a rule fights the task in front of you,
 say so out loud and get sign-off before breaking it.
