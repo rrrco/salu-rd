@@ -555,6 +555,79 @@
   }
 }
 
+/* The product dialog. Same materialise language as the nav sheet, applied to a
+   panel that has a scrim behind it.
+
+   Two enter shapes because there are two materials. Below `sm` the panel is
+   anchored to the bottom edge, so it travels 16px: enough to acknowledge the
+   edge it came from, nowhere near a full off-screen slide. At `sm` and up it
+   floats free and centred, so it scales instead - from 0.98, not 0.95, because
+   this surface is large and a deep scale on a large surface reads as a zoom.
+
+   Positioning lives on a flex wrapper (components/ui/dialog.tsx), so these
+   keyframes own `transform` outright and carry no centring offsets. */
+@keyframes dialog-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialog-sheet-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes dialog-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dialog-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+}
+
 /* Sheet links cascade in. Each link sets `--i`; the 40ms step is short enough
    that the list reads as one movement, long enough to show reading order.
    `backwards` fill keeps links invisible through their delay. */

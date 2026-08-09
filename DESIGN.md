@@ -259,6 +259,10 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 | Disclosure open/close | height 0 to auto, 340ms in / 240ms out, opacity delayed 60ms on enter | A native `<details>` snaps; the layout jumped hundreds of pixels in one frame |
 | Disclosure glyph | plus rotates 135° into a cross, critically damped spring | One glyph doing both states, no hard cut between two icons |
 | Mobile nav sheet | fade + 8px travel, links stagger at 40ms | The sheet arrives rather than cutting in; the cascade shows reading order |
+| Product dialog, desktop | fade + `translateY(4px)` + `scale(0.98)`, 240ms in / 160ms out | A panel that cuts in over the grid reads as a page change rather than a layer above it. `0.98` and not `0.95`: the surface is large, and a deep scale on a large surface reads as a zoom |
+| Product dialog, mobile | fade + `translateY(16px)` from the bottom edge, same 240/160 | Enough travel to say where it came from, nowhere near a full off-screen slide |
+| Product dialog scrim | `teal-950/50` + 4px backdrop blur, fades with the panel | The catalog behind is dense with packshots on white, which stay legible under a flat scrim and compete with the panel |
+| Product tile press | card `scale(0.99)`, `--dur-press`, scoped to the tile link | The whole card is one target now, so the whole card answers the press |
 | Arrow affordances | translate 2px toward their direction on hover | An arrow means "onward", so it should move that way |
 
 **Not in this system:** scroll hijack, pinned sections, parallax, marquees, magnetic cursors, custom cursors, infinite loops. A supply buyer wants the quote form, not a ride.
@@ -301,7 +305,29 @@ Label **above**, `--font-mono`, `--text-xs`, uppercase. Input `--radius-sm`, `su
 
 ### ProductTile
 
-`--radius-lg`, 1px `border`, `surface`. Image area is a fixed `1:1` on the `teal-100` to `teal-200` gradient with `object-cover`. No image means the `iconKey` icon renders instead, so the grid can never break. Hover raises border to `accent` and scales the image `1.03`. Border is 1px at rest and 1px on hover with only the color changing, so there is no layout shift.
+`--radius-lg`, 1px `border`, `surface`. Image area is a fixed `4:5` on white with `object-contain`: these are packshots, not scenery, and every one is shot on white. No image means the `iconKey` icon renders instead, so the grid can never break. Hover raises border to `accent` and scales the image `1.03`. Border is 1px at rest and 1px on hover with only the color changing, so there is no layout shift.
+
+**The whole tile is a link** to `/productos/[slug]`, via `after:absolute after:inset-0` on the heading's anchor rather than an anchor wrapped around the card: one link, the product name as its accessible name, a card-sized hit target, and the WhatsApp button stays a sibling with `z-10` instead of an anchor nested inside another. Keyboard focus rings the stretched pseudo-element, so the outline traces the card.
+
+A product with **no slug** loses the link *and* the hover affordances. A border that lifts to `accent` on a card that cannot be clicked is the §9 anti-pattern, so the two have to move together.
+
+### ProductDialog
+
+Radix Dialog, one component, two materials. Below `sm` a bottom sheet capped at `88dvh` with only the top corners at `--radius-lg`; at `sm` and up a centred panel, `max-w-3xl`, capped at `min(85dvh, 52rem)`, `--radius-lg`, `--shadow-lg`.
+
+Positioning is a `pointer-events-none` flex wrapper, not `translate(-50%, -50%)`. That leaves `transform` free for the animation; a centred dialog that also animates transform has to bake the offsets into every keyframe, and every future keyframe has to remember. The wrapper passes clicks through to the scrim so dismiss-on-outside-press still fires.
+
+`transform-origin` stays centred. A modal is not anchored to a trigger, so it is the exception to the origin-aware rule that governs popovers. Enter and exit are CSS keyframes, not transitions, because Radix waits for `animationend` before unmounting.
+
+The product name lives in the sticky header bar, not in the body: on a phone the packshot is the tallest thing in the sheet, and a title under it means the buyer opens a product and cannot see which product it is. The close control matches `SheetCloseButton` exactly.
+
+### ProductSpecs
+
+A `<dl>`, one row per field that has a value, nothing rendered when none do. Every spec field is optional in the CMS and an empty row reads as missing data rather than as data that does not apply. Labels are the small-caps sans treatment; `species` renders as `outline` badges.
+
+### Badge
+
+`--radius-full`, the one place a pill is allowed (§3.2), which is exactly what distinguishes a label from a control here since buttons are never pill-shaped. Two variants: `tinted` (`teal-100` fill, `accent-deep` label) for the category, `outline` for set members like species.
 
 ### Section
 
@@ -334,6 +360,34 @@ Seven sections, seven distinct layout families. No family repeats.
 The figures live **inside** the hero, layered on the gradient, rather than as a separate band below it. That is the original design's instinct; only the material changed.
 
 `#contact` deliberately sits at position 7. In the previous build it was position 3, asking for conversion before establishing any trust.
+
+### Beyond the landing page
+
+`/productos` is the full catalog: search, category chips, grid. `/productos/[slug]` is a single product.
+
+A product opened **from the catalog** is intercepted by the `@modal` slot and rendered as a dialog over the live grid, so the buyer's search term and category filter survive. The same URL loaded directly, refreshed or shared renders the standalone page. One `ProductDetail` feeds both; only the grid ratio, the gaps and the image `sizes` differ, because a catalog whose overlay says something different to its page is worse than having no overlay.
+
+Tiles on the home page are **not** intercepted, since interception is scoped to `/productos`. That is deliberate: the catalog has expensive local state worth preserving and the home grid has none. A second root-level slot to make them match would be dead options.
+
+The standalone page is a new layout family, not a repeat: media column left and sticky, copy right, related products of the same category below. The media is capped at `22rem` rather than left to fill its column, because a packshot scaled to a 500px track is mostly empty white with a sachet in the middle.
+
+**The overlay has to open instantly, and instant is a measurement, not an opinion.** Measured click to panel-visible on a production build:
+
+| | Before | After |
+|---|---|---|
+| Cold, no hover | 324ms | 324ms |
+| Cold, pointer rested on the tile first | 380ms | **18ms** |
+| Returning to a product already seen | 105ms | **11ms** |
+
+Three changes get that, and all three are needed:
+
+- **`unstable_dynamicOnHover` on the tile link** plus **`experimental.dynamicOnHover`** in `next.config.ts`. The overlay is a dynamic route, so Next's default prefetch reaches only the nearest `loading.js` and this route has none, meaning nothing arrived before the click. Hover and touchstart now trigger the full fetch. Neither half works alone.
+- **`experimental.staleTimes: { dynamic: 120, static: 180 }`.** The client router may reuse a product it already holds for two minutes, so going back into one costs no server round trip. Kept short of a long cache on purpose: an edit in Studio still reaches a browsing buyer quickly.
+- **One GROQ query per page and `cache()` around the read.** The product and its related siblings were two sequential Sanity calls, the second unable to start until the first returned, and `generateMetadata` fetched the product a second time. Now `productPageQuery` nests `related` under `^`, and `getProductPage` in `app/lib/products.ts` is request-deduplicated.
+
+Two things to remember when judging this: **prefetching is disabled in `next dev`**, so any timing has to be taken against `next build && next start`; and Next cancels prefetches for links outside the viewport, so a link has to actually be on screen for hovering it to mean anything.
+
+There is deliberately **no skeleton** for the overlay. With prefetch on intent the panel is already in memory on desktop, so a loading state would only ever flash, and a flash of chrome that resolves in 18ms reads as a glitch rather than as progress. The tile's own press feedback acknowledges the tap.
 
 ---
 
