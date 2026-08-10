@@ -21,7 +21,7 @@
 
 **Language.** Spanish, Dominican, tú-form. Quote-driven: every CTA asks for a cotización, never a purchase.
 
-**Logo.** `public/salu-img.png` is the dog-and-cat silhouette. On dark surfaces apply `filter: brightness(0) invert(1)` to render it white. `public/salu-logo.png` is the full lockup with wordmark; prefer the silhouette plus live text so the wordmark stays selectable and scalable.
+**Logo.** `public/salu-img.png` is the dog-and-cat silhouette. On dark surfaces apply `filter: brightness(0) invert(1)` to render it white. There is no full-lockup image in the repo; render the wordmark as live text next to the silhouette so it stays selectable and scalable.
 
 ---
 
