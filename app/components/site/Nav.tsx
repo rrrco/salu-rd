@@ -3,8 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { List, WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { List } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
+import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import {
   Sheet,
@@ -100,7 +101,7 @@ export function Nav() {
               href={whatsappUrl(WHATSAPP_MESSAGES.general)}
               className="ml-3"
             >
-              <WhatsappLogo size={16} aria-hidden="true" />
+              <WhatsAppIcon />
               Cotizar
             </ButtonLink>
           </div>
@@ -113,7 +114,7 @@ export function Nav() {
               aria-label="Abrir menú"
               className="flex size-11 cursor-pointer items-center justify-center rounded-md text-fg active:scale-[0.97] lg:hidden"
             >
-              <List size={22} aria-hidden="true" />
+              <List size={24} aria-hidden="true" />
             </SheetTrigger>
 
             <SheetContent aria-describedby={undefined} className="lg:hidden">
@@ -148,7 +149,7 @@ export function Nav() {
                     className="mt-6 w-full"
                     onClick={() => setOpen(false)}
                   >
-                    <WhatsappLogo size={18} aria-hidden="true" />
+                    <WhatsAppIcon />
                     Cotizar por WhatsApp
                   </ButtonLink>
                 </div>

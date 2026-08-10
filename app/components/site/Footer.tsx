@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { EnvelopeSimple, WhatsappLogo, MapPin } from '@phosphor-icons/react/ssr'
+import { EnvelopeSimple, MapPin } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
+import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import { SITE, NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
@@ -29,7 +30,7 @@ export function Footer() {
               veterinarios para clínicas, hospitales y distribuidores.
             </p>
             <ButtonLink href={whatsappUrl(WHATSAPP_MESSAGES.general)}>
-              <WhatsappLogo size={16} aria-hidden="true" />
+              <WhatsAppIcon />
               Cotizar por WhatsApp
             </ButtonLink>
           </div>
@@ -58,7 +59,7 @@ export function Footer() {
               className="flex w-fit items-center gap-2.5 text-sm text-fg-muted transition-colors duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent-deep"
             >
               <EnvelopeSimple
-                size={18}
+                size={16}
                 aria-hidden="true"
                 className="shrink-0 text-accent-deep"
               />
@@ -70,15 +71,11 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex w-fit items-center gap-2.5 text-sm text-fg-muted transition-colors duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent-deep"
             >
-              <WhatsappLogo
-                size={18}
-                aria-hidden="true"
-                className="shrink-0 text-accent-deep"
-              />
+              <WhatsAppIcon size={16} className="shrink-0 text-accent-deep" />
               {SITE.phoneDisplay}
             </a>
             <p className="flex items-center gap-2.5 text-sm text-fg-muted">
-              <MapPin size={18} aria-hidden="true" className="shrink-0 text-accent-deep" />
+              <MapPin size={16} aria-hidden="true" className="shrink-0 text-accent-deep" />
               {SITE.country}
             </p>
           </div>

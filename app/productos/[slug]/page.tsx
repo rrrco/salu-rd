@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             href="/productos"
             className="inline-flex items-center gap-1.5 font-semibold text-xs uppercase tracking-[0.08em] text-fg-muted transition-colors duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent"
           >
-            <CaretLeft size={14} aria-hidden="true" />
+            <CaretLeft size={16} aria-hidden="true" />
             Volver al catálogo
           </Link>
         </div>

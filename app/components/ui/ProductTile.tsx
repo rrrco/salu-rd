@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ButtonLink } from '@/components/ui/button'
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
-import { CategoryIcon } from '../../lib/icons'
+import { CategoryIcon, WhatsAppIcon } from '../../lib/icons'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 import { urlFor, blurOf } from '../../lib/image'
 import type { SanityProduct } from '../../lib/types'
@@ -145,7 +144,7 @@ export function ProductTile({
           href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
           className="relative z-10 mt-auto w-full"
         >
-          <WhatsappLogo size={16} aria-hidden="true" />
+          <WhatsAppIcon />
           Cotizar
         </ButtonLink>
       </div>

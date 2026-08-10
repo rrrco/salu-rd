@@ -95,7 +95,7 @@ function SheetCloseButton({ label }: { label: string }) {
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]'
       )}
     >
-      <X size={22} aria-hidden="true" />
+      <X size={20} aria-hidden="true" />
     </SheetClose>
   )
 }

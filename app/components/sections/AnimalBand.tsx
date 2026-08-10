@@ -1,4 +1,4 @@
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 import { PhotoSlot } from '../ui/PhotoSlot'
@@ -53,7 +53,7 @@ export function AnimalBand() {
                 size="lg"
                 className="mt-2"
               >
-                <WhatsappLogo size={18} aria-hidden="true" />
+                <WhatsAppIcon />
                 Cotizar por WhatsApp
               </ButtonLink>
             </div>

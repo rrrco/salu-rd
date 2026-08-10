@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CATEGORIES, labelOf, type SanityProductDetail } from '../../lib/types'
@@ -84,7 +84,7 @@ export function ProductDetail({
             size={isPage ? 'lg' : 'md'}
             className="w-full sm:w-auto"
           >
-            <WhatsappLogo size={18} aria-hidden="true" />
+            <WhatsAppIcon />
             Cotizar por WhatsApp
           </ButtonLink>
           <ButtonLink

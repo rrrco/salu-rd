@@ -179,6 +179,7 @@ Body: `line-height: 1.7`, `max-width: 65ch`.
 - Emphasis within a headline uses **italic or weight of the same family**. Never inject a second family into a headline.
 - Stat numerals carry `font-variant-numeric: tabular-nums` so count-up animation never jitters layout width.
 - Italic words containing descenders (`y g j p q`) need `line-height` at least `1.1` plus bottom padding reserve.
+- **Quotation marks are set as type, never drawn as icons.** The testimonial mark was Phosphor `Quotes` at 22px outline, where the two hollow commas read as a lowercase "gg" and the reader had to decode the one glyph on the page that should have been instant. It is now the real `&ldquo;` at `3.5rem` in `teal-300`, `select-none` so it stays out of the clipboard. Punctuation belongs to the type system, which is also why it was always going to lose the fight with the icon-weight rule in 8.
 - No gradient text.
 
 ---
@@ -433,6 +434,7 @@ Non-negotiable, checked before any change ships.
 
 ```bash
 node scripts/contrast-audit.mjs   # 34 pairings, must print ALL PASS
+node scripts/icon-audit.mjs       # icon language, must print ALL PASS
 ```
 
 Every color pairing the site actually uses is in that script, with the ratio it needs. Change a color token, run it, and it tells you what broke. The previous build had five failing pairings, including every primary button on the site; none of them were visible without measuring.
@@ -443,7 +445,20 @@ Every color pairing the site actually uses is in that script, with the ratio it 
 - Carousel is keyboard operable with real `<button>` controls and `aria-label`s.
 - Decorative images `alt=""`. Meaningful images carry real Spanish alt text.
 - Icons that stand alone carry `aria-label`. Icons beside text are `aria-hidden`.
-- **One icon language.** Every glyph is Phosphor at `regular` weight, matching SF Symbols' single-family, single-stroke logic. The app previously mixed `fill` (WhatsApp, quotes), `bold` (arrows) and `light` (placeholders), so a solid WhatsApp glyph sat beside an outlined envelope and read as two different icon sets. Paired icons also share a container: same circle, same size, same stroke.
+- **One icon language.** Every glyph is Phosphor at `regular` weight, matching SF Symbols' single-family, single-stroke logic. The app previously mixed `fill` (WhatsApp, quotes), `bold` (arrows) and `light` (placeholders), so a solid WhatsApp glyph sat beside an outlined envelope and read as two different icon sets. Paired icons also share a container: same circle, same size, same stroke, and that container is `size-12` with a 24px glyph wherever it appears.
+- **The exemption, and it is the only one: third-party brand marks.** `WhatsappLogo` renders at `fill`, through the `WhatsAppIcon` wrapper in `app/lib/icons.tsx`. A logo is not an icon; it is someone else's identity, and it renders the way its owner draws it. WhatsApp's mark is solid everywhere WhatsApp controls it, so an outlined copy reads as an approximation rather than as the real thing. The wrapper exists because the mark appears at eleven call sites and the exemption should have exactly one home.
+- **A control owns its icon size; a standalone icon takes one off the ladder.** `button.tsx` carries `[&_svg:not([class*='size-'])]:size-4`, and `alert.tsx` and `badge.tsx` do the same, so an icon inside any of them is sized by CSS. A `size` prop there is overridden and does nothing. Pass no size inside a control. Outside one, use the ladder:
+
+  | Size | Role |
+  |---|---|
+  | 16 | Inline beside text |
+  | 20 | Affordances and controls: arrows, search, close |
+  | 24 | Glyph in a `size-12` circle |
+  | 28 | The WhatsApp FAB |
+  | 40 | States and placeholders |
+  | 64 / 96 | Product fallback art: tile, then detail frame |
+
+  Before this ladder the app used ten sizes assigned per file rather than per role, `ArrowUpRight` appeared at both 20 and 18 inside `#contact` doing the same job twice, and nine `size` props inside buttons were dead. The sizes looked deliberate in the source and were not.
 - `prefers-reduced-motion` honoured everywhere.
 - `min-h-[100dvh]`, never `h-screen`. iOS Safari's address bar makes `100vh` jump.
 
@@ -461,6 +476,7 @@ This codebase drifted before. These are the specific regressions to refuse.
 - Hotlinking another company's assets.
 - Shipping a form that submits to `action="#"`, or a captcha that gates nothing.
 - Letting the type scale drift from the spec without updating the spec.
+- **A `size` prop on an icon inside a control that already sizes it.** `button.tsx`, `alert.tsx` and `badge.tsx` all set the svg size in CSS, which wins. The prop reads as a deliberate choice and does nothing, so the next person tunes a number that has never had any effect. `scripts/icon-audit.mjs` fails on it.
 
 **General:**
 - Em-dashes (`—`) and en-dashes (`–`) in any visible string. Use a hyphen, a comma, or two sentences.

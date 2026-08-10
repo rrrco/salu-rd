@@ -1,4 +1,5 @@
-import { EnvelopeSimple, WhatsappLogo, ArrowUpRight } from '@phosphor-icons/react/ssr'
+import { EnvelopeSimple, ArrowUpRight } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { Card } from '@/components/ui/card'
 import ContactForm from '../ContactForm'
 import { Section, SectionHead } from '../ui/Section'
@@ -55,7 +56,7 @@ export function Contact() {
           >
             <span className="flex items-start justify-between gap-4">
               <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/15">
-                <WhatsappLogo size={24} aria-hidden="true" />
+                <WhatsAppIcon size={24} />
               </span>
               <ArrowUpRight
                 size={20}
@@ -96,8 +97,7 @@ export function Contact() {
               <span className="truncate text-fg">{SITE.email}</span>
             </span>
             <ArrowUpRight
-              size={18}
-
+              size={20}
               aria-hidden="true"
               className="ml-auto shrink-0 text-fg-subtle transition-transform duration-[180ms] ease-[var(--ease-out)] hover-fine:group-hover:-translate-y-0.5 hover-fine:group-hover:translate-x-0.5 motion-reduce:transition-none"
             />
