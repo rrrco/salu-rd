@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CaretLeft } from '@phosphor-icons/react/ssr'
-import { client } from '../lib/sanity'
-import { allProductsQuery } from '../lib/queries'
-import type { SanityProduct } from '../lib/types'
-import CatalogClient from '../components/CatalogClient'
+import { client } from '../../lib/sanity'
+import { allProductsQuery } from '../../lib/queries'
+import type { SanityProduct } from '../../lib/types'
+import CatalogClient from '../../components/CatalogClient'
 
 export const revalidate = 60
 

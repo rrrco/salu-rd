@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation'
 import { DialogTitle } from '@/components/ui/dialog'
-import { getProduct } from '../../../lib/products'
-import { ProductDetail } from '../../../components/product/ProductDetail'
-import { ProductModal } from '../../../components/product/ProductModal'
+import { getProduct } from '../../../../lib/products'
+import { ProductDetail } from '../../../../components/product/ProductDetail'
+import { ProductModal } from '../../../../components/product/ProductModal'
 
 export const revalidate = 60
 

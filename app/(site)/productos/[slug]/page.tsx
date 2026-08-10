@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CaretLeft } from '@phosphor-icons/react/ssr'
-import { client } from '../../lib/sanity'
-import { productSlugsQuery } from '../../lib/queries'
-import { getProductPage } from '../../lib/products'
-import { urlFor } from '../../lib/image'
-import { ProductDetail } from '../../components/product/ProductDetail'
-import { ProductTile } from '../../components/ui/ProductTile'
+import { client } from '../../../lib/sanity'
+import { productSlugsQuery } from '../../../lib/queries'
+import { getProductPage } from '../../../lib/products'
+import { urlFor } from '../../../lib/image'
+import { ProductDetail } from '../../../components/product/ProductDetail'
+import { ProductTile } from '../../../components/ui/ProductTile'
 
 export const revalidate = 60
 

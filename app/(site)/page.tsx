@@ -1,13 +1,13 @@
-import { Hero } from './components/sections/Hero'
-import { FeaturedProducts } from './components/sections/FeaturedProducts'
-import { Purpose } from './components/sections/Purpose'
-import { AnimalBand } from './components/sections/AnimalBand'
-import { Testimonials } from './components/sections/Testimonials'
-import { Contact } from './components/sections/Contact'
-import { CtaBand } from './components/sections/CtaBand'
-import { client } from './lib/sanity'
-import { productsQuery } from './lib/queries'
-import type { SanityProduct } from './lib/types'
+import { Hero } from '../components/sections/Hero'
+import { FeaturedProducts } from '../components/sections/FeaturedProducts'
+import { Purpose } from '../components/sections/Purpose'
+import { AnimalBand } from '../components/sections/AnimalBand'
+import { Testimonials } from '../components/sections/Testimonials'
+import { Contact } from '../components/sections/Contact'
+import { CtaBand } from '../components/sections/CtaBand'
+import { client } from '../lib/sanity'
+import { productsQuery } from '../lib/queries'
+import type { SanityProduct } from '../lib/types'
 
 export const revalidate = 60
 

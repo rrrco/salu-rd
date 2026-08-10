@@ -23,11 +23,6 @@ const poppins = Poppins({
   preload: false,
   variable: '--font-poppins',
 })
-import { Nav } from './components/site/Nav'
-import { Footer } from './components/site/Footer'
-import { BrowserBars } from './components/site/BrowserBars'
-import { WhatsAppFab } from './components/site/WhatsAppFab'
-
 /**
  * iOS Safari paints the status-bar inset from `theme-color`, not from the
  * page's html background - without it the strip defaults to white. The home
@@ -75,21 +70,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>
       </head>
-      <body>
-        <a
-          href="#main"
-          className="sr-only-focusable fixed left-4 top-4 z-[100] rounded-md bg-brand px-4 py-2 text-sm font-semibold text-on-brand"
-        >
-          Saltar al contenido
-        </a>
-        <Nav />
-        {/* main carries the paper ground; body deliberately holds the footer's
-            teal-50 so the canvas below the page matches it (globals.css). */}
-        <main id="main" className="bg-bg">{children}</main>
-        <Footer />
-        <BrowserBars />
-        <WhatsAppFab />
-      </body>
+      {/* Marketing chrome (Nav, Footer, FAB) lives in `(site)/layout.tsx` so
+          that `/studio` renders the Sanity Studio without it. */}
+      <body>{children}</body>
     </html>
   )
 }
