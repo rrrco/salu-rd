@@ -285,7 +285,9 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 
 ### Button
 
-Three variants, two sizes. `--radius-md`. Sentence case, sans face, weight 600, `0.02em` tracking.
+Three variants, three sizes. `--radius-md`. Sentence case, sans face, weight 600, `0.02em` tracking.
+
+Sizes are `md` (h-11), `lg` (h-13) and `icon` — a 44px square carrying a glyph and no label, for a bar control that has no room for one. `icon` sets its own glyph size, since the 16px an inline icon takes beside a label is far too small alone in a 44px target.
 
 | Variant | Rest | Hover | Notes |
 |---|---|---|---|
@@ -355,6 +357,8 @@ Anchor IDs are contractual. Existing CTAs link to them.
 Seven sections, seven distinct layout families. No family repeats.
 
 **WhatsApp is the primary conversion path, everywhere.** It is what this business actually closes on, so it is the primary button in the nav, the hero, every product tile, the photo band, the closing CTA and the footer, and it is a full brand-filled panel in `#contact`. The email form is the slow path and sits collapsed beside it. Product tiles prefill the message with the product name, so the chat opens already saying what the buyer was looking at.
+
+**On mobile the nav CTA is a glyph, not a row in the menu.** Below `lg` the bar carries a bare WhatsApp glyph (`size="icon"`, 44px, on the same grid and the same 24px rung of the ladder as the hamburger beside it) rather than hiding the conversion path one tap deep inside the sheet. No surface: a second filled button in a bar this narrow competes with the logo, and the pair reads as two nav controls. The glyph is flat white — the bar is a dark band on every route and at every scroll position, so there is one ground to sit on. The full-width filled `Cotizar por WhatsApp` stays inside the sheet — while the menu is open, the bar glyph is behind the overlay. The floating FAB stays on every breakpoint; the redundancy is deliberate, since a thumb-height target costs nothing to leave in place.
 
 **Dark moments bookend a light middle**: the hero and the closing CTA, with the photo band as the one dark beat between them. An earlier version had a dark hero followed immediately by a dark products band, which read as one long muddy stretch and cost the products their separation. Product photography also sits better on a light ground.
 
@@ -453,7 +457,7 @@ Every color pairing the site actually uses is in that script, with the ratio it 
   |---|---|
   | 16 | Inline beside text |
   | 20 | Affordances and controls: arrows, search, close |
-  | 24 | Glyph in a `size-12` circle |
+  | 24 | Glyph in a `size-12` circle, and the nav bar's own controls - hamburger and WhatsApp - which pair at this size |
   | 28 | The WhatsApp FAB |
   | 40 | States and placeholders |
   | 64 / 96 | Product fallback art: tile, then detail frame |

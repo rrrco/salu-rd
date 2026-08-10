@@ -68,6 +68,17 @@ const buttonVariants = cva(
       size: {
         md: 'h-11 px-5',
         lg: 'h-13 px-7',
+        /* Square, glyph only. 44px is the same grid as the nav hamburger and
+           the sheet/dialog close buttons, so icon controls line up wherever
+           they sit beside each other.
+
+           The glyph size lives here, not at the call site: a control owns its
+           icon size (DESIGN.md 8). It repeats the base clamp's selector
+           verbatim so `twMerge` reads the two as one utility and drops the
+           16px default. A bare `[&_svg]:size-6` would not dedupe, and would
+           then lose the cascade too: `:not([class*='size-'])` carries an
+           attribute selector, so the base rule outranks it on specificity. */
+        icon: "size-11 px-0 [&_svg:not([class*='size-'])]:size-6",
       },
     },
     defaultVariants: {

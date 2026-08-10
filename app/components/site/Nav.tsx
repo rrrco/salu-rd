@@ -94,56 +94,83 @@ export function Nav() {
             </ButtonLink>
           </div>
 
-          {/* Mobile sheet. Radix Dialog supplies the focus trap, Escape
-              handling and body scroll lock the previous hand-rolled menu
-              managed (or missed) itself. */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger
-              aria-label="Abrir menú"
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md text-fg active:scale-[0.97] lg:hidden"
+          <div className="flex items-center gap-2 lg:hidden">
+            {/* WhatsApp is what this business closes on, so on mobile it is a
+                control in the bar rather than a row inside the menu. Bare
+                glyph, no surface: it reads as a peer of the hamburger it sits
+                beside, and the filled CTA stays the one inside the sheet.
+
+                White, flat. The bar is a dark band on every route and at every
+                scroll position, so the glyph has exactly one ground to sit on
+                and does not need to track a token. */}
+            <ButtonLink
+              href={whatsappUrl(WHATSAPP_MESSAGES.general)}
+              variant="ghost"
+              size="icon"
+              className="text-white"
+              aria-label="Cotizar por WhatsApp"
             >
-              <List size={24} aria-hidden="true" />
-            </SheetTrigger>
+              {/* No size here or on the variant's behalf: `size="icon"` owns
+                  it, at the hamburger's 24px rung, so the pair sits on one
+                  optical line. */}
+              <WhatsAppIcon />
+            </ButtonLink>
 
-            <SheetContent aria-describedby={undefined} className="lg:hidden">
-              <SheetTitle className="sr-only">Menú principal</SheetTitle>
+            {/* Mobile sheet. Radix Dialog supplies the focus trap, Escape
+                handling and body scroll lock the previous hand-rolled menu
+                managed (or missed) itself. */}
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger
+                aria-label="Abrir menú"
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md text-fg active:scale-[0.97]"
+              >
+                <List size={24} aria-hidden="true" />
+              </SheetTrigger>
 
-              {/* The sheet's own top bar mirrors the header's geometry so the
-                  close control sits visually where the hamburger was - and,
-                  unlike the hamburger, inside the focus trap. */}
-              <div className="mx-auto flex h-[var(--nav-h)] w-full max-w-(--container-content) shrink-0 items-center justify-between px-(--space-gutter)">
-                <Link href="/" aria-label="SALU División Veterinaria, inicio" onClick={() => setOpen(false)}>
-                  <Logo />
-                </Link>
-                <SheetCloseButton label="Cerrar menú" />
-              </div>
+              {/* Portaled to body, so it needs its own breakpoint guard. */}
+              <SheetContent aria-describedby={undefined} className="lg:hidden">
+                <SheetTitle className="sr-only">Menú principal</SheetTitle>
 
-              <div className="flex flex-col gap-1 px-(--space-gutter) py-8">
-                {NAV_LINKS.map((link, index) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    style={linkCascade(index)}
-                    className={`block border-b border-border py-4 text-h3 text-fg ${linkCascadeClass}`}
-                  >
-                    {link.label}
+                {/* The sheet's own top bar mirrors the header's geometry so the
+                    close control sits visually where the hamburger was - and,
+                    unlike the hamburger, inside the focus trap. */}
+                <div className="mx-auto flex h-[var(--nav-h)] w-full max-w-(--container-content) shrink-0 items-center justify-between px-(--space-gutter)">
+                  <Link href="/" aria-label="SALU División Veterinaria, inicio" onClick={() => setOpen(false)}>
+                    <Logo />
                   </Link>
-                ))}
-                <div style={linkCascade(NAV_LINKS.length)} className={linkCascadeClass}>
-                  <ButtonLink
-                    href={whatsappUrl(WHATSAPP_MESSAGES.general)}
-                    size="lg"
-                    className="mt-6 w-full"
-                    onClick={() => setOpen(false)}
-                  >
-                    <WhatsAppIcon />
-                    Cotizar por WhatsApp
-                  </ButtonLink>
+                  <SheetCloseButton label="Cerrar menú" />
                 </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+
+                <div className="flex flex-col gap-1 px-(--space-gutter) py-8">
+                  {NAV_LINKS.map((link, index) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      style={linkCascade(index)}
+                      className={`block border-b border-border py-4 text-h3 text-fg ${linkCascadeClass}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                  {/* Still earns its place with the bar glyph in the header:
+                      while the sheet is open, that control is behind the
+                      overlay. */}
+                  <div style={linkCascade(NAV_LINKS.length)} className={linkCascadeClass}>
+                    <ButtonLink
+                      href={whatsappUrl(WHATSAPP_MESSAGES.general)}
+                      size="lg"
+                      className="mt-6 w-full"
+                      onClick={() => setOpen(false)}
+                    >
+                      <WhatsAppIcon />
+                      Cotizar por WhatsApp
+                    </ButtonLink>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </nav>
       </header>
     </>
