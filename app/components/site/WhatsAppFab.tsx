@@ -1,4 +1,4 @@
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { SITE } from '../../lib/site'
 
 /**
@@ -26,7 +26,7 @@ export function WhatsAppFab() {
         'motion-reduce:transition-none motion-reduce:hover-fine:scale-100',
       ].join(' ')}
     >
-      <WhatsappLogo size={28} aria-hidden="true" />
+      <WhatsAppIcon size={28} />
     </a>
   )
 }

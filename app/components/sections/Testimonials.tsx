@@ -1,4 +1,3 @@
-import { Quotes } from '@phosphor-icons/react/ssr'
 import { Card } from '@/components/ui/card'
 import { Section, SectionHead } from '../ui/Section'
 import { Reveal } from '../ui/Reveal'
@@ -73,12 +72,22 @@ export function Testimonials() {
                 reason; "it looks nice" is not one. */}
             <Card asChild className="h-full gap-5 p-8">
               <figure>
-              <Quotes
-                size={22}
+              {/* A quotation mark is type, not an icon. This was Phosphor's
+                  `Quotes` at 22px outline, where the two hollow commas read as
+                  a lowercase "gg" rather than as punctuation. Setting the real
+                  character at display size makes it unmistakable, and takes it
+                  out from under the icon-weight rule, which never had any
+                  business governing punctuation.
 
+                  `select-none` because `aria-hidden` handles screen readers and
+                  does nothing for the clipboard: without it, copying a
+                  testimonial drags the ornament along with the quote. */}
+              <span
                 aria-hidden="true"
-                className="shrink-0 text-brand"
-              />
+                className="-mb-2 -ml-1 select-none text-[3.5rem] font-semibold leading-[0.7] text-teal-300"
+              >
+                &ldquo;
+              </span>
 
               <blockquote className="text-lead text-fg">{testimonial.quote}</blockquote>
 

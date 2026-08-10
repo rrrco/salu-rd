@@ -36,7 +36,7 @@ export default async function ProductosPage() {
             href="/"
             className="mb-6 inline-flex items-center gap-1.5 font-semibold text-xs uppercase tracking-[0.08em] text-fg-muted transition-colors duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent"
           >
-            <CaretLeft size={14} aria-hidden="true" />
+            <CaretLeft size={16} aria-hidden="true" />
             Volver al inicio
           </Link>
           <h1 className="max-w-[18ch] text-h1 font-semibold">Catálogo de productos</h1>

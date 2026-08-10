@@ -57,7 +57,7 @@ export default function ContactForm() {
 
       {state.status === 'error' && state.message ? (
         <Alert variant="destructive">
-          <WarningCircle size={18} aria-hidden="true" />
+          <WarningCircle aria-hidden="true" />
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
       ) : null}

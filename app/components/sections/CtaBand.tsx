@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import { Reveal } from '../ui/Reveal'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
@@ -34,7 +34,7 @@ export function CtaBand() {
             ¿Listo para abastecer tu práctica con productos veterinarios premium?
           </h2>
           <ButtonLink href={whatsappUrl(WHATSAPP_MESSAGES.general)} size="lg">
-            <WhatsappLogo size={18} aria-hidden="true" />
+            <WhatsAppIcon />
             Cotizar por WhatsApp
           </ButtonLink>
         </Reveal>

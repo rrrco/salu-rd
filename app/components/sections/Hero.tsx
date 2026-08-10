@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { WhatsappLogo } from '@phosphor-icons/react/ssr'
+import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import { RevealGroup, RevealItem } from '../ui/Reveal'
 import { HeroStats } from './Stats'
@@ -76,7 +76,7 @@ export function Hero() {
               {/* WhatsApp is the channel this business actually closes on, so
                   it is the primary action, not a floating button in the corner. */}
               <ButtonLink href={whatsappUrl(WHATSAPP_MESSAGES.general)} size="lg">
-                <WhatsappLogo size={18} aria-hidden="true" />
+                <WhatsAppIcon />
                 Cotizar por WhatsApp
               </ButtonLink>
               <ButtonLink href="/productos" variant="inverse" size="lg">

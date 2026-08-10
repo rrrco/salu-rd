@@ -33,7 +33,6 @@ export function FeaturedProducts({ products }: { products: SanityProduct[] }) {
             {/* Nudges forward on hover: the arrow means "onward", so it should
                 move that way when the pointer arrives. */}
             <ArrowRight
-              size={15}
               aria-hidden="true"
               className="transition-transform duration-[180ms] ease-[var(--ease-out)] hover-fine:group-hover:translate-x-0.5 motion-reduce:transition-none"
             />

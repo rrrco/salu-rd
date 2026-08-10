@@ -45,7 +45,7 @@ export default function CatalogClient({ products }: { products: SanityProduct[] 
       <div className="flex flex-col gap-5">
         <div className="relative max-w-md">
           <MagnifyingGlass
-            size={18}
+            size={20}
             aria-hidden="true"
             className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-fg-subtle"
           />
@@ -67,7 +67,7 @@ export default function CatalogClient({ products }: { products: SanityProduct[] 
               aria-label="Limpiar búsqueda"
               className="absolute right-3 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-fg-subtle transition-colors duration-[180ms] ease-[var(--ease-out)] hover-fine:text-fg"
             >
-              <X size={14} aria-hidden="true" />
+              <X size={16} aria-hidden="true" />
             </button>
           ) : null}
         </div>
