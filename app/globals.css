@@ -364,23 +364,49 @@
 }
 
 /* ============================================================================
-   Nav surface (scrolled)
+   Nav surface
 
-   The sticky bar's face once the page scrolls: a slice of the hero rather
-   than a flat fill. Teal-950 holds the top edge (continuous with the iOS
-   status bar / theme-color #062428), the 168deg drift warms it toward the
-   bottom, and a faint bloom rises on the right - the same vocabulary as
-   .hero-surface, compressed to bar height.
+   The sticky bar's face: teal-950 holds the top edge (continuous with the iOS
+   status bar / theme-color #062428), same 180deg vocabulary as the hero's top
+   slice - no diagonal, no bloom - so the bar reads as the hero's dark band
+   that stayed pinned.
+
+   The face is a pseudo-element because `background-image` is not animatable -
+   as a background swap it snapped in; as an opacity it fades on the same
+   240ms ease the shadow uses. `sticky` + `z-40` (Nav.tsx) make the header a
+   stacking context, so `z-index: -1` paints behind the bar's contents and
+   nothing else.
+
+   Two facts pick the state, combined here because no one component knows
+   both: `data-under-nav` - a band that runs under the bar and supplies the
+   dark ground itself, declared in the route's prerendered HTML (the home
+   hero) - and `data-scrolled`, client scroll state (Nav.tsx). The bar floats
+   only over such a band at rest; everywhere else it carries its own face.
    ========================================================================= */
 
-.nav-surface {
-  /* Same 180deg vocabulary as the hero's top slice - no diagonal, no bloom -
-     so the bar reads as the hero's dark band that stayed pinned. */
+[data-nav] {
+  transition: box-shadow var(--dur-enter) var(--ease-out);
+}
+
+[data-nav]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: linear-gradient(
     180deg,
     var(--color-teal-950) 0%,
     var(--color-teal-900) 100%
   );
+  transition: opacity var(--dur-enter) var(--ease-out);
+}
+
+:where(body:has([data-under-nav])) [data-nav]:not([data-scrolled])::before {
+  opacity: 0;
+}
+
+[data-nav][data-scrolled] {
+  box-shadow: 0 2px 12px rgb(6 36 40 / 0.25);
 }
 
 /* ============================================================================

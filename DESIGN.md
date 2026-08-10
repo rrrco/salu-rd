@@ -342,7 +342,7 @@ Anchor IDs are contractual. Existing CTAs link to them.
 
 | # | Section | Layout family | Surface |
 |---|---|---|---|
-| - | Nav | sticky bar, max 72px, single line | transparent over the hero, translucent light once scrolled |
+| - | Nav | sticky bar, max 72px, single line | dark teal band on every route; transparent over the hero at rest, face fades in on scroll |
 | 1 | `#hero` | full-bleed centred brand field, figures on a glass panel | teal gradient, **dark** |
 | 2 | `#products` | asymmetric grid, white tiles | `teal-50` |
 | 3 | `#purpose` | 7/5 split, three identical pillars beside a photo | paper |

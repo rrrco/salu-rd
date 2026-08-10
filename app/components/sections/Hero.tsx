@@ -16,8 +16,9 @@ import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
  * white card, and the tiny uppercase button.
  *
  * The hero slides under the transparent nav via a negative top margin, so the
- * colour runs to the very top of the viewport. `Nav` switches to its dark
- * treatment while it sits over this section.
+ * colour runs to the very top of the viewport. `data-under-nav` declares that
+ * arrangement: the nav's face rules (globals.css) leave the bar transparent at
+ * rest only on routes whose HTML carries this marker.
  *
  * Four text elements, as the spec allows: eyebrow, headline, subtext, CTAs. The
  * brand mark is a mark, not a fifth line of type, and the nav carries the
@@ -27,6 +28,7 @@ export function Hero() {
   return (
     <section
       id="hero"
+      data-under-nav
       data-bar-color="#062428"
       className="hero-surface on-dark relative -mt-(--nav-h) flex min-h-[100dvh] flex-col overflow-hidden pt-(--nav-h)"
     >

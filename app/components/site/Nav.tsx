@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { List } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
@@ -30,20 +29,6 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const sentinel = useRef<HTMLDivElement>(null)
-  const pathname = usePathname()
-
-  /**
-   * The nav is a dark band on every route, with one exception: the top of the
-   * home hero, which supplies the dark ground itself, so the bar is transparent
-   * there and lets it through. Everywhere else - including the top of
-   * light-topped routes like productos - it is the solid teal-950 bar. It never
-   * flips to a light face.
-   *
-   * Derived during render rather than tracked in state: it is a function of
-   * values we already have, and an effect would introduce a frame where the
-   * nav is styled for the wrong background.
-   */
-  const overHero = pathname === '/' && !scrolled
 
   /**
    * IntersectionObserver on a sentinel, not a scroll listener. A scroll handler
@@ -64,13 +49,18 @@ export function Nav() {
     <>
       <div ref={sentinel} aria-hidden="true" className="absolute top-0 h-px w-full" />
 
+      {/* The nav is a dark band on every route, with one exception: the top of
+          the home hero, which supplies the dark ground itself, so the bar is
+          transparent there and lets it through. That fact is route-shaped, and
+          this component prerenders once for every route - `usePathname()` here
+          shipped the wrong colors in the static HTML (#10). So the hero
+          declares itself with `data-under-nav`, and the face rules live in
+          globals.css where CSS can combine the route fact with `data-scrolled`.
+          Correct on first paint, no hydration involved. */}
       <header
-        className={[
-          'sticky top-0 z-40 w-full border-b border-transparent on-dark',
-          'transition-[background-color,box-shadow] duration-[240ms] ease-[var(--ease-out)]',
-          overHero ? 'bg-transparent' : 'nav-surface',
-          scrolled ? 'shadow-[0_2px_12px_rgb(6_36_40/0.25)]' : '',
-        ].filter(Boolean).join(' ')}
+        data-nav
+        data-scrolled={scrolled || undefined}
+        className="on-dark sticky top-0 z-40 w-full border-b border-transparent"
       >
         <nav
           aria-label="Principal"
