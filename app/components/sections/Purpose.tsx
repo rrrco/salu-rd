@@ -77,10 +77,10 @@ export function Purpose() {
         <Reveal delay={0.12} className="lg:col-span-5">
           <PhotoSlot
             src="/photos/delivery.jpg"
-            alt="Preparación de pedidos de productos veterinarios SALU"
+            alt="Camión de reparto cargado con cajas de productos veterinarios SALU"
             ratio="aspect-[4/3] lg:aspect-auto lg:h-full"
             sizes="(min-width: 1024px) 40vw, 100vw"
-            note="Foto 4:3 - cajas de producto en su entorno real, o una entrega en curso"
+            note="Foto 3:4 vertical - cajas de producto en su entorno real, o una entrega en curso"
             className="h-full w-full"
           />
         </Reveal>
