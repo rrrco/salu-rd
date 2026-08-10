@@ -68,6 +68,10 @@ const buttonVariants = cva(
       size: {
         md: 'h-11 px-5',
         lg: 'h-13 px-7',
+        /* Square, glyph only. 44px is the same grid as the nav hamburger and
+           the sheet/dialog close buttons, so icon controls line up wherever
+           they sit beside each other. */
+        icon: 'size-11 px-0',
       },
     },
     defaultVariants: {

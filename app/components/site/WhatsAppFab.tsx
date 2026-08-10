@@ -5,6 +5,10 @@ import { SITE } from '../../lib/site'
  * Lives in `layout.tsx`, so it renders once for every route. Previously this
  * markup and its inline SVG path were duplicated verbatim across both pages.
  *
+ * Kept on every breakpoint even though the navbar also carries a WhatsApp
+ * control (`Nav.tsx`). The redundancy is deliberate: this is the conversion
+ * path, and a thumb-height target costs nothing to leave in place.
+ *
  * The brand-tinted shadow is the one place `--shadow-accent` is used: it makes
  * the button read as part of the brand rather than a bolted-on third-party
  * widget.
