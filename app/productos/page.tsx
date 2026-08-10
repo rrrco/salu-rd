@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CaretLeft } from '@phosphor-icons/react/ssr'
 import { client } from '../lib/sanity'
@@ -7,12 +7,6 @@ import type { SanityProduct } from '../lib/types'
 import CatalogClient from '../components/CatalogClient'
 
 export const revalidate = 60
-
-/* This route opens on the light teal-50 header, so the iOS status-bar inset
-   matches it instead of the site's dark default (see layout.tsx). */
-export const viewport: Viewport = {
-  themeColor: '#e6f4f6',
-}
 
 export const metadata: Metadata = {
   title: 'Catálogo de Productos',
@@ -30,7 +24,7 @@ export default async function ProductosPage() {
 
   return (
     <>
-      <header data-overscroll-ground="light" data-bar-color="#e6f4f6" className="border-b border-border bg-teal-50">
+      <header data-bar-color="#e6f4f6" className="border-b border-border bg-teal-50">
         <div className="mx-auto max-w-(--container-content) px-(--space-gutter) py-14">
           <Link
             href="/"
