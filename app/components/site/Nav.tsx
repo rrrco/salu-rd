@@ -32,17 +32,17 @@ export function Nav() {
   const pathname = usePathname()
 
   /**
-   * The nav is a dark-band element everywhere it has a face: transparent over
-   * the home hero (which supplies the dark ground itself), and a solid
-   * teal-950 bar once scrolled - on any route. It never flips to a light bar;
-   * the only light state is the top of light-topped routes (productos), where
-   * it stays transparent with dark contents.
+   * The nav is a dark band on every route, with one exception: the top of the
+   * home hero, which supplies the dark ground itself, so the bar is transparent
+   * there and lets it through. Everywhere else - including the top of
+   * light-topped routes like productos - it is the solid teal-950 bar. It never
+   * flips to a light face.
    *
    * Derived during render rather than tracked in state: it is a function of
    * values we already have, and an effect would introduce a frame where the
    * nav is styled for the wrong background.
    */
-  const dark = pathname === '/' || scrolled
+  const overHero = pathname === '/' && !scrolled
 
   /**
    * IntersectionObserver on a sentinel, not a scroll listener. A scroll handler
@@ -65,12 +65,10 @@ export function Nav() {
 
       <header
         className={[
-          'sticky top-0 z-40 w-full border-b border-transparent',
+          'sticky top-0 z-40 w-full border-b border-transparent on-dark',
           'transition-[background-color,box-shadow] duration-[240ms] ease-[var(--ease-out)]',
-          dark ? 'on-dark' : '',
-          scrolled
-            ? 'nav-surface shadow-[0_2px_12px_rgb(6_36_40/0.25)]'
-            : 'bg-transparent',
+          overHero ? 'bg-transparent' : 'nav-surface',
+          scrolled ? 'shadow-[0_2px_12px_rgb(6_36_40/0.25)]' : '',
         ].filter(Boolean).join(' ')}
       >
         <nav
@@ -78,7 +76,7 @@ export function Nav() {
           className="mx-auto flex h-[var(--nav-h)] max-w-(--container-content) items-center justify-between px-(--space-gutter)"
         >
           <Link href="/" aria-label="SALU División Veterinaria, inicio">
-            <Logo onDark={dark} />
+            <Logo onDark />
           </Link>
 
           {/* Desktop: one line, always. */}

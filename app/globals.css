@@ -206,19 +206,10 @@
     scroll-padding-top: calc(var(--nav-h) + 1rem);
     -webkit-text-size-adjust: 100%;
     /* The ground behind the page's TOP edge (iOS uses the html background for
-       the top overscroll/inset region). The home hero runs full-bleed to the
-       viewport top, so a top rubber-band reveals the hero's own deep teal,
-       not a white flash. */
+       the top overscroll/inset region). The nav pins a dark teal band to the
+       viewport top on every route, so a top rubber-band reveals the same deep
+       teal, not a white flash. */
     background-color: var(--color-teal-950);
-  }
-
-  /* Per-route overscroll ground. Safari has not reliably honored
-     `overscroll-behavior` on the document scroller, so the ground must match
-     whatever each route puts at the viewport top: teal-950 for the home hero
-     (default above), and any page that opens light declares itself with
-     `data-overscroll-ground="light"`. */
-  html:has([data-overscroll-ground='light']) {
-    background-color: var(--color-teal-50);
   }
 
   /* Rubber-banding is platform grammar on touch; keep it there and rely on

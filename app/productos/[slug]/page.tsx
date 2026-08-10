@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CaretLeft } from '@phosphor-icons/react/ssr'
@@ -10,12 +10,6 @@ import { ProductDetail } from '../../components/product/ProductDetail'
 import { ProductTile } from '../../components/ui/ProductTile'
 
 export const revalidate = 60
-
-/* Opens on the light teal-50 bar, so the iOS status-bar inset matches it
-   instead of the site's dark default. Same treatment as /productos. */
-export const viewport: Viewport = {
-  themeColor: '#e6f4f6',
-}
 
 export async function generateStaticParams() {
   try {
@@ -65,7 +59,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <div data-overscroll-ground="light" data-bar-color="#e6f4f6" className="border-b border-border bg-teal-50">
+      <div data-bar-color="#e6f4f6" className="border-b border-border bg-teal-50">
         <div className="mx-auto max-w-(--container-content) px-(--space-gutter) py-5">
           <Link
             href="/productos"
