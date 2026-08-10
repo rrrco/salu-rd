@@ -27,12 +27,17 @@ Formato: JPG o WebP. Ancho mínimo recomendado 3000px para `animal.jpg`, y
 en escritorio se recorta a una columna vertical angosta (≈2:3), así que casi un
 tercio del ancho original se descarta.
 
-> Estado actual: `delivery.jpg` es una foto propia (camión cargado con cajas
-> SALU) en 896x1200. El encuadre es correcto —proporción 3:4, sujeto centrado,
-> luz de día cubierta— pero queda por debajo del mínimo: en escritorio el recorte
-> vertical solo aporta 776x1200 px reales contra los ~1010x1560 que pide una
-> pantalla retina, así que se ve algo suave. Reemplazar por una versión 3:4 de al
-> menos 2400x3200 en cuanto exista. `animal.jpg` está en 1584x672; alcanza para pantallas medianas
+**Redimensionar antes de commitear.** Las fotos locales no pasan por el
+optimizador de Next: el loader propio (`app/lib/imageLoader.ts`) solo procesa
+URLs de Sanity y devuelve el resto tal cual, así que el archivo que está en el
+repo es exactamente el que descarga cada visitante. Trabaja con el original en
+alta y guarda aquí una versión de ~1500x2000 a calidad 84, que cubre pantallas
+retina en los dos recortes y pesa menos de 500KB.
+
+> Estado actual: `delivery.jpg` está listo. Camión cargado con cajas SALU, 3:4,
+> sujeto centrado, luz de día cubierta. El original es de 3584x4800; en el repo
+> vive reducido a 1500x2000 (483KB) por la razón de arriba, con margen de sobra
+> para retina en ambos recortes. `animal.jpg` está en 1584x672; alcanza para pantallas medianas
 > pero queda corto del ancho recomendado, así que en monitores grandes todavía se
 > ve algo suave. Además viene ya recortada a 21:9, por lo que en móvil (4:5) el
 > encuadre central deja al veterinario fuera y solo se ve el rebaño.
