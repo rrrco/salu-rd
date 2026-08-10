@@ -285,7 +285,9 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 
 ### Button
 
-Three variants, two sizes. `--radius-md`. Sentence case, sans face, weight 600, `0.02em` tracking.
+Three variants, three sizes. `--radius-md`. Sentence case, sans face, weight 600, `0.02em` tracking.
+
+Sizes are `md` (h-11), `lg` (h-13) and `icon` — a 44px square carrying a glyph and no label, for a bar control that has no room for one. `icon` sets its own glyph size, since the 16px an inline icon takes beside a label is far too small alone in a 44px target.
 
 | Variant | Rest | Hover | Notes |
 |---|---|---|---|
@@ -455,7 +457,7 @@ Every color pairing the site actually uses is in that script, with the ratio it 
   |---|---|
   | 16 | Inline beside text |
   | 20 | Affordances and controls: arrows, search, close |
-  | 24 | Glyph in a `size-12` circle |
+  | 24 | Glyph in a `size-12` circle, and the nav bar's own controls - hamburger and WhatsApp - which pair at this size |
   | 28 | The WhatsApp FAB |
   | 40 | States and placeholders |
   | 64 / 96 | Product fallback art: tile, then detail frame |

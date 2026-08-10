@@ -120,10 +120,10 @@ export function Nav() {
               className="text-white"
               aria-label="Cotizar por WhatsApp"
             >
-              {/* `size-6` rather than a `size` prop: the CVA owns icon size
-                  inside a control, and 24px is the hamburger's rung of the
-                  ladder, so the pair sits on one optical line. */}
-              <WhatsAppIcon className="size-6" />
+              {/* No size here or on the variant's behalf: `size="icon"` owns
+                  it, at the hamburger's 24px rung, so the pair sits on one
+                  optical line. */}
+              <WhatsAppIcon />
             </ButtonLink>
 
             {/* Mobile sheet. Radix Dialog supplies the focus trap, Escape
