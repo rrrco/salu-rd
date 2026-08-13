@@ -139,7 +139,7 @@ export function ProductTile({
           )}
         </h3>
         {product.description && (
-          <p className="line-clamp-3 text-sm text-fg-muted">{product.description}</p>
+          <p className="line-clamp-2 text-sm text-fg-muted">{product.description}</p>
         )}
 
         {/* The foot: the sizes and the button, pushed to the bottom together.
