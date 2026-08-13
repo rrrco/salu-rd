@@ -314,6 +314,8 @@ Label **above**, `--font-mono`, `--text-xs`, uppercase. Input `--radius-sm`, `su
 
 A product with **no slug** loses the link *and* the hover affordances. A border that lifts to `accent` on a card that cannot be clicked is the §9 anti-pattern, so the two have to move together.
 
+**Padding responds to the tile, not the viewport.** The tile is a `@container`, and below `240px` of its own width the image padding drops to 10px, the body to 14px and the CTA's side padding to 12px. The same phone renders this tile at 169px in the catalog's two-column grid and at 350px on the home page, so a `sm:` rule would tighten the wrong one. One container query keeps it right in both grids and at every desktop column count, with no density prop to thread through.
+
 ### ProductDialog
 
 Radix Dialog, one component, two materials. Below `sm` a bottom sheet capped at `88dvh` with only the top corners at `--radius-lg`; at `sm` and up a centred panel, `max-w-3xl`, capped at `min(85dvh, 52rem)`, `--radius-lg`, `--shadow-lg`.
@@ -369,6 +371,8 @@ The figures live **inside** the hero, layered on the gradient, rather than as a 
 ### Beyond the landing page
 
 `/productos` is the full catalog: search, category chips, grid. `/productos/[slug]` is a single product.
+
+The catalog grid is **two columns from the narrowest phone**, then 3 at `lg` and 4 at `xl`. One column at 390px gave each tile the whole viewport, so 64 products read as 64 full-screen pages and a buyer scanning for a reference saw one at a time. Two columns put four in view. The home page grid keeps its single mobile column: it carries three tiles, not 64, and there is nothing to scan.
 
 A product opened **from the catalog** is intercepted by the `@modal` slot and rendered as a dialog over the live grid, so the buyer's search term and category filter survive. The same URL loaded directly, refreshed or shared renders the standalone page. One `ProductDetail` feeds both; only the grid ratio, the gaps and the image `sizes` differ, because a catalog whose overlay says something different to its page is worse than having no overlay.
 
