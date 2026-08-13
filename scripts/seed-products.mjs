@@ -1,11 +1,15 @@
 /**
  * Bulk-import the standardized product photos as `product` documents.
  *
- * The images are the output of ~/Documents/code/projects/ai-image-standardizer,
- * renamed to kebab-case product slugs. Each file becomes one product: the image
- * is uploaded as a Sanity asset and referenced from a new document whose slug is
- * the filename. Products whose slug already exists are skipped, so this is safe
- * to re-run after adding more photos.
+ * The photos come from the ai-image-standardizer repo, which shoots the same
+ * product once per package size and names the files `slug__presentation.jpg`.
+ * Its `products.json` is the contract between the two repos: it groups those
+ * files back into products, smallest package first, with the label it read off
+ * each photo. This script consumes that manifest, so one product becomes one
+ * document with a switchable gallery rather than one document per file:
+ *
+ *   image   = presentations[0]        (with its label)
+ *   gallery = presentations[1..]      (each with its label)
  *
  * This script only *writes an NDJSON file*; the Sanity CLI does the uploading,
  * so the whole thing runs on your `sanity login` session and needs no API token.
@@ -24,14 +28,18 @@
  *   --featured          mark the new products as featured (default: false, so
  *                       they do not flood the homepage — the 3 existing ones
  *                       stay the only featured products until you choose more)
- *   --dir <path>        image source directory
+ *   --manifest <path>   the standardizer's products.json
+ *   --dir <path>        image source directory, where the manifest's filenames
+ *                       are resolved
  *   --dataset <name>    dataset to check for existing slugs (default: production)
  */
 import { createClient } from '@sanity/client'
-import { readdir, writeFile } from 'node:fs/promises'
-import { basename, extname, join } from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { access, readFile, writeFile } from 'node:fs/promises'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { homedir } from 'node:os'
+
+import { buildDocuments, planImport } from './seed-products.lib.mjs'
 
 const argv = process.argv.slice(2)
 const flag = (name) => argv.includes(`--${name}`)
@@ -40,12 +48,17 @@ const opt = (name, fallback) => {
   return i !== -1 && argv[i + 1] ? argv[i + 1] : fallback
 }
 
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+
 const OUT = opt('out', null)
 const FEATURED = flag('featured')
-const DIR = opt('dir', join(homedir(), 'Documents/code/projects/salu-rd/SALU PRODUCTOS'))
+const DIR = opt('dir', join(REPO_ROOT, 'SALU PRODUCTOS'))
+const MANIFEST = opt(
+  'manifest',
+  join(homedir(), 'Developer/projects/ai-image-standardizer/output/products.json')
+)
 const DATASET = opt('dataset', process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production')
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '90vh2vk9'
-const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp'])
 
 /**
  * Only the categories I could infer from the product name with confidence.
@@ -81,33 +94,25 @@ const ICON_BY_SLUG = {
   'yodol': 'wounds',
 }
 
-/** `vitamina-e+selenio.png` -> `vitamina-e-selenio` */
-const toSlug = (file) =>
-  basename(file, extname(file))
-    .toLowerCase()
-    .replace(/[+_\s]+/g, '-')
-    .replace(/-+/g, '-')
+const manifest = JSON.parse(await readFile(MANIFEST, 'utf8'))
 
-/**
- * `vitamina-e+selenio` -> `Vitamina E + Selenio`. Spanish connectors stay
- * lowercase, one- and two-letter tokens are acronyms (UG, CV, B, K) and get
- * uppercased, everything else is capitalized.
- */
-const LOWER = new Set(['en', 'de', 'del', 'la', 'el', 'y', 'con'])
-const toName = (file) =>
-  basename(file, extname(file))
-    .replace(/\+/g, ' + ')
-    .split(/[-_\s]+/)
-    .filter(Boolean)
-    .map((t) => {
-      if (t === '+') return '+'
-      if (/^\d+$/.test(t)) return t
-      const low = t.toLowerCase()
-      if (LOWER.has(low)) return low
-      if (low.length <= 2) return low.toUpperCase()
-      return low[0].toUpperCase() + low.slice(1)
-    })
-    .join(' ')
+// Fail before touching the network: a manifest that outran the image folder
+// would otherwise surface as an opaque error deep inside `sanity dataset import`.
+const missing = []
+for (const product of manifest) {
+  for (const { file } of product.presentations) {
+    try {
+      await access(join(DIR, file))
+    } catch {
+      missing.push(`${product.slug}: ${file}`)
+    }
+  }
+}
+if (missing.length) {
+  console.error(`${missing.length} file(s) in the manifest are not in ${DIR}:\n`)
+  for (const m of missing) console.error(`  ${m}`)
+  process.exit(1)
+}
 
 // The dataset is public, so reading the existing slugs needs no credentials.
 const client = createClient({
@@ -117,45 +122,57 @@ const client = createClient({
   useCdn: false,
 })
 
-const files = (await readdir(DIR))
-  .filter((f) => IMAGE_EXT.has(extname(f).toLowerCase()))
-  .sort()
-
 const existing = await client.fetch('*[_type == "product"]{ "slug": slug.current, order }')
-const taken = new Set(existing.map((p) => p.slug).filter(Boolean))
-let order = Math.max(0, ...existing.map((p) => p.order ?? 0))
+const startOrder = Math.max(0, ...existing.map((p) => p.order ?? 0))
 
-const pending = files.map((f) => ({ file: f, slug: toSlug(f), name: toName(f) }))
-const fresh = pending.filter((p) => !taken.has(p.slug))
-const skipped = pending.filter((p) => taken.has(p.slug))
+const { pending, renamed, noIcon, lowConfidence } = planImport({
+  manifest,
+  takenSlugs: existing.map((p) => p.slug).filter(Boolean),
+  iconBySlug: ICON_BY_SLUG,
+})
 
-console.log(`${DIR}\n${files.length} images -> ${fresh.length} new, ${skipped.length} already in ${DATASET}\n`)
-if (skipped.length) console.log(`skipping: ${skipped.map((p) => p.slug).join(', ')}\n`)
-
-const noIcon = fresh.filter((p) => !ICON_BY_SLUG[p.slug]).map((p) => p.slug)
+const images = manifest.reduce((n, p) => n + p.presentations.length, 0)
+console.log(`manifest  ${MANIFEST}`)
+console.log(`images    ${DIR}`)
+console.log(`${manifest.length} products / ${images} images -> ${pending.length} new documents in ${DATASET}\n`)
 
 if (!OUT) {
-  for (const p of fresh) {
-    console.log(`  ${p.name.padEnd(28)} ${p.slug.padEnd(26)} ${ICON_BY_SLUG[p.slug] ?? '—'}`)
+  for (const p of pending) {
+    const labels = p.presentations.map((pr) => pr.label ?? '—').join(', ')
+    console.log(
+      `  ${p.name.padEnd(34)} ${p.slug.padEnd(32)} ${String(p.iconKey ?? '—').padEnd(14)} ${p.presentations.length}x  ${labels}`
+    )
   }
-  if (noIcon.length) console.log(`\nno iconKey (set in Studio): ${noIcon.join(', ')}`)
+}
+
+if (renamed.length) {
+  console.log(`\n!!  ${renamed.length} slug(s) already exist in ${DATASET} and were NOT overwritten.`)
+  console.log('    They are created under a new slug — merge or delete the duplicate in the Studio:')
+  for (const p of renamed) console.log(`      ${p.renamedFrom}  ->  ${p.slug}`)
+}
+if (lowConfidence.length) {
+  console.log(`\n!!  ${lowConfidence.length} label(s) the vision model was unsure of — check against the photo:`)
+  for (const l of lowConfidence) {
+    console.log(`      ${l.slug}: ${l.label ?? '(sin presentación)'}  ${l.file}`)
+  }
+}
+if (noIcon.length) {
+  console.log(`\nno iconKey (set in Studio): ${noIcon.join(', ')}`)
+}
+
+if (!OUT) {
   console.log('\nPreview only. Re-run with --out <file> to write the NDJSON.')
   process.exit(0)
 }
 
-const docs = fresh.map((p) => ({
-  _id: `product-${p.slug}`,
-  _type: 'product',
-  name: p.name,
-  slug: { _type: 'slug', current: p.slug },
-  ...(ICON_BY_SLUG[p.slug] ? { iconKey: ICON_BY_SLUG[p.slug] } : {}),
-  image: { _sanityAsset: `image@${pathToFileURL(join(DIR, p.file)).href}` },
+const docs = buildDocuments({
+  pending,
+  toAssetRef: (file) => `image@${pathToFileURL(join(DIR, file)).href}`,
   featured: FEATURED,
-  order: ++order,
-}))
+  startOrder,
+})
 
 await writeFile(OUT, docs.map((d) => JSON.stringify(d)).join('\n') + '\n')
 
-console.log(`Wrote ${docs.length} documents to ${OUT}\n`)
-if (noIcon.length) console.log(`Set iconKey in the Studio for: ${noIcon.join(', ')}\n`)
+console.log(`\nWrote ${docs.length} documents to ${OUT}`)
 console.log(`Next:  npx sanity dataset import ${OUT} ${DATASET}`)

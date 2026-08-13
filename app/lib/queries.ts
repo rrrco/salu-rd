@@ -2,8 +2,10 @@ import { groq } from 'next-sanity'
 
 /** Shared image projection. Returns the raw image object (asset expanded,
  *  hotspot and crop intact) so `urlFor()` can honour the hotspot and emit a
- *  blur LQIP. */
+ *  blur LQIP. `label` is the package size this particular photo shows — see the
+ *  image fields in `sanity/schemas/product.ts`. */
 const imageFields = groq`
+  label,
   hotspot,
   crop,
   asset-> {
