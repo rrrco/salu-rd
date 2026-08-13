@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CategoryIcon, WhatsAppIcon } from '../../lib/icons'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
@@ -58,6 +59,9 @@ export function ProductTile({
 }) {
   const hasImage = Boolean(product.image?.asset)
   const blur = blurOf(product.image)
+  /* Deduplicated: two photos of the same size are two shots of one box, and the
+     tile would otherwise repeat the label. */
+  const presentations = [...new Set(product.sizes ?? [])]
   const href = product.slug?.current ? `/productos/${product.slug.current}` : null
 
   return (
@@ -135,18 +139,56 @@ export function ProductTile({
           )}
         </h3>
         {product.description && (
-          <p className="line-clamp-3 text-sm text-fg-muted">{product.description}</p>
+          <p className="line-clamp-2 text-sm text-fg-muted">{product.description}</p>
         )}
-        {/* Sits above the stretched link so it stays its own target, and it is
-            prefilled with this product's name: the chat opens already saying
-            what the buyer was looking at. */}
-        <ButtonLink
-          href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
-          className="relative z-10 mt-auto w-full"
-        >
-          <WhatsAppIcon />
-          Cotizar
-        </ButtonLink>
+
+        {/* The foot: the sizes and the button, pushed to the bottom together.
+
+            Anchoring is what keeps a row of tiles legible. Eleven of the 64
+            product names wrap to two lines, and anything sitting under a name
+            drops with it, so the sizes on one tile landed a line below the
+            sizes on its neighbours. The button never had that problem because
+            it was already anchored, so the fix is to put the sizes inside its
+            anchor rather than to reserve a second line under every name and buy
+            an empty row on the 53 tiles that do not need it.
+
+            It also reads better: the size is the thing the buyer is about to
+            ask the price of, and it now sits directly above the button that
+            asks. */}
+        <div className="mt-auto flex flex-col gap-3">
+          {/* Labelled, not bare numbers: `4 kg` on its own could be read as a
+              dose. Singular when there is one, because 29 of the 64 products
+              have exactly one and "Presentaciones: 4 kg" reads as a list that
+              lost its other entries.
+
+              Nothing renders when no photo carries a size, so the 22 products
+              without one keep the tile they have today. */}
+          {presentations.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-fg-subtle">
+                {presentations.length === 1 ? 'Presentación' : 'Presentaciones'}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {presentations.map((size) => (
+                  <Badge key={size} variant="outline" className="tabular-nums">
+                    {size}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Sits above the stretched link so it stays its own target, and it is
+              prefilled with this product's name: the chat opens already saying
+              what the buyer was looking at. */}
+          <ButtonLink
+            href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
+            className="relative z-10 w-full"
+          >
+            <WhatsAppIcon />
+            Cotizar
+          </ButtonLink>
+        </div>
       </div>
     </article>
   )

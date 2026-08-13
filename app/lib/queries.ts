@@ -16,14 +16,22 @@ const imageFields = groq`
 `
 
 /** Card projection. The catalog ships one of these per product, so it carries
- *  only what a tile draws. The spec fields live in `productDetailFields`. */
+ *  only what a tile draws. The spec fields live in `productDetailFields`.
+ *
+ *  `sizes` is the package sizes the product comes in, read off the photos that
+ *  show them. Projected as bare strings rather than by shipping the gallery to
+ *  the tile: the tile draws three words, and the assets behind them would be
+ *  64 products' worth of payload for a grid that renders one image each.
+ *  `coalesce` covers a product with no gallery at all, where `gallery[].label`
+ *  is null and null would swallow the whole concatenation. */
 const productFields = groq`
   _id,
   name,
   slug,
   description,
   iconKey,
-  image { ${imageFields} }
+  image { ${imageFields} },
+  "sizes": array::compact([image.label] + coalesce(gallery[].label, []))
 `
 
 /** Detail projection: the card plus the technical sheet and the gallery. */
