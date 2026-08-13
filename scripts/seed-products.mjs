@@ -94,6 +94,64 @@ const ICON_BY_SLUG = {
   'yodol': 'wounds',
 }
 
+/**
+ * Products the vision model probably got wrong, by manifest slug.
+ *
+ * Everything here still imports — the catalog is only useful reviewed whole —
+ * but the document name gets a `[REVIEW] ` prefix so the entries needing a
+ * human decision are findable in the Studio list without a spreadsheet. Delete
+ * a slug from this list once its product is confirmed or merged; the prefix
+ * disappears on the next import.
+ *
+ * Duplicates of a slug already in the dataset and low-confidence label reads
+ * are flagged automatically and need no entry here.
+ */
+const REVIEW_SLUGS = [
+  // Florfenicol Continental 30%, three spellings of one name, all "100 ml".
+  // `florefenicol-continental` reads "20%" — a different strength, or the same.
+  'florefenicol-continental',
+  'florefenicol-continental-30',
+  'florfenicol-contineital-30',
+  'florfenicol-continental-30',
+  // Oxitetraciclina Continental 20%, two spellings; merging duplicates 100 ml.
+  'oxitetraciclina-continental-20',
+  'oxitetracilina-continental-20',
+  // Zapi Broditop bloque 0.005 BB, "broditdp" vs "broditop".
+  'zapi-broditdp-bloque-0-005-bb',
+  'zapi-broditop-bloque-0-005-bb',
+  // InterMEDIC needles read three ways, sizes split across all three.
+  'inter-medic',
+  'intermedic',
+  'intermedic-disposable-needle',
+  // InnCare gloves: brand only vs full product name, both "100 pcs".
+  'inncare',
+  'inncare-latex-disposable-gloves',
+  // NexGard vs NexuGard; the second duplicates a size the first already has.
+  'nexgard',
+  'nexugard',
+  // RAN Electrolyte: two spellings and three readings of one litre.
+  'ran-electrolite',
+  'ran-electrolyte',
+  // Enrofloxacina Continental with and without the strength suffix, both 100 ml.
+  'enrofloxacina-continental',
+  'enrofloxacina-continental-10',
+  // Fenbendazol CV: 22% powder vs CV10% liquid. Plausibly two real products.
+  'fenbendazol-cv-22-polvo',
+  'fenbendazole-cv10',
+  // Generic packaging — gloves, needles, IV sets — produced a junk brand name
+  // where the product name should be.
+  'salu',
+  'salu-set-iv',
+  'disposable',
+  'disposable-infusion-set',
+  'iv-advis',
+  'safemed',
+  'nipro',
+  // No brand read at all; the slug is the original WhatsApp filename.
+  'whatsapp-image-2026-08-13-at-09-27-03-64-1',
+  'whatsapp-image-2026-08-13-at-09-27-03-65',
+]
+
 const manifest = JSON.parse(await readFile(MANIFEST, 'utf8'))
 
 // Fail before touching the network: a manifest that outran the image folder
@@ -125,22 +183,24 @@ const client = createClient({
 const existing = await client.fetch('*[_type == "product"]{ "slug": slug.current, order }')
 const startOrder = Math.max(0, ...existing.map((p) => p.order ?? 0))
 
-const { pending, renamed, noIcon, lowConfidence } = planImport({
+const { pending, renamed, flagged, noIcon, lowConfidence } = planImport({
   manifest,
   takenSlugs: existing.map((p) => p.slug).filter(Boolean),
   iconBySlug: ICON_BY_SLUG,
+  reviewSlugs: REVIEW_SLUGS,
 })
 
 const images = manifest.reduce((n, p) => n + p.presentations.length, 0)
 console.log(`manifest  ${MANIFEST}`)
 console.log(`images    ${DIR}`)
-console.log(`${manifest.length} products / ${images} images -> ${pending.length} new documents in ${DATASET}\n`)
+console.log(`${manifest.length} products / ${images} images -> ${pending.length} new documents in ${DATASET}`)
+console.log(`${flagged.length} of them marked [REVIEW], ${pending.length - flagged.length} clean\n`)
 
 if (!OUT) {
   for (const p of pending) {
     const labels = p.presentations.map((pr) => pr.label ?? '—').join(', ')
     console.log(
-      `  ${p.name.padEnd(34)} ${p.slug.padEnd(32)} ${String(p.iconKey ?? '—').padEnd(14)} ${p.presentations.length}x  ${labels}`
+      `  ${p.name.padEnd(44)} ${p.slug.padEnd(32)} ${String(p.iconKey ?? '—').padEnd(14)} ${p.presentations.length}x  ${labels}`
     )
   }
 }
@@ -149,6 +209,10 @@ if (renamed.length) {
   console.log(`\n!!  ${renamed.length} slug(s) already exist in ${DATASET} and were NOT overwritten.`)
   console.log('    They are created under a new slug — merge or delete the duplicate in the Studio:')
   for (const p of renamed) console.log(`      ${p.renamedFrom}  ->  ${p.slug}`)
+}
+if (flagged.length) {
+  console.log(`\n!!  ${flagged.length} product(s) named [REVIEW] — search "[REVIEW]" in the Studio:`)
+  for (const p of flagged) console.log(`      ${p.slug.padEnd(44)} ${p.reviewReason}`)
 }
 if (lowConfidence.length) {
   console.log(`\n!!  ${lowConfidence.length} label(s) the vision model was unsure of — check against the photo:`)

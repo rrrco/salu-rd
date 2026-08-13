@@ -4,6 +4,9 @@ import { test } from 'node:test'
 
 import { buildDocuments, planImport, uniqueSlug } from './seed-products.lib.mjs'
 
+/** Every product still imports; the prefix only marks the ones to look at. */
+const review = (manifest, opts) => planImport({ manifest, takenSlugs: [], ...opts })
+
 const p = (slug, presentations) => ({ slug, name: slug, presentations })
 const ref = (file) => `image@file:///img/${file}`
 
@@ -107,6 +110,67 @@ test('a null label is omitted rather than written as null', () => {
   const [doc] = buildDocuments({ pending, toAssetRef: ref })
 
   assert.equal('label' in doc.image, false)
+})
+
+test('a listed suspect is renamed [REVIEW] but still imported', () => {
+  const { pending, flagged } = review([p('nexugard', [{ file: 'a.jpg' }])], {
+    reviewSlugs: ['nexugard'],
+  })
+
+  assert.equal(pending.length, 1, 'flagging never drops a product')
+  assert.equal(pending[0].name, '[REVIEW] nexugard')
+  assert.equal(flagged.length, 1)
+})
+
+test('a duplicate of an existing slug is flagged without being listed', () => {
+  const { pending } = planImport({
+    manifest: [p('florvet', [{ file: 'a.jpg' }])],
+    takenSlugs: ['florvet'],
+  })
+
+  assert.equal(pending[0].name, '[REVIEW] florvet')
+  assert.match(pending[0].reviewReason, /already in the dataset/)
+})
+
+test('a low-confidence label is flagged without being listed', () => {
+  const { pending } = review([
+    p('salu', [{ label: '250 ml', file: 'a.jpg', confidence: 'low' }]),
+  ])
+
+  assert.equal(pending[0].name, '[REVIEW] salu')
+  assert.equal(pending[0].reviewReason, 'low-confidence label')
+})
+
+test('a clean product keeps its name untouched', () => {
+  const { pending, flagged } = review([
+    p('apetipet', [{ label: '100 ml', file: 'a.jpg', confidence: 'high' }]),
+  ])
+
+  assert.equal(pending[0].name, 'apetipet')
+  assert.equal(pending[0].reviewReason, null)
+  assert.deepEqual(flagged, [])
+})
+
+test('the [REVIEW] prefix never leaks into the slug, which is the route key', () => {
+  const { pending } = review([p('nexugard', [{ file: 'a.jpg' }])], {
+    reviewSlugs: ['nexugard'],
+  })
+  const [doc] = buildDocuments({ pending, toAssetRef: ref })
+
+  assert.equal(doc.slug.current, 'nexugard')
+  assert.equal(doc._id, 'product-nexugard')
+  assert.equal(doc.name, '[REVIEW] nexugard')
+})
+
+test('flagging is keyed on the manifest slug, not the suffixed one', () => {
+  const { pending } = planImport({
+    manifest: [p('nexgard', [{ file: 'a.jpg' }])],
+    takenSlugs: ['nexgard'],
+    reviewSlugs: ['nexgard'],
+  })
+
+  assert.equal(pending[0].slug, 'nexgard-2')
+  assert.equal(pending[0].name, '[REVIEW] nexgard')
 })
 
 test('order continues past the highest order already in the dataset', () => {

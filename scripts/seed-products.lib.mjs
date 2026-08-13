@@ -20,6 +20,21 @@ export const uniqueSlug = (slug, taken) => {
   return `${slug}-${n}`
 }
 
+export const REVIEW_PREFIX = '[REVIEW] '
+
+/**
+ * Why a product is worth a second look before it is trusted. The whole catalog
+ * imports either way — the prefix is a marker to sort by in the Studio, not a
+ * filter — so a false positive costs a glance and a false negative hides a bad
+ * product among 57 good ones. Flag generously.
+ */
+const reviewReason = ({ product, renamedFrom, reviewSlugs }) => {
+  if (renamedFrom) return `duplicate of "${renamedFrom}", already in the dataset`
+  if (reviewSlugs.has(product.slug)) return 'name or grouping read wrong by the vision model'
+  if (product.presentations.some((pr) => pr.confidence === 'low')) return 'low-confidence label'
+  return null
+}
+
 /**
  * Resolve every manifest entry against the slugs already in the dataset.
  *
@@ -28,23 +43,35 @@ export const uniqueSlug = (slug, taken) => {
  * `iconKey` is looked up on the *manifest* slug rather than the resolved one:
  * `florvet-2` is still the antibiotic `florvet` is, and looking it up after the
  * rename would silently drop the category for exactly the duplicates.
+ *
+ * Anything suspect keeps its real name but gains a `[REVIEW] ` prefix, so the
+ * full catalog is browsable in one list while the entries needing a human
+ * decision sort to the top. The slug is left clean: it is the route key, and
+ * the prefix is temporary editorial state, not part of the address.
  */
-export function planImport({ manifest, takenSlugs, iconBySlug = {} }) {
+export function planImport({ manifest, takenSlugs, iconBySlug = {}, reviewSlugs = [] }) {
   const taken = new Set(takenSlugs)
+  const review = new Set(reviewSlugs)
+
   const pending = manifest.map((product) => {
     const slug = uniqueSlug(product.slug, taken)
     taken.add(slug)
+    const renamedFrom = slug === product.slug ? null : product.slug
+    const reason = reviewReason({ product, renamedFrom, reviewSlugs: review })
     return {
       ...product,
       slug,
-      renamedFrom: slug === product.slug ? null : product.slug,
+      renamedFrom,
       iconKey: iconBySlug[product.slug],
+      reviewReason: reason,
+      name: reason ? `${REVIEW_PREFIX}${product.name}` : product.name,
     }
   })
 
   return {
     pending,
     renamed: pending.filter((p) => p.renamedFrom),
+    flagged: pending.filter((p) => p.reviewReason),
     noIcon: pending.filter((p) => !p.iconKey).map((p) => p.slug),
     lowConfidence: manifest.flatMap((p) =>
       p.presentations
