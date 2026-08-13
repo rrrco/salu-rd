@@ -25,6 +25,9 @@ export type SanityProduct = {
   description?: string
   iconKey?: string
   image?: SanityImage
+  /** Package sizes this product comes in, collected from its photo labels by
+   *  the projection. Empty for a product whose photos carry no size. */
+  sizes?: string[]
 }
 
 /** Shape returned by `productDetailFields`. Every added field is optional: a

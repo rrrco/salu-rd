@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CategoryIcon, WhatsAppIcon } from '../../lib/icons'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
@@ -58,6 +59,9 @@ export function ProductTile({
 }) {
   const hasImage = Boolean(product.image?.asset)
   const blur = blurOf(product.image)
+  /* Deduplicated: two photos of the same size are two shots of one box, and the
+     tile would otherwise repeat the label. */
+  const presentations = [...new Set(product.sizes ?? [])]
   const href = product.slug?.current ? `/productos/${product.slug.current}` : null
 
   return (
@@ -134,6 +138,31 @@ export function ProductTile({
             product.name
           )}
         </h3>
+        {/* The sizes the product comes in, straight after the name and before
+            the description, because "which sizes does this come in" is the
+            question the buyer asks next and the answer is three words long.
+
+            Labelled, not bare numbers: `4 kg` on its own could be read as a
+            dose. Singular when there is one, because 29 of the catalog's 64
+            products have exactly one and "Presentaciones: 4 kg" reads as a
+            list that lost its other entries.
+
+            Nothing renders when no photo carries a size, so the 22 products
+            without one keep the tile they have today. */}
+        {presentations.length > 0 && (
+          <div className="-mt-1 flex flex-col gap-1.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-fg-subtle">
+              {presentations.length === 1 ? 'Presentación' : 'Presentaciones'}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {presentations.map((size) => (
+                <Badge key={size} variant="outline" className="tabular-nums">
+                  {size}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
         {product.description && (
           <p className="line-clamp-3 text-sm text-fg-muted">{product.description}</p>
         )}
