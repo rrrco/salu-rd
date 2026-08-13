@@ -41,6 +41,23 @@ const CATEGORY_TITLES: Record<string, string> = {
   ophthalmic: 'Oftálmicos',
 }
 
+/**
+ * The same product is photographed once per package size, and each photo carries
+ * the size it shows. That is a caption on the image, not a variant: the site has
+ * no cart, price or stock, so a presentation is a photo with a name. Sanity image
+ * fields take custom `fields`, so this needs no new document type and no
+ * migration — an image saved without a label behaves exactly as before.
+ *
+ * Distinct from the document-level `presentation` string, which describes the
+ * product as a whole on the technical sheet.
+ */
+const imageLabelField = defineField({
+  name: 'label',
+  title: 'Presentación',
+  type: 'string',
+  description: 'El tamaño que muestra esta foto. Por ejemplo: 30 ml, 1 L, 1 galón.',
+})
+
 export default defineType({
   name: 'product',
   title: 'Producto',
@@ -84,6 +101,7 @@ export default defineType({
       group: 'content',
       options: { hotspot: true },
       description: 'Empaque sobre fondo blanco. Sin imagen se muestra el ícono de la categoría.',
+      fields: [imageLabelField],
     }),
     defineField({
       name: 'gallery',
@@ -91,7 +109,13 @@ export default defineType({
       type: 'array',
       group: 'content',
       description: 'Imágenes adicionales: otros ángulos, la etiqueta, la presentación. Opcional.',
-      of: [defineArrayMember({ type: 'image', options: { hotspot: true } })],
+      of: [
+        defineArrayMember({
+          type: 'image',
+          options: { hotspot: true },
+          fields: [imageLabelField],
+        }),
+      ],
       options: { layout: 'grid' },
     }),
 

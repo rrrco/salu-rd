@@ -11,6 +11,9 @@ export type SanityImage = {
   hotspot?: { x: number; y: number; height: number; width: number }
   crop?: { top: number; bottom: number; left: number; right: number }
   alt?: string
+  /** Package size this photo shows ("30 ml", "1 galón"). Optional: most images
+   *  are a single packshot with nothing to disambiguate. */
+  label?: string
 }
 
 /** Shape returned by `productFields`: everything a catalog tile needs, nothing
