@@ -645,6 +645,30 @@
   }
 }
 
+/* The quote drawer slides in from the edge it docks to.
+   A full slide, where the centred panel gets 4px and a fade: the panel is a
+   layer over the page and only has to say so, while the drawer is furniture
+   attached to one side and has to say which side. `--dur-panel` exists for
+   exactly this, and the exit stays shorter than the enter like everything
+   else here. */
+@keyframes dialog-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes dialog-drawer-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
 /* Sheet links cascade in. Each link sets `--i`; the 40ms step is short enough
    that the list reads as one movement, long enough to show reading order.
    `backwards` fill keeps links invisible through their delay. */

@@ -7,11 +7,14 @@ import { Dialog as DialogPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 /**
- * One dialog, two materials.
+ * One dialog, three materials.
  *
- * Below `sm` it is a bottom sheet: the panel meets the thumb rather than the
- * middle of the screen. At `sm` and up it centres, because a bottom sheet on a
- * 1400px display is a strip of content pinned to the wrong edge.
+ * Below its breakpoint it is always a bottom sheet: the panel meets the thumb
+ * rather than the middle of the screen. Above it, `panel` centres, because a
+ * bottom sheet on a 1400px display is a strip of content pinned to the wrong
+ * edge, and `drawer` docks to the right edge, which is where a running list
+ * belongs and where every buyer already expects to find one. See
+ * `DialogContent`.
  *
  * Positioning is done by a flex wrapper, not by `translate(-50%, -50%)`. That
  * keeps `transform` free for the animation: a centred dialog that also animates
@@ -67,31 +70,62 @@ function DialogOverlay({
   )
 }
 
+/**
+ * `panel` centres on a desktop; `drawer` docks to the right edge at `lg`.
+ *
+ * Both are the same bottom sheet below their breakpoint, because below it the
+ * distinction has nowhere to exist: a phone has one good place to put a panel.
+ * The split is `lg` for the drawer and `sm` for the panel deliberately - the
+ * quote's own entry point changes hands at `lg` (bar below, nav glyph above),
+ * so the material changes where the control does.
+ */
+type DialogVariant = 'panel' | 'drawer'
+
 function DialogContent({
   className,
   children,
+  variant = 'panel',
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & { variant?: DialogVariant }) {
+  const drawer = variant === 'drawer'
+
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
-      <div className="pointer-events-none fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6">
+      <div
+        className={cn(
+          'pointer-events-none fixed inset-0 z-50 flex items-end justify-center',
+          drawer ? 'lg:items-stretch lg:justify-end' : 'sm:items-center sm:p-6'
+        )}
+      >
         <DialogPrimitive.Content
           data-slot="dialog-content"
+          data-variant={variant}
           className={cn(
             'pointer-events-auto flex w-full flex-col overflow-hidden outline-none',
             'bg-surface text-fg shadow-lg',
             // Mobile: meets the bottom edge, so only the top corners round.
             'max-h-[88dvh] rounded-t-lg',
-            // Desktop: a free-floating panel at the container radius.
-            'sm:max-h-[min(85dvh,52rem)] sm:max-w-3xl sm:rounded-lg',
+            drawer
+              ? // Docked: full height against the right edge, so no corner on
+                // that side rounds and none of the four is free-floating.
+                'lg:h-dvh lg:max-h-none lg:w-[26rem] lg:rounded-none'
+              : // Free-floating panel at the container radius.
+                'sm:max-h-[min(85dvh,52rem)] sm:max-w-3xl sm:rounded-lg',
             // `transform-origin` stays centred. A modal is not anchored to a
             // trigger, so it is the exception to the origin-aware rule that
             // governs popovers.
             'data-[state=open]:animate-[dialog-sheet-in_240ms_var(--ease-out)]',
             'data-[state=closed]:animate-[dialog-sheet-out_160ms_var(--ease-out)]',
-            'sm:data-[state=open]:animate-[dialog-panel-in_240ms_var(--ease-out)]',
-            'sm:data-[state=closed]:animate-[dialog-panel-out_160ms_var(--ease-out)]',
+            drawer
+              ? cn(
+                  'lg:data-[state=open]:animate-[dialog-drawer-in_320ms_var(--ease-out)]',
+                  'lg:data-[state=closed]:animate-[dialog-drawer-out_240ms_var(--ease-out)]'
+                )
+              : cn(
+                  'sm:data-[state=open]:animate-[dialog-panel-in_240ms_var(--ease-out)]',
+                  'sm:data-[state=closed]:animate-[dialog-panel-out_160ms_var(--ease-out)]'
+                ),
             className
           )}
           {...props}

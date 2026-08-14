@@ -24,10 +24,11 @@ import {
 /**
  * The quote, opened.
  *
- * It reuses `Dialog` rather than introducing a right-hand drawer. The site
- * already has exactly one panel material - bottom sheet on a phone, centred
- * card on a desktop (DESIGN.md 5, ProductDialog) - and a second one bought
- * nothing here except a third set of keyframes to keep in sync.
+ * `Dialog`'s `drawer` variant: a bottom sheet below `lg`, docked to the right
+ * edge above it. The breakpoint is the same one the entry points swap at, so
+ * the material always matches the control that opened it - the bar at the
+ * bottom of a phone opens a panel from the bottom, the glyph in the desktop
+ * nav opens the drawer under it.
  *
  * Mounted once in the site layout, opened from the nav button or the mobile
  * bar. Neither of those is a `DialogTrigger`, so `open` is store state: the two
@@ -40,8 +41,8 @@ export function QuotePanel() {
 
   return (
     <Dialog open={open} onOpenChange={setQuoteOpen}>
-      <DialogContent aria-describedby={undefined} className="sm:max-w-lg">
-        <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-surface py-2 pl-5 pr-2">
+      <DialogContent variant="drawer" aria-describedby={undefined}>
+        <div className="flex shrink-0 items-center gap-3 border-b border-border bg-surface py-2 pl-5 pr-2">
           <div className="min-w-0 flex-1">
             <DialogTitle>Tu cotización</DialogTitle>
             {/* Announced on change, so a screen reader hears the count move
@@ -57,13 +58,15 @@ export function QuotePanel() {
           <EmptyQuote />
         ) : (
           <>
-            <ul className="overflow-y-auto overscroll-contain px-5">
+            {/* `min-h-0` or the list refuses to shrink below its content and
+                pushes the footer off the bottom of a full-height drawer. */}
+            <ul className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5">
               {lines.map((line) => (
                 <QuoteRow key={line.slug} line={line} />
               ))}
             </ul>
 
-            <div className="flex flex-col gap-3 border-t border-border bg-surface p-5">
+            <div className="flex shrink-0 flex-col gap-3 border-t border-border bg-surface p-5">
               <ButtonLink
                 href={whatsappUrl(quoteMessage(lines))}
                 size="lg"
@@ -92,7 +95,7 @@ export function QuotePanel() {
  *  anything in the list, so it has to say what to do next. */
 function EmptyQuote() {
   return (
-    <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center">
       <h3 className="text-h3 font-semibold">Aún no has agregado productos</h3>
       <p className="max-w-[40ch] text-sm text-fg-muted">
         Agrega los que te interesen desde el catálogo y los cotizamos todos en un

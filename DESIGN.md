@@ -265,6 +265,7 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 | Product dialog scrim | `teal-950/50` + 4px backdrop blur, fades with the panel | The catalog behind is dense with packshots on white, which stay legible under a flat scrim and compete with the panel |
 | Product tile press | card `scale(0.99)`, `--dur-press`, scoped to the tile link | The whole card is one target now, so the whole card answers the press |
 | Arrow affordances | translate 2px toward their direction on hover | An arrow means "onward", so it should move that way |
+| Quote drawer, desktop | `translateX(100%)`, `--dur-panel` in / 240ms out, no fade | A full slide where the centred panel gets 4px: the panel is a layer over the page and only has to say so, the drawer is furniture attached to one side and has to say which side |
 | Quote bar entry | fade + `translateY(12px)`, 240ms, no exit | It arrives from below the edge it sits on. No exit keyframe: it leaves because the buyer emptied the list, and animating that out keeps a bar on screen describing a quote that is gone |
 | WhatsApp FAB lift | `translateY(-64px)`, 180ms, below `lg` only | The quote bar takes the bottom edge. The FAB moves rather than hides: a control that vanishes because you added a product is a control the buyer then has to go looking for |
 
@@ -320,7 +321,14 @@ A product with **no slug** loses the link *and* the hover affordances. A border 
 
 ### ProductDialog
 
-Radix Dialog, one component, two materials. Below `sm` a bottom sheet capped at `88dvh` with only the top corners at `--radius-lg`; at `sm` and up a centred panel, `max-w-3xl`, capped at `min(85dvh, 52rem)`, `--radius-lg`, `--shadow-lg`.
+Radix Dialog, one component, three materials, selected by `variant`. Below the breakpoint both variants are the same bottom sheet, capped at `88dvh` with only the top corners at `--radius-lg`: a phone has one good place to put a panel and the distinction has nowhere to exist there.
+
+| `variant` | Above the breakpoint | Breakpoint | Used by |
+|---|---|---|---|
+| `panel` (default) | centred, `max-w-3xl`, capped at `min(85dvh, 52rem)`, `--radius-lg`, `--shadow-lg` | `sm` | the product overlay |
+| `drawer` | docked to the right edge, `h-dvh`, `26rem`, square corners | `lg` | the quote |
+
+The breakpoints differ on purpose. The product overlay is opened from a tile at every width, so it changes material as soon as there is room. The quote's entry point changes hands at `lg` (bar below, nav glyph above), so its material changes where its control does and the panel always arrives from the edge the control sits on.
 
 Positioning is a `pointer-events-none` flex wrapper, not `translate(-50%, -50%)`. That leaves `transform` free for the animation; a centred dialog that also animates transform has to bake the offsets into every keyframe, and every future keyframe has to remember. The wrapper passes clicks through to the scrim so dismiss-on-outside-press still fires.
 
@@ -347,7 +355,7 @@ The two entry points are deliberate opposites and never both visible. The nav is
 
 **The tile foot is 75/25**, `grid-cols-[3fr_minmax(0,1fr)]`: WhatsApp keeps the primary, because the buyer of one reference should not lose today's one-tap path to a feature built for the buyer of eight. `minmax(0,...)` and not a bare `1fr`, or the button's min-content pushes the track past its quarter and overflows the card. Below 150px of *tile* the two stack, which is the same container-query logic the tile's padding already uses: at a 320px screen a quarter is 31px and three-quarters is narrower than the word "Cotizar".
 
-The panel reuses `Dialog`, so the quote is the same material as the product overlay - bottom sheet on a phone, centred card on a desktop. A right-hand drawer would have been a third panel language for one feature.
+The panel is `Dialog`'s `drawer` variant: the same bottom sheet as everything else below `lg`, docked to the right edge above it. A running list belongs against an edge and that is where every buyer already looks for one, so it is worth the variant; reusing `Dialog` to get it means the scrim, the focus trap and the sheet half all stay shared.
 
 Reverse states, all four: the stepper's minus, the per-line trash, "Vaciar cotización" behind a two-press confirm, and the panel's own close. Adding is the only irreversible-looking act, and it isn't.
 
