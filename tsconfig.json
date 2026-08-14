@@ -10,6 +10,10 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    /* `app/lib/quote.test.ts` runs under `node --test`, which strips types but
+       does not resolve extensionless specifiers. Safe here because `noEmit`
+       is on and the bundler never sees the test file. */
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,

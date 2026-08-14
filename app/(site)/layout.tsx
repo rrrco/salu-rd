@@ -3,6 +3,8 @@ import { Nav } from '../components/site/Nav'
 import { Footer } from '../components/site/Footer'
 import { BrowserBars } from '../components/site/BrowserBars'
 import { WhatsAppFab } from '../components/site/WhatsAppFab'
+import { QuoteBar } from '../components/quote/QuoteBar'
+import { QuotePanel } from '../components/quote/QuotePanel'
 
 /**
  * Marketing chrome for every public route. `/studio` sits outside this group
@@ -24,6 +26,11 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       <main id="main" className="bg-bg">{children}</main>
       <Footer />
       <BrowserBars />
+      {/* The quote is chrome, not content: it has to outlive every navigation,
+          so it is mounted here rather than inside a route. The bar is the
+          mobile entry point, the panel answers to it and to the nav button. */}
+      <QuoteBar />
+      <QuotePanel />
       <WhatsAppFab />
     </>
   )

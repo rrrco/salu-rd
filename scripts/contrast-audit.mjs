@@ -79,6 +79,10 @@ P('accent eyebrow teal-300 on band', onDarkAccent, band, 3)
 P('section eyebrow accent-deep on teal-50', accentDark, teal50, 4.5)
 P('secondary btn border on band', mix(white, band, 0.6), band, 3)
 P('focus ring teal-200 on band', onDarkMuted, band, 3)
+/* The quote count in the nav. Same pair as the `inverse` button, listed again
+   under its own name so changing ink-900 shows what else it takes with it. */
+P('quote count ink-900 on white badge', fg, white, 4.5)
+P('quote badge fill boundary vs band', white, band, 3)
 
 console.log('-- footer (ink-950) --')
 P('footer body ink-600 on teal-50', fgMuted, footer, 4.5)
