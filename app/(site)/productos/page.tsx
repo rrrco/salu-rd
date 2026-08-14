@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CaretLeft } from '@phosphor-icons/react/ssr'
+import { CaretLeft, Truck } from '@phosphor-icons/react/ssr'
+import { DELIVERY } from '../../lib/site'
 import { client } from '../../lib/sanity'
 import { allProductsQuery } from '../../lib/queries'
 import type { SanityProduct } from '../../lib/types'
@@ -37,6 +38,14 @@ export default async function ProductosPage() {
           <p className="mt-4 max-w-[var(--width-prose)] text-lead text-fg-muted">
             Medicamentos, biológicos y consumibles certificados. Solicita precios y
             disponibilidad de cualquier referencia.
+          </p>
+          {/* Said once, in the header, rather than on all 64 tiles: repeated
+              under every packshot it stops being information and becomes
+              texture. The product view carries it again beside the CTAs, which
+              is where a buyer who arrived straight from search lands. */}
+          <p className="mt-4 flex items-start gap-2 text-sm text-fg-subtle">
+            <Truck size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-accent-deep" />
+            {DELIVERY.catalog}
           </p>
         </div>
       </header>

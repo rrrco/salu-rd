@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
+import { Truck } from '@phosphor-icons/react/ssr'
 import { WhatsAppIcon } from '../../lib/icons'
 import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CATEGORIES, labelOf, type SanityProductDetail } from '../../lib/types'
-import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+import { DELIVERY, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 import { soleSize } from '../../lib/quote'
 import { AddToQuoteButton } from '../quote/AddToQuoteButton'
 import { ProductMedia } from './ProductMedia'
@@ -113,6 +114,15 @@ export function ProductDetail({
             Escríbenos
           </ButtonLink>
         </div>
+
+        {/* Under the controls, not above them: it is a condition on the action,
+            and a buyer reads it at the moment they are deciding to act.
+            `outline`, so it does not compete with the category badge at the top
+            of this same column, which is the louder of the two labels. */}
+        <Badge variant="outline" className="font-normal">
+          <Truck aria-hidden="true" />
+          {DELIVERY.product}
+        </Badge>
       </div>
     </div>
   )
