@@ -659,6 +659,21 @@
   }
 }
 
+/* The mobile quote bar arrives from below the fold it sits on. 12px, the same
+   travel the hero entry uses: enough to say where it came from, not so much
+   that adding a second product feels like a page change. No exit keyframe -
+   see the note in QuoteBar.tsx. */
+@keyframes quote-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ============================================================================
    Page transition
 

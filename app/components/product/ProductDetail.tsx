@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CATEGORIES, labelOf, type SanityProductDetail } from '../../lib/types'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+import { soleSize } from '../../lib/quote'
+import { AddToQuoteButton } from '../quote/AddToQuoteButton'
 import { ProductMedia } from './ProductMedia'
 import { ProductSpecs } from './ProductSpecs'
 
@@ -77,8 +79,13 @@ export function ProductDetail({
 
         {/* WhatsApp is what this business closes on, so it is the primary
             control here as it is everywhere else, prefilled with the product
-            name so the chat opens already saying what the buyer was reading. */}
-        <div className="mt-1 flex w-full flex-col gap-3 sm:flex-row">
+            name so the chat opens already saying what the buyer was reading.
+
+            The quote button carries its label here, unlike in the tile. There
+            is room for one, and this page is often where a buyer meets the
+            feature for the first time; a bare glyph on first contact is a
+            puzzle. Three tiers, three weights: brand fill, tinted, outline. */}
+        <div className="mt-1 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
           <ButtonLink
             href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
             size={isPage ? 'lg' : 'md'}
@@ -87,6 +94,16 @@ export function ProductDetail({
             <WhatsAppIcon />
             Cotizar por WhatsApp
           </ButtonLink>
+          {product.slug?.current ? (
+            <AddToQuoteButton
+              slug={product.slug.current}
+              name={product.name}
+              packageSize={soleSize(product.sizes)}
+              withLabel
+              size={isPage ? 'lg' : 'md'}
+              className="w-full sm:w-auto"
+            />
+          ) : null}
           <ButtonLink
             href="/#contact"
             variant="secondary"

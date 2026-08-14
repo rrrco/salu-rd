@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test scripts/*.test.mjs"
+    "test": "node --test scripts/*.test.mjs app/lib/*.test.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

@@ -14,6 +14,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+import { QuoteNavButton } from '../quote/QuoteNavButton'
 
 /** Cascade delay for the sheet links, applied via CSS custom property so the
  *  stagger runs off the main thread. */
@@ -85,9 +86,14 @@ export function Nav() {
                 {link.label}
               </Link>
             ))}
+            {/* Desktop only. On a phone the quote lives in `QuoteBar`, which
+                appears at the bottom of the screen once there is something in
+                it - the mobile bar below already carries a WhatsApp glyph and
+                a hamburger, and a third control does not fit beside them. */}
+            <QuoteNavButton />
             <ButtonLink
               href={whatsappUrl(WHATSAPP_MESSAGES.general)}
-              className="ml-3"
+              className="ml-1"
             >
               <WhatsAppIcon />
               Cotizar

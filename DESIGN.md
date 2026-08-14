@@ -265,6 +265,8 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 | Product dialog scrim | `teal-950/50` + 4px backdrop blur, fades with the panel | The catalog behind is dense with packshots on white, which stay legible under a flat scrim and compete with the panel |
 | Product tile press | card `scale(0.99)`, `--dur-press`, scoped to the tile link | The whole card is one target now, so the whole card answers the press |
 | Arrow affordances | translate 2px toward their direction on hover | An arrow means "onward", so it should move that way |
+| Quote bar entry | fade + `translateY(12px)`, 240ms, no exit | It arrives from below the edge it sits on. No exit keyframe: it leaves because the buyer emptied the list, and animating that out keeps a bar on screen describing a quote that is gone |
+| WhatsApp FAB lift | `translateY(-64px)`, 180ms, below `lg` only | The quote bar takes the bottom edge. The FAB moves rather than hides: a control that vanishes because you added a product is a control the buyer then has to go looking for |
 
 **Not in this system:** scroll hijack, pinned sections, parallax, marquees, magnetic cursors, custom cursors, infinite loops. A supply buyer wants the quote form, not a ride.
 
@@ -325,6 +327,31 @@ Positioning is a `pointer-events-none` flex wrapper, not `translate(-50%, -50%)`
 `transform-origin` stays centred. A modal is not anchored to a trigger, so it is the exception to the origin-aware rule that governs popovers. Enter and exit are CSS keyframes, not transitions, because Radix waits for `animationend` before unmounting.
 
 The product name lives in the sticky header bar, not in the body: on a phone the packshot is the tallest thing in the sheet, and a title under it means the buyer opens a product and cannot see which product it is. The close control matches `SheetCloseButton` exactly.
+
+### Quote (cotización)
+
+A buyer collecting eight references used to open eight WhatsApp chats. The quote is a list in the browser that ends in one message. No prices, no checkout, no database: `localStorage` under `salu.quote.v1`, discarded after 30 days, and the only thing it can produce is a prefilled WhatsApp deep link.
+
+**It is a cotización, never a carrito.** Nothing here has a price and nothing gets paid for, so the word and the glyph are a clipboard, not a shopping cart. A cart promises a transaction that never arrives.
+
+Four parts:
+
+| Part | Where | When |
+|---|---|---|
+| `AddToQuoteButton` | tile, product page, product overlay | always, if the product has a slug |
+| `QuoteNavButton` | nav bar, `lg` and up | always, with a `teal-300` count badge when the list is not empty |
+| `QuoteBar` | fixed to the bottom edge, below `lg` | only when the list is not empty |
+| `QuotePanel` | site layout, once | on demand, from either control |
+
+The two entry points are deliberate opposites and never both visible. The nav is sticky at every scroll position, so on desktop a permanent glyph there is enough and a bar underneath would be a second copy of the same button. On a phone the header already carries a WhatsApp glyph and a hamburger and has no room for a third control, so the bar is the only copy - and it costs nothing until the first product goes in.
+
+**The tile foot is 75/25**, `grid-cols-[3fr_minmax(0,1fr)]`: WhatsApp keeps the primary, because the buyer of one reference should not lose today's one-tap path to a feature built for the buyer of eight. `minmax(0,...)` and not a bare `1fr`, or the button's min-content pushes the track past its quarter and overflows the card. Below 150px of *tile* the two stack, which is the same container-query logic the tile's padding already uses: at a 320px screen a quarter is 31px and three-quarters is narrower than the word "Cotizar".
+
+The panel reuses `Dialog`, so the quote is the same material as the product overlay - bottom sheet on a phone, centred card on a desktop. A right-hand drawer would have been a third panel language for one feature.
+
+Reverse states, all four: the stepper's minus, the per-line trash, "Vaciar cotización" behind a two-press confirm, and the panel's own close. Adding is the only irreversible-looking act, and it isn't.
+
+The pure half lives in `app/lib/quote.ts` with no DOM, no storage and no clock, which is what lets `app/lib/quote.test.ts` run under `node --test`. `app/lib/quote-store.ts` is the seam where all three arrive.
 
 ### ProductSpecs
 

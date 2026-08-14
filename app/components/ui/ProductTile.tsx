@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { ButtonLink } from '@/components/ui/button'
 import { CategoryIcon, WhatsAppIcon } from '../../lib/icons'
 import { whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+import { soleSize } from '../../lib/quote'
+import { AddToQuoteButton } from '../quote/AddToQuoteButton'
 import { urlFor, blurOf } from '../../lib/image'
 import type { SanityProduct } from '../../lib/types'
 
@@ -68,7 +70,8 @@ export function ProductTile({
   /* Deduplicated: two photos of the same size are two shots of one box, and the
      tile would otherwise repeat the label. */
   const presentations = [...new Set(product.sizes ?? [])]
-  const href = product.slug?.current ? `/productos/${product.slug.current}` : null
+  const slug = product.slug?.current
+  const href = slug ? `/productos/${slug}` : null
 
   return (
     <article
@@ -184,20 +187,51 @@ export function ProductTile({
             </div>
           )}
 
-          {/* Sits above the stretched link so it stays its own target, and it is
-              prefilled with this product's name: the chat opens already saying
-              what the buyer was looking at. */}
-          {/* The 20px side padding is wider than a 134px tile can afford - at a
-              320px viewport the label starts eating into it. Trading it for
-              12px on a compact tile costs nothing, since `w-full` sets the
-              width and the padding only ever decides the minimum. */}
-          <ButtonLink
-            href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
-            className="relative z-10 w-full @max-[240px]:px-3"
+          {/* Sits above the stretched link so both stay their own targets, and
+              the WhatsApp CTA is prefilled with this product's name: the chat
+              opens already saying what the buyer was looking at.
+
+              75/25, and the split collapses to two stacked full-width buttons
+              below 150px of tile. That is not a viewport breakpoint: at a 320px
+              screen this tile is 134px wide, its quarter is 31px and its
+              three-quarters is 94px, which is narrower than the word "Cotizar"
+              and its glyph. Two rows there beats a label sliced in half, and
+              every wider phone keeps the split.
+
+              `minmax(0,1fr)` and not a bare `1fr` on the second track: a plain
+              `1fr` floors at the button's min-content, so anything wider than a
+              quarter pushes the track out and overflows the card rather than
+              taking its share.
+
+              A product with no slug has no identity to store, so it keeps the
+              single full-width CTA - the same rule that already costs it the
+              tile link. */}
+          <div
+            className={
+              href
+                ? 'relative z-10 grid grid-cols-[3fr_minmax(0,1fr)] gap-2 @max-[150px]:grid-cols-1'
+                : 'relative z-10'
+            }
           >
-            <WhatsAppIcon />
-            Cotizar
-          </ButtonLink>
+            {/* The 20px side padding is wider than a 134px tile can afford - at
+                a 320px viewport the label starts eating into it. Trading it for
+                12px on a compact tile costs nothing, since `w-full` sets the
+                width and the padding only ever decides the minimum. */}
+            <ButtonLink
+              href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
+              className="w-full px-3 @max-[240px]:px-2"
+            >
+              <WhatsAppIcon />
+              Cotizar
+            </ButtonLink>
+            {slug ? (
+              <AddToQuoteButton
+                slug={slug}
+                name={product.name}
+                packageSize={soleSize(presentations)}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
     </article>
