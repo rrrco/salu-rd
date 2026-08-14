@@ -100,7 +100,12 @@ export default function CatalogClient({ products }: { products: SanityProduct[] 
       </div>
 
       {filtered.length > 0 ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          {/* Two columns from the narrowest phone up. One column at 390px meant
+              a single tile filled the viewport and the catalog read as 64
+              full-screen pages; two puts four products in view at once, which
+              is what a buyer scanning for a reference needs. The tiles go
+              compact on their own at that width - see ProductTile. */}
           {filtered.map((product, i) => (
             <ProductTile key={product._id} product={product} priority={i < 4} />
           ))}

@@ -47,11 +47,17 @@ const PREFETCH_ON_INTENT = { unstable_dynamicOnHover: true }
  * A product with no slug has nowhere to go, so it loses the link *and* the
  * hover affordances. A border that lifts to accent on a card that cannot be
  * clicked promises something that never happens (DESIGN.md 9).
+ *
+ * Padding tightens below 240px of *tile* width, not below a viewport
+ * breakpoint. The same phone shows this tile at ~169px in the catalog's
+ * two-column grid and at full width on the home page, so a `sm:` rule would
+ * squeeze the wrong one. One container query, and the tile is correct in both
+ * grids and at every desktop column count without a prop to thread through.
  */
 export function ProductTile({
   product,
   priority = false,
-  sizes = '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
+  sizes = '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw',
 }: {
   product: SanityProduct
   priority?: boolean
@@ -70,7 +76,7 @@ export function ProductTile({
         // `on-light` keeps the tile a white card even inside a dark band, which
         // is the composition the brand has always used and avoids the tile
         // splitting into a light image half and a dark text half.
-        'on-light group relative flex h-full flex-col overflow-hidden rounded-lg',
+        'on-light group @container relative flex h-full flex-col overflow-hidden rounded-lg',
         'border border-border bg-surface',
         'transition-[border-color,box-shadow,transform] duration-[180ms] ease-[var(--ease-out)]',
         href ? 'hover-fine:border-accent hover-fine:shadow-md' : '',
@@ -91,7 +97,7 @@ export function ProductTile({
           white, so a tinted ground showed as coloured bands above and below the
           product where the contained image did not reach. White makes the
           photo's own background disappear into the card. */}
-      <div className="relative aspect-[4/5] overflow-hidden border-b border-border bg-white p-4">
+      <div className="relative aspect-[4/5] overflow-hidden border-b border-border bg-white p-4 @max-[240px]:p-2.5">
         {hasImage ? (
           <Image
             src={urlFor(product.image!, 'natural')}
@@ -115,7 +121,7 @@ export function ProductTile({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-3 p-5 @max-[240px]:gap-2 @max-[240px]:p-3.5">
         <h3 className="text-h3 font-medium text-fg">
           {href ? (
             <Link
@@ -155,7 +161,7 @@ export function ProductTile({
             It also reads better: the size is the thing the buyer is about to
             ask the price of, and it now sits directly above the button that
             asks. */}
-        <div className="mt-auto flex flex-col gap-3">
+        <div className="mt-auto flex flex-col gap-3 @max-[240px]:gap-2">
           {/* Labelled, not bare numbers: `4 kg` on its own could be read as a
               dose. Singular when there is one, because 29 of the 64 products
               have exactly one and "Presentaciones: 4 kg" reads as a list that
@@ -181,9 +187,13 @@ export function ProductTile({
           {/* Sits above the stretched link so it stays its own target, and it is
               prefilled with this product's name: the chat opens already saying
               what the buyer was looking at. */}
+          {/* The 20px side padding is wider than a 134px tile can afford - at a
+              320px viewport the label starts eating into it. Trading it for
+              12px on a compact tile costs nothing, since `w-full` sets the
+              width and the padding only ever decides the minimum. */}
           <ButtonLink
             href={whatsappUrl(WHATSAPP_MESSAGES.product(product.name))}
-            className="relative z-10 w-full"
+            className="relative z-10 w-full @max-[240px]:px-3"
           >
             <WhatsAppIcon />
             Cotizar
