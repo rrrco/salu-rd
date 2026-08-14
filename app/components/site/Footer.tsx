@@ -6,6 +6,31 @@ import { ButtonLink } from '@/components/ui/button'
 import { SITE, NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
 /**
+ * Author credit. Not part of `SITE`: these are the builder's details, not the
+ * client's.
+ *
+ * No email here on purpose. The Contacto column above already carries one, and
+ * a second address in the same footer makes a buyer stop to work out which one
+ * is SALU's. The portfolio is the one door, and it is the one that can change
+ * without a deploy.
+ */
+const CREDIT = {
+  name: 'santiu',
+  site: 'https://santiu.co',
+} as const
+
+/**
+ * The underline is permanent rather than hover-only, so the credit reads as a
+ * link at rest in a 12px line where nothing else is clickable. It sits at
+ * `border-strong` (ink-400), one step lighter than the label, and the rule and
+ * the label move to `accent-deep` together on hover. Offsetting by 3px clears
+ * the descenders in `y` and `g`, which the default underline cuts through at
+ * this size.
+ */
+const creditLink =
+  'font-medium text-fg-muted underline decoration-border-strong decoration-1 underline-offset-[3px] transition-[color,text-decoration-color] duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent-deep hover-fine:decoration-accent-deep'
+
+/**
  * Light footer.
  *
  * A near-black slab under a light page was the heaviest thing on the site and
@@ -81,9 +106,31 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-border pt-6">
+        {/* Side by side only from `md`. The two lines measure ~363px and ~185px,
+            and a phone cannot hold both, so below that the credit takes its own
+            line rather than squeezing the copyright into two.
+
+            `md:pr-16` keeps the credit out of the WhatsApp FAB. The FAB is fixed
+            at 56px with a 23px inset, so it owns the bottom-right 79px of the
+            viewport, and this bar is the one thing on the site that ends up
+            underneath it at full scroll. Right-aligned text ends at the container
+            edge whatever its length, so shortening the line did not fix this. The
+            reserve drops at `2xl`, where the 1240px container is already more
+            than 79px clear of the edge. */}
+        <div className="mt-14 flex flex-col items-start justify-between gap-2.5 border-t border-border pt-6 md:flex-row md:items-baseline md:gap-x-6 md:pr-16 2xl:pr-0">
           <p className="text-xs text-fg-subtle">
             {year} {SITE.name} {SITE.division}. Todos los derechos reservados.
+          </p>
+          <p className="text-xs text-fg-subtle">
+            Diseñado y desarrollado por{' '}
+            <a
+              href={CREDIT.site}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={creditLink}
+            >
+              {CREDIT.name}
+            </a>
           </p>
         </div>
       </div>
