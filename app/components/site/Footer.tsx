@@ -5,6 +5,24 @@ import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
 import { SITE, NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
+/** Author credit. Not part of `SITE`: these are the builder's details, not the client's. */
+const CREDIT = {
+  name: 'santiu',
+  site: 'https://santiu.co',
+  email: 'santi.uribegil@gmail.com',
+} as const
+
+/**
+ * The underline is permanent rather than hover-only, so the credit reads as a
+ * link at rest in a 12px line where nothing else is clickable. It sits at
+ * `border-strong` (ink-400), one step lighter than the label, and the rule and
+ * the label move to `accent-deep` together on hover. Offsetting by 3px clears
+ * the descenders in `y` and `g`, which the default underline cuts through at
+ * this size.
+ */
+const creditLink =
+  'font-medium text-fg-muted underline decoration-border-strong decoration-1 underline-offset-[3px] transition-[color,text-decoration-color] duration-[180ms] ease-[var(--ease-out)] hover-fine:text-accent-deep hover-fine:decoration-accent-deep'
+
 /**
  * Light footer.
  *
@@ -81,9 +99,35 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-border pt-6">
+        {/* Side by side only from `lg`. The two lines measure ~363px and ~361px,
+            so anything narrower than about 880px wraps both of them to two lines,
+            which covers the whole tablet band including iPad portrait.
+
+            `lg:pr-16` keeps the right-hand line out of the WhatsApp FAB. The FAB
+            is fixed at 56px with a 23px inset, so it owns the bottom-right 79px
+            of the viewport, and this bar is the one thing on the site that ends
+            up underneath it at full scroll. The reserve drops at `2xl`, where the
+            1240px container is already more than 79px clear of the edge. */}
+        <div className="mt-14 flex flex-col items-start justify-between gap-2.5 border-t border-border pt-6 lg:flex-row lg:items-baseline lg:gap-x-6 lg:pr-16 2xl:pr-0">
           <p className="text-xs text-fg-subtle">
             {year} {SITE.name} {SITE.division}. Todos los derechos reservados.
+          </p>
+          <p className="flex flex-wrap items-center gap-x-1.5 text-xs text-fg-subtle">
+            Diseñado y desarrollado por
+            <a
+              href={CREDIT.site}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={creditLink}
+            >
+              {CREDIT.name}
+            </a>
+            <span aria-hidden="true" className="text-border-strong">
+              ·
+            </span>
+            <a href={`mailto:${CREDIT.email}`} className={creditLink}>
+              {CREDIT.email}
+            </a>
           </p>
         </div>
       </div>
