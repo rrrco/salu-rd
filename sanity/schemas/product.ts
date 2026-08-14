@@ -168,22 +168,23 @@ export default defineType({
     }),
     defineField({
       name: 'order',
-      title: 'Orden',
+      title: 'Orden en inicio',
       type: 'number',
       group: 'site',
-      description: 'Menor primero. Los productos sin orden quedan al final, alfabéticamente.',
+      description:
+        'Solo ordena los tres destacados de la página de inicio. Menor primero. El catálogo va siempre en orden alfabético.',
     }),
   ],
   orderings: [
     {
-      title: 'Orden',
-      name: 'order',
-      by: [{ field: 'order', direction: 'asc' }],
-    },
-    {
       title: 'Nombre',
       name: 'name',
       by: [{ field: 'name', direction: 'asc' }],
+    },
+    {
+      title: 'Orden en inicio',
+      name: 'order',
+      by: [{ field: 'order', direction: 'asc' }],
     },
   ],
   /* The document list reads as a catalog rather than a column of names: the
