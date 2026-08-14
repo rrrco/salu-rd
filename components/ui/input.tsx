@@ -8,6 +8,12 @@ import { cn } from '@/lib/utils'
  * accent ring, which keeps the branded focus moment. `focus:` rather than
  * `focus-visible:` on purpose - a text control should show focus on pointer
  * entry too.
+ *
+ * `type="search"` draws a clear button of its own in WebKit and Chromium, on
+ * hover and focus only, so a search field that ships its own clear control
+ * showed two crosses side by side the moment the pointer entered. The native
+ * one is suppressed here rather than at the call site: it is the same defect
+ * wherever a search input appears, and the answer never differs.
  */
 function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
@@ -21,6 +27,7 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         'transition-[background-color,border-color,box-shadow] duration-[180ms] ease-[var(--ease-out)]',
         'focus:border-accent focus:outline-none focus:ring-2 focus:ring-[color-mix(in_oklab,var(--color-accent)_30%,transparent)]',
         'aria-invalid:border-destructive',
+        '[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none',
         'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60',
         className
       )}

@@ -374,6 +374,10 @@ The figures live **inside** the hero, layered on the gradient, rather than as a 
 
 The catalog grid is **two columns from the narrowest phone**, then 3 at `lg` and 4 at `xl`. One column at 390px gave each tile the whole viewport, so 64 products read as 64 full-screen pages and a buyer scanning for a reference saw one at a time. Two columns put four in view. The home page grid keeps its single mobile column: it carries three tiles, not 64, and there is nothing to scan.
 
+**The search sticks under the nav; the chips do not.** A 64-product scroll should not have to be undone to type a name. The bar pins at `--nav-h` and takes a paper band and a hairline only once pinned, so the page at rest gains no chrome — the stuck state comes from an `IntersectionObserver` on a sentinel, the same pattern the nav uses for `data-scrolled`. The category chips wrap to three rows on a phone, and pinning 120px of filters would spend a sixth of the viewport on controls that are usually already set.
+
+Filtering from the pinned bar **pulls the catalog back under the nav** if it had scrolled above it. Narrowing 64 products to 4 takes the page from 14,000px to 2,400px and the browser clamps the scroll, which otherwise strands the buyer past the end of results they cannot see. Nothing moves when the catalog is already in view, so typing never fights the page.
+
 A product opened **from the catalog** is intercepted by the `@modal` slot and rendered as a dialog over the live grid, so the buyer's search term and category filter survive. The same URL loaded directly, refreshed or shared renders the standalone page. One `ProductDetail` feeds both; only the grid ratio, the gaps and the image `sizes` differ, because a catalog whose overlay says something different to its page is worse than having no overlay.
 
 Tiles on the home page are **not** intercepted, since interception is scoped to `/productos`. That is deliberate: the catalog has expensive local state worth preserving and the home grid has none. A second root-level slot to make them match would be dead options.
