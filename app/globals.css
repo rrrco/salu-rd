@@ -645,6 +645,21 @@
   }
 }
 
+/* The nav count arriving. Fires once, when the quote stops being empty, since
+   the element only mounts at that moment - later increments swap the digit and
+   nothing replays. 0.95 and not 0.8: at 16px a deeper scale reads as a bounce,
+   and the opacity is doing the work anyway (DESIGN.md 4.2). */
+@keyframes quote-badge-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* The quote drawer slides in from the edge it docks to.
    A full slide, where the centred panel gets 4px and a fade: the panel is a
    layer over the page and only has to say so, while the drawer is furniture

@@ -38,10 +38,17 @@ export function QuoteNavButton() {
     >
       <ClipboardText size={24} aria-hidden="true" />
       {count > 0 ? (
-        /* teal-300 on teal-950 text: the one accent that reads on every ground
-           this bar takes, and it takes several - the nav is transparent over
-           the hero and a teal gradient everywhere else, so a badge ringed in
-           any single color would be wrong on one of them.
+        /* White fill, ink-900 numeral: the same pair the `inverse` button uses,
+           which is the repo's answer for a light surface sitting on a dark
+           ground. It needs one, because this bar takes several grounds - the
+           nav is transparent over the hero and a teal gradient everywhere else
+           - and white is the only fill that reads on all of them without a
+           ring tuned to a single one.
+
+           It fades in rather than cutting in, once, at the moment the quote
+           stops being empty. Later increments only swap the digit: a number
+           that re-animates every time you press add would draw the eye away
+           from the grid the buyer is still reading.
 
            `aria-hidden`: the count is already in the button's name, and read
            twice it comes out as "cotización, 3 productos, 3". */
@@ -49,7 +56,8 @@ export function QuoteNavButton() {
           aria-hidden="true"
           className={[
             'absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1',
-            'bg-teal-300 text-[0.625rem] font-bold leading-none text-teal-950 tabular-nums',
+            'bg-white text-[0.625rem] font-bold leading-none text-ink-900 tabular-nums',
+            'animate-[quote-badge-in_180ms_var(--ease-out)]',
           ].join(' ')}
         >
           {count}

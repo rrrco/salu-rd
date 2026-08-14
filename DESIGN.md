@@ -265,6 +265,7 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 | Product dialog scrim | `teal-950/50` + 4px backdrop blur, fades with the panel | The catalog behind is dense with packshots on white, which stay legible under a flat scrim and compete with the panel |
 | Product tile press | card `scale(0.99)`, `--dur-press`, scoped to the tile link | The whole card is one target now, so the whole card answers the press |
 | Arrow affordances | translate 2px toward their direction on hover | An arrow means "onward", so it should move that way |
+| Quote count appearing | fade + `scale(0.95)`, 180ms | Fires once, when the quote stops being empty, because that is when the element mounts. Increments only swap the digit: a number that re-animates on every press pulls the eye off the grid the buyer is still reading |
 | Quote drawer, desktop | `translateX(100%)`, `--dur-panel` in / 240ms out, no fade | A full slide where the centred panel gets 4px: the panel is a layer over the page and only has to say so, the drawer is furniture attached to one side and has to say which side |
 | Quote bar entry | fade + `translateY(12px)`, 240ms, no exit | It arrives from below the edge it sits on. No exit keyframe: it leaves because the buyer emptied the list, and animating that out keeps a bar on screen describing a quote that is gone |
 | WhatsApp FAB lift | `translateY(-64px)`, 180ms, below `lg` only | The quote bar takes the bottom edge. The FAB moves rather than hides: a control that vanishes because you added a product is a control the buyer then has to go looking for |
@@ -347,7 +348,7 @@ Four parts:
 | Part | Where | When |
 |---|---|---|
 | `AddToQuoteButton` | tile, product page, product overlay | always, if the product has a slug |
-| `QuoteNavButton` | nav bar, `lg` and up | always, with a `teal-300` count badge when the list is not empty |
+| `QuoteNavButton` | nav bar, `lg` and up | always, with a white count badge carrying an `ink-900` numeral when the list is not empty |
 | `QuoteBar` | fixed to the bottom edge, below `lg` | only when the list is not empty |
 | `QuotePanel` | site layout, once | on demand, from either control |
 
