@@ -44,6 +44,8 @@ const productDetailFields = groq`
   gallery[] { ${imageFields} }
 `
 
+/** The home page trio. `order` exists for exactly this list — the three
+ *  products the business wants seen first. Everywhere else is alphabetical. */
 export const productsQuery = groq`
   *[_type == "product" && featured == true] | order(order asc) [0..2] {
     ${productFields}
@@ -51,7 +53,7 @@ export const productsQuery = groq`
 `
 
 export const allProductsQuery = groq`
-  *[_type == "product"] | order(order asc, name asc) {
+  *[_type == "product"] | order(name asc) {
     ${productFields}
   }
 `
@@ -88,7 +90,7 @@ export const productPageQuery = groq`
       iconKey == ^.iconKey &&
       _id != ^._id &&
       defined(slug.current)
-    ] | order(order asc, name asc) [0..3] {
+    ] | order(name asc) [0..3] {
       ${productFields}
     }
   }
