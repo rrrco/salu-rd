@@ -1,0 +1,355 @@
+{
+  "_note": "slug -> fields to patch. 'presentation' is the document-level spec field. 'imageLabel' sets the label on the main image when the photo clearly shows that size. Sources: cv = continentalvet.com product page, label = read off the original WhatsApp photo, web = web search.",
+
+  "amoxisalu-ug": {
+    "description": "Antibiótico oral en polvo de la línea SALU que combina amoxicilina trihidratada al 20% con colistina al 6%. La amoxicilina cubre gérmenes Gram positivos y Gram negativos y la colistina refuerza la acción sobre enterobacterias, por lo que se usa en aves y cerdos frente a infecciones digestivas y respiratorias.",
+    "activeIngredient": "Amoxicilina trihidratada 20% + Colistina 6%",
+    "_src": "label"
+  },
+  "biosalu-ug": {
+    "description": "Desinfectante de amplio espectro contra virus, bacterias, hongos y esporas, formulado con glutaraldehído, cloruro de didecil dimetil amonio, formaldehído, alcohol isopropílico y glioxal. Se usa en la desinfección de explotaciones avícolas, porcinas y ganaderas, mataderos, incubadoras y equipos de ordeño, diluido en agua o al 1% para equipo quirúrgico.",
+    "activeIngredient": "Glutaraldehído, cloruro de didecil dimetil amonio, formaldehído, alcohol isopropílico, glioxal",
+    "_src": "label"
+  },
+  "saluvitamin-ug": {
+    "description": "Mezcla de aminoácidos y vitaminas en solución oral para todas las especies. Se diluye en el agua de bebida y se usa como apoyo en estrés, convalecencia, bajo consumo de alimento y en etapas de crecimiento y producción.",
+    "_src": "label"
+  },
+  "amoflox": {
+    "description": "Combinación antibiótica oral de norfloxacina y amoxicilina. La norfloxacina inhibe la ADN girasa bacteriana y la amoxicilina bloquea la formación de la pared celular, lo que da un espectro amplio sobre Gram positivos, Gram negativos, Mycoplasma y Pasteurella en aves y cerdos.",
+    "activeIngredient": "Norfloxacina + Amoxicilina",
+    "_src": "cv"
+  },
+  "amoxivet-polvo-soluble": {
+    "description": "Antibiótico oral en polvo soluble a base de amoxicilina, penicilina semisintética activa contra un amplio espectro de microorganismos Gram positivos y Gram negativos. Indicado para el tratamiento y la prevención de enfermedades de aves y cerdos causadas por patógenos sensibles a la amoxicilina.",
+    "activeIngredient": "Amoxicilina trihidratada",
+    "presentation": "Sobre de 150 g",
+    "_src": "cv"
+  },
+  "zapi-broditop": {
+    "description": "Raticida en bloque de compresión parafinado, resistente al agua y a la humedad, de muy buena aceptación por los roedores. Para el control de ratas y ratones en exteriores de granjas y sembradíos y en interiores como casas, almacenes y graneros.",
+    "activeIngredient": "Brodifacoum 0.005%",
+    "presentation": "Cubeta de 5 kg",
+    "_src": "cv"
+  },
+  "bromhexin": {
+    "description": "Mucolítico, secretolítico y expectorante en polvo soluble, con 10 g de bromhexina HCL por cada 100 g. Se usa como coadyuvante en enfermedades respiratorias que cursan con secreciones bronquiales viscosas en aves, cerdos, bovinos y caballos, diluyendo un sobre en 200 galones de agua durante 3 a 5 días.",
+    "activeIngredient": "Bromhexina HCL 10 g / 100 g",
+    "presentation": "Sobre de 100 g",
+    "_src": "label"
+  },
+  "cloro-en-pastilla": {
+    "description": "Cloro orgánico en pastillas para la cloración y potabilización del agua de bebida, a base de ácido tricloroisocianúrico con 90% de cloro activo. De disolución lenta y uniforme, no modifica el pH del agua y mantiene entre 0.5 y 1 ppm de cloro libre.",
+    "activeIngredient": "Ácido tricloroisocianúrico (90% cloro activo)",
+    "presentation": "Pastillas de 100 g",
+    "imageLabel": "100 g",
+    "_src": "label+web"
+  },
+  "coligen": {
+    "description": "Antibioterapia para el tratamiento de diarreas de origen infeccioso, por el efecto sinérgico de colistina y gentamicina. Contiene además caolín, un protector gastroentérico que tapiza la mucosa inflamada, y está indicado frente a Escherichia coli, Proteus, Klebsiella, Staphylococcus, Salmonella typhimurium y Pseudomonas.",
+    "activeIngredient": "Colistina + Gentamicina + Caolín",
+    "presentation": "Envase de 250 ml",
+    "imageLabel": "250 ml",
+    "_src": "cv"
+  },
+  "colistyn": {
+    "description": "Antibiótico oral en polvo a base de sulfato de colistina para aves y cerdos. Actúa sobre bacterias Gram negativas del tracto digestivo y se usa en el tratamiento de enteritis y diarreas causadas por gérmenes sensibles.",
+    "activeIngredient": "Colistina sulfato",
+    "_src": "label"
+  },
+  "coxycox-2.5p": {
+    "description": "Anticoccidial de uso oral para el tratamiento de la coccidiosis en aves y conejos. Actúa sobre todas las cepas de coccidios en cualquiera de sus etapas de desarrollo.",
+    "presentation": "Envase de 1 litro",
+    "_src": "cv"
+  },
+  "coxycox-5p": {
+    "description": "Anticoccidial de uso oral para el tratamiento de la coccidiosis en aves y conejos, en concentración al 5%. Actúa sobre todas las cepas de coccidios en cualquiera de sus etapas de desarrollo.",
+    "_src": "cv"
+  },
+  "doxiciclina-bromexina": {
+    "description": "Combinación de doxiciclina, antibiótico de amplio espectro del grupo de las tetraciclinas, con bromhexina, un mucolítico que fluidifica las secreciones bronquiales. Indicada en procesos respiratorios de aves y cerdos, donde la bromhexina facilita la llegada del antibiótico al tejido pulmonar.",
+    "activeIngredient": "Doxiciclina + Bromhexina",
+    "_src": "label"
+  },
+  "dynavit-200": {
+    "description": "Mezcla hidrosoluble de vitaminas y electrolitos en proporciones equilibradas, con alto contenido de vitamina E. Repone los electrolitos que se pierden en períodos de estrés y mantiene el balance de agua y pH, útil frente a enfermedades, terapia antibiótica, vacunación, sobrepoblación, altas temperaturas, despique y transporte.",
+    "presentation": "Sobre de 150 g",
+    "imageLabel": "150 g",
+    "_src": "cv"
+  },
+  "expectol": {
+    "description": "Solución expectorante y mucolítica de uso oral. Fluidifica las secreciones bronquiales y facilita su expulsión, como coadyuvante en el tratamiento de afecciones respiratorias.",
+    "_src": "label"
+  },
+  "fact-track": {
+    "description": "Tónico energizante para equinos, rumiantes y aves, formulado según los requerimientos nutricionales del Consejo de Investigación de Norteamérica para caballos. Aporta lisina para el desarrollo muscular, vitaminas y oligoelementos balanceados sobre un excipiente de mieles ricas, con hierro adicional. Ideal para animales de alta competición, desarrollo y convalecencia.",
+    "presentation": "Envase de 1 litro y 1 galón",
+    "imageLabel": "1 L",
+    "_src": "cv+label"
+  },
+  "fast-track": {
+    "description": "Tónico energizante para equinos, rumiantes y aves, formulado según los requerimientos nutricionales del Consejo de Investigación de Norteamérica para caballos. Aporta lisina para el desarrollo muscular, vitaminas y oligoelementos balanceados sobre un excipiente de mieles ricas, con hierro adicional. Ideal para animales de alta competición, desarrollo y convalecencia.",
+    "presentation": "Envase de 1 litro y 1 galón",
+    "_src": "cv+label",
+    "_dupe": "mismo producto que fact-track"
+  },
+  "fenbendazol-cv-22": {
+    "description": "Antiparasitario interno de amplio espectro en polvo, adulticida, larvicida y ovicida, con 22 g de fenbendazol por cada 100 g. Indicado para el tratamiento y la prevención de parasitosis gastrointestinales y pulmonares de bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
+    "activeIngredient": "Fenbendazol 22 g / 100 g",
+    "presentation": "Caja x 25 sobres de 25 g",
+    "imageLabel": "25 sobres de 25 g",
+    "_src": "label"
+  },
+  "fenbendazol-cv-22-polvo": {
+    "description": "Antiparasitario interno de amplio espectro en polvo, adulticida, larvicida y ovicida, con 22 g de fenbendazol por cada 100 g. Indicado para el tratamiento y la prevención de parasitosis gastrointestinales y pulmonares de bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
+    "activeIngredient": "Fenbendazol 22 g / 100 g",
+    "presentation": "Caja x 25 sobres de 25 g",
+    "_src": "label",
+    "_dupe": "mismo producto que fenbendazol-cv-22"
+  },
+  "fenbendazole-cv10": {
+    "description": "Antiparasitario interno de amplio espectro en suspensión oral al 10%, adulticida, larvicida y ovicida. Controla infestaciones por Ostertagia, Haemonchus, Trichostrongylus, Nematodirus, Cooperia, Dictyocaulus, Ancylostoma y Toxocara, entre otros, en bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
+    "activeIngredient": "Fenbendazol 10%",
+    "presentation": "Envase de 1 litro y 250 ml",
+    "_src": "cv"
+  },
+  "florvet-soluble": {
+    "description": "Antimicrobiano soluble a base de florfenicol, antibiótico de amplio espectro con excelente absorción intestinal, amplio margen de seguridad y problemas mínimos de resistencia bacteriana. Indicado en infecciones por E. coli, Pasteurella, Avibacterium, Salmonella, estreptococos y otras bacterias Gram positivas y Gram negativas.",
+    "activeIngredient": "Florfenicol",
+    "_src": "cv"
+  },
+  "florvet": {
+    "description": "Solución oral de florfenicol al 10%, antibiótico de amplio espectro con excelente absorción intestinal, amplio margen de seguridad y problemas mínimos de resistencia bacteriana. Indicado en infecciones causadas por E. coli, Pasteurella, Avibacterium, Salmonella, estreptococos y otras bacterias Gram positivas y Gram negativas.",
+    "activeIngredient": "Florfenicol 10%",
+    "presentation": "Envase de 1 litro",
+    "_src": "cv"
+  },
+  "fosfomicina-t-b": {
+    "description": "Antibiótico oral en polvo que combina fosfomicina cálcica con tilosina tartrato y bromhexina. La asociación cubre procesos respiratorios y digestivos de aves y cerdos causados por Mycoplasma, Pasteurella y colibacilosis, y la bromhexina fluidifica las secreciones bronquiales.",
+    "activeIngredient": "Fosfomicina cálcica + Tilosina tartrato + Bromhexina",
+    "_src": "label"
+  },
+  "zapi-garban-10-ec": {
+    "description": "Insecticida piretroide concentrado a base de cipermetrina al 10%, con efecto desalojo y solventes de bajo impacto ambiental. La ausencia de solventes orgánicos y su tecnología B.I.A. le dan seguridad de empleo para el aplicador y los animales presentes en el lugar tratado. Para el control de insectos voladores y rastreros.",
+    "activeIngredient": "Cipermetrina 10%",
+    "presentation": "Frasco de 1 litro con medidor",
+    "_src": "cv"
+  },
+  "hepato-ren": {
+    "description": "Hepatoprotector y renoprotector para estimular la recuperación de las aves ante patologías que comprometen la función hepática o renal, como hepatitis por cuerpos de inclusión, hígado graso, síndrome de hígado blanco, micotoxinas y grasas enranciadas. Promueve el crecimiento, estimula el apetito y favorece la recuperación en convalecencias.",
+    "presentation": "Envase de 1 litro",
+    "imageLabel": "1 L",
+    "_src": "cv"
+  },
+  "integrador-b-k-200": {
+    "description": "Complejo vitamínico soluble concentrado a base de vitaminas del complejo B combinadas con vitamina K. Está especialmente formulado para usarse durante y después de enfermedades tratadas con sulfas y antibióticos en dosis altas.",
+    "presentation": "Sobre de 200 g",
+    "imageLabel": "200 g",
+    "_src": "cv"
+  },
+  "kerkus-plata": {
+    "description": "Curabichera en aerosol con acción antimiásica, cicatrizante, repelente y hemostática. Combina piretroides con polvo de aluminio, que forma una película protectora sobre la herida y corta el sangrado, para el tratamiento preventivo y curativo de miasis en heridas, castraciones, descorne y ombligos de recién nacidos.",
+    "_src": "web"
+  },
+  "kerkus-talco": {
+    "description": "Talco cicatrizante y antimiásico de uso veterinario. Se aplica en polvo sobre heridas, castraciones, descorne y ombligos de recién nacidos, con acción secante, repelente de moscas y protectora frente a la infestación por larvas.",
+    "_src": "web"
+  },
+  "neocin": {
+    "description": "Antibiótico oral a base de sulfato de neomicina, con poca absorción en el aparato digestivo, lo que le permite permanecer in situ y actuar directamente sobre el tracto gástrico e intestinal. Indicado en enteritis y diarreas de aves y cerdos causadas por gérmenes sensibles.",
+    "activeIngredient": "Neomicina sulfato",
+    "presentation": "Sobre de 100 g",
+    "imageLabel": "100 g",
+    "_src": "cv"
+  },
+  "neotetrafur-plus": {
+    "description": "Complejo antibiótico de amplio espectro con clortetraciclina, norfloxacina y neomicina, para el tratamiento y la prevención de enfermedades del aparato digestivo y respiratorio de las aves. Indicado en enfermedad crónica respiratoria, onfalitis, enteritis, complicaciones bacterianas de la bronquitis infecciosa y colibacilosis, e ideal para el recibimiento de pollitos.",
+    "activeIngredient": "Clortetraciclina 10 g + Norfloxacina 12.5 g + Neomicina 10 g / 1000 g",
+    "presentation": "Sobre de 100 g",
+    "imageLabel": "100 g",
+    "_src": "cv"
+  },
+  "nexcard-spectra": {
+    "description": "Tableta masticable mensual para perros que combina afoxolaner con milbemicina oxima. Mata pulgas, garrapatas y ácaros de la sarna, controla nematodos gastrointestinales como ascáridos, anquilostomas y tricocéfalos, y previene el gusano del corazón.",
+    "activeIngredient": "Afoxolaner + Milbemicina oxima",
+    "_src": "web"
+  },
+  "origoran": {
+    "description": "Aditivo natural a base de orégano (Origanum vulgare), alicina y canela, usado como promotor de crecimiento no antibiótico. Se administra en el agua de bebida para mantener el estado sanitario del lote, mejorar la conversión alimenticia y apoyar la inmunidad.",
+    "activeIngredient": "Origanum vulgare + Alicina + Canela",
+    "_src": "web"
+  },
+  "resporan": {
+    "description": "Tónico respiratorio natural a base de aceites esenciales de eucalipto, tomillo, menta, alcanfor y albahaca sagrada. Actúa como expectorante, antifúngico, antimicrobiano y antitusivo: fluidifica las secreciones, reduce la inflamación de las vías aéreas y facilita la respiración en aves y cerdos.",
+    "activeIngredient": "Aceites esenciales de eucalipto, tomillo, menta, alcanfor y albahaca",
+    "_src": "web"
+  },
+  "tilmicovet": {
+    "description": "La tilmicosina es un antimicrobiano del grupo de los macrólidos, especialmente activo contra gérmenes Gram positivos, algunos Gram negativos y micoplasmas. Se absorbe rápidamente en el tracto digestivo y se concentra en el tejido pulmonar, por lo que es eficaz en el control de enfermedades respiratorias de aves y cerdos.",
+    "activeIngredient": "Tilmicosina",
+    "presentation": "Envase de 1 litro y 240 ml",
+    "_src": "cv"
+  },
+  "vitamina-e-selenio": {
+    "description": "Complejo soluble a base de vitamina E y selenio, con 4.000 UI de vitamina E y 100 mg de selenio por sobre. Para el tratamiento y la prevención de distrofias musculares, encefalomalacia, miocarditis, síndrome de mala absorción y diátesis exudativa.",
+    "activeIngredient": "Vitamina E 4.000 UI + Selenio 100 mg",
+    "presentation": "Sobre de 100 g",
+    "_src": "cv+label"
+  },
+  "vitamina-k": {
+    "description": "Vitamina K soluble en polvo para uso veterinario oral. Se usa en la prevención y el tratamiento de los trastornos de la coagulación por carencia de vitamina K, frecuentes tras tratamientos prolongados con sulfas y antibióticos o en cuadros con sangrado.",
+    "activeIngredient": "Vitamina K3 (menadiona)",
+    "_src": "web"
+  },
+  "vitaminas-b+k": {
+    "description": "Combinación de vitaminas solubles del complejo B con vitamina K, para el tratamiento y la prevención de la avitaminosis del complejo B y de los trastornos de coagulación por carencia de vitamina K. Útil también en estados de estrés y como potencializador de antibióticos durante la convalecencia.",
+    "presentation": "Sobre de 100 g",
+    "_src": "cv"
+  },
+  "yodol": {
+    "description": "Desinfectante yodado, germicida de amplio espectro frente a virus, bacterias, hongos y levaduras, para uso en toda especie animal. Se emplea en el lavado y la desinfección de naves avícolas y porcinas, salas de ordeño, pezoneras, ubres y utensilios, cura de ombligos de recién nacidos e higienización del agua.",
+    "activeIngredient": "Yodo",
+    "presentation": "Envase de 1 galón",
+    "imageLabel": "1 galón",
+    "_src": "cv"
+  },
+  "apetipet": {
+    "description": "Jarabe suplemento vitamínico para perros con carnitina y sabor a carne. Se usa como estimulante del apetito y apoyo nutricional en cachorros, animales convalecientes o con bajo consumo de alimento.",
+    "activeIngredient": "Complejo vitamínico + L-carnitina",
+    "_src": "label"
+  },
+  "cloro-cv": {
+    "description": "Pastillas de cloro de 200 g al 90% de cloro activo para el tratamiento del agua. De liberación lenta y alto poder esterilizante, una pastilla trata 40 metros cúbicos de agua durante 20 días, manteniendo entre 0.5 y 1 ppm de cloro libre.",
+    "activeIngredient": "ATCC 200 g, 90% de cloro activo",
+    "presentation": "Cubeta de 4 kg (20 pastillas)",
+    "_src": "label"
+  },
+  "clortetraciclina-continental": {
+    "description": "Antibiótico soluble a base de clortetraciclina, con 25 g por cada 100 g, para el tratamiento y la prevención de enfermedades de las aves. Indicado en enfermedad crónica respiratoria, cresta azul, enteritis, cólera aviar y complicaciones bacterianas originadas en bronquitis y laringotraqueítis, así como tras vacunaciones y transporte.",
+    "activeIngredient": "Clortetraciclina 25 g / 100 g",
+    "presentation": "Sobre de 100 g",
+    "_src": "label"
+  },
+  "bajante-de-suero-control-flujo": {
+    "description": "Equipo de venoclisis desechable y estéril para la administración de sueros y soluciones por gravedad, con regulador de flujo. De un solo uso, no tóxico y no pirogénico.",
+    "_src": "label"
+  },
+  "enrofloxacina-continental-10": {
+    "description": "Antiinfeccioso inyectable de amplio espectro a base de enrofloxacina al 10%, activo sobre gérmenes Gram positivos, Gram negativos y micoplasmas. Indicado en infecciones respiratorias, digestivas y urinarias de bovinos, porcinos, caninos, felinos y caprinos.",
+    "activeIngredient": "Enrofloxacina 10%",
+    "_src": "cv"
+  },
+  "florfenicol-continental-30": {
+    "description": "Antibiótico inyectable de amplio espectro al 30% contra bacterias Gram positivas y Gram negativas. Se libera lentamente, alcanzando una larga vida media y alta eficacia con una sola dosis, y se concentra en los fluidos bronquiales, lo que lo hace eficaz frente a Pasteurella, Salmonella, E. coli, cocos, Clostridium y micoplasma.",
+    "activeIngredient": "Florfenicol 30%",
+    "presentation": "Frasco de 100 ml",
+    "_src": "cv"
+  },
+  "gentamicina-continental": {
+    "description": "Solución oral de gentamicina al 2%, aminoglucósido con eficaz acción contra gérmenes Gram negativos como E. coli, Salmonella, Proteus, Pseudomonas y Shigella. Por su escasa absorción permanece inalterada en el tracto intestinal hasta su eliminación, produciendo un efecto terapéutico permanente frente a colibacilosis, salmonelosis y enfermedad crónica respiratoria.",
+    "activeIngredient": "Gentamicina 2%",
+    "presentation": "Envase de 1 galón",
+    "_src": "cv"
+  },
+  "glutavet-200": {
+    "description": "Desinfectante de amplio espectro contra virus, bacterias, hongos y esporas que mantiene su efectividad aun en presencia de materia orgánica. Altamente activo frente a peste porcina clásica y africana, Newcastle, fiebre aftosa, adenovirus, reovirus y picornavirus, y frente a estreptococos, estafilococos y E. coli.",
+    "activeIngredient": "Glutaraldehído + cloruro de didecil dimetil amonio + formaldehído",
+    "presentation": "Envase de 1 galón",
+    "_src": "cv"
+  },
+  "hierro-dextrano-continental-20": {
+    "description": "Solución hematopoyética inyectable de rápida absorción al 20%. Indicada en la prevención y el tratamiento de la deficiencia de hierro en cerdos y, en las demás especies, como apoyo en anemias, pérdida de apetito, diarreas, retardo del crecimiento y baja resistencia a agentes infecciosos.",
+    "activeIngredient": "Hierro dextrano 20%",
+    "presentation": "Frascos de 100 ml y 250 ml",
+    "_src": "cv"
+  },
+  "inncare-latex-disposable-gloves": {
+    "description": "Guantes desechables de examen, disponibles en látex y en nitrilo azul libre de polvo. De grado médico, ambidiestros y no estériles, para manejo clínico y de granja.",
+    "_src": "label"
+  },
+  "intermedic-disposable-needle": {
+    "description": "Agujas hipodérmicas desechables y estériles de un solo uso, disponibles en varios calibres y longitudes para aplicaciones inyectables en distintas especies.",
+    "_src": "label"
+  },
+  "ivermectina-continental-2": {
+    "description": "Endectocida inyectable de amplio espectro y larga residualidad al 2%. Combate de forma simultánea nematodos pulmonares, gastrointestinales y renales, además de parasitosis externas por ácaros, y su efecto prolongado protege frente a reinfestaciones durante semanas.",
+    "activeIngredient": "Ivermectina 2%",
+    "presentation": "Frascos de 100 ml, 250 ml y 500 ml",
+    "_src": "cv"
+  },
+  "kerkus-plus": {
+    "description": "Concentrado emulsionable con piretroides para baños de aspersión contra parásitos externos y fumigación de establos, almacenes y silos. Actúa como uricida, garrapaticida, piojicida, acaricida, antimiásico, mosquicida, pulguicida y sarnicida en bovinos, equinos, ovinos, caprinos, porcinos y caninos.",
+    "activeIngredient": "Piretroides",
+    "_src": "label"
+  },
+  "matabicheiras-forte-sv": {
+    "description": "Larvicida en aerosol de uso veterinario para el tratamiento y la prevención de miasis. Se aplica directamente sobre heridas, castraciones, descorne y ombligos, eliminando las larvas y protegiendo la zona tratada.",
+    "presentation": "Envase de 500 ml",
+    "_src": "label"
+  },
+  "nipro": {
+    "description": "Agujas hipodérmicas desechables y estériles de un solo uso, en calibre 18G con longitudes de 1\" y 1 1/2\". Caja de 100 unidades.",
+    "_src": "label"
+  },
+  "oxi-25": {
+    "description": "Antibiótico oral de amplio espectro y rápida acción a base de oxitetraciclina HCl, con 25 g por cada 100 g. Se administra en el agua de bebida para el tratamiento de infecciones respiratorias y digestivas de aves y cerdos.",
+    "activeIngredient": "Oxitetraciclina HCl 25 g / 100 g",
+    "presentation": "Caja x 25 sobres de 25 g",
+    "_src": "label"
+  },
+  "oxitetracilina-continental-20": {
+    "description": "Antibiótico inyectable de larga acción y amplio espectro al 20% para bovinos, ovinos y porcinos. Indicado en actinobacilosis, diarrea de terneros, infecciones pódales, mastitis, pasteurelosis, neumonía, anaplasmosis, pericarditis y onfalitis, entre otras enfermedades por gérmenes sensibles.",
+    "activeIngredient": "Oxitetraciclina 20%",
+    "presentation": "Frascos de 100 ml y 250 ml",
+    "_src": "cv"
+  },
+  "oxivitaminico": {
+    "description": "Antibiótico con vitaminas en polvo soluble, que combina oxitetraciclina con vitaminas A, E, K, B2, B12, niacinamida y ácido pantoténico. Cubre el proceso infeccioso y a la vez repone el desgaste vitamínico asociado a la enfermedad y al estrés.",
+    "activeIngredient": "Oxitetraciclina 5.51 g + complejo vitamínico / 100 g",
+    "presentation": "Caja x 25 sobres de 25 g",
+    "_src": "label"
+  },
+  "promotor-continental": {
+    "description": "Mezcla de aminoácidos y vitaminas en solución oral, de alta solubilidad en el agua de bebida y apta para cualquier especie. Indicada en el tratamiento y la prevención de la desnutrición, para mejorar la fertilidad y la postura en aves, y como coadyuvante en estrés, convalecencia, gestación y lactancia.",
+    "presentation": "Envase de 250 ml",
+    "_src": "cv"
+  },
+  "ran-electrolyte": {
+    "description": "Solución de electrolitos y vitaminas para el agua de bebida. Repone las sales y los micronutrientes que se pierden en cuadros de deshidratación, diarrea, estrés calórico, transporte y vacunación, en bovinos, aves, cerdos y ovinos.",
+    "presentation": "Envase de 1 litro",
+    "_src": "label"
+  },
+  "rancool": {
+    "description": "Producto natural para la protección contra el estrés por calor en aves, bovinos, caprinos, ovinos y otras especies. Se administra en el agua de bebida durante los períodos de altas temperaturas para sostener el consumo de alimento y el rendimiento productivo.",
+    "presentation": "Envase de 1 litro",
+    "_src": "label"
+  },
+  "rovisol-ad3ec-oral": {
+    "description": "Emulsión hidromiscible de las vitaminas liposolubles A, D3 y E junto con vitamina C. Su rápida y completa absorción genera depósitos hepáticos máximos y se mezcla con leche, agua u otros líquidos, indicada como refuerzo vitamínico cuando decae el crecimiento, la producción o el consumo de alimento y tras tratamientos, vacunaciones, transporte o estrés por calor.",
+    "activeIngredient": "Vitaminas A, D3, E y C",
+    "presentation": "Envase de 1 litro y 1 galón",
+    "_src": "cv"
+  },
+  "th5": {
+    "description": "Desinfectante bactericida, fungicida y virucida para uso veterinario e higiene industrial, a base de amonio cuaternario. Eficacia comprobada al 1% sobre más de 50 cepas, para la desinfección y limpieza de equipos e instalaciones, hospitales, plantas de sacrificio y control de bacterias, hongos y virus.",
+    "activeIngredient": "Cloruros de bencil C12-C16 alquil dimetil 327.50 g / L",
+    "presentation": "Envase de 100 ml",
+    "_src": "label"
+  },
+  "tylflor": {
+    "description": "Combinación de florfenicol y tilosina con alta sinergia antimicrobiana, en solución oral. Indicada en el tratamiento de enfermedades producidas por Salmonella, E. coli, Pasteurella, Mycoplasma, Actinobacillus y otros gérmenes sensibles en aves y cerdos.",
+    "activeIngredient": "Florfenicol + Tilosina",
+    "presentation": "Envase de 1 litro",
+    "_src": "cv"
+  },
+  "jerginas-desechables": {
+    "description": "Jeringas desechables estériles de un solo uso, disponibles en 1 ml con punta luer slip y en 3 ml con cierre luer lock. Caja de 100 unidades.",
+    "_src": "label"
+  },
+  "cvalbendazole": {
+    "description": "Antihelmíntico de uso oral para bovinos, caprinos, ovinos, porcinos, caninos, felinos y equinos. Controla infestaciones por Ostertagia, Haemonchus, Trichostrongylus, Nematodirus, Cooperia, Oesophagostomum, Dictyocaulus, Trichuris, Ancylostoma y Toxocara, entre otros.",
+    "activeIngredient": "Albendazol",
+    "presentation": "Envase de 1 litro y 250 ml",
+    "_src": "cv"
+  }
+}
