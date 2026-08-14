@@ -9,9 +9,9 @@ export const SITE = {
   name: 'SALU',
   division: 'División Veterinaria',
   email: 'salusrl.dv@gmail.com',
-  phoneDisplay: '+1 809 442 0017',
-  phoneE164: '18094420017',
-  whatsapp: 'https://wa.me/18094420017',
+  phoneDisplay: '+1 829 763 1855',
+  phoneE164: '18297631855',
+  whatsapp: 'https://wa.me/18297631855',
   country: 'República Dominicana',
 } as const
 
