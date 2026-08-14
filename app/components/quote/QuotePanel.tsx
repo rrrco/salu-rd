@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { WhatsAppIcon } from '../../lib/icons'
-import { whatsappUrl } from '../../lib/site'
+import { DELIVERY, whatsappUrl } from '../../lib/site'
 import { countItems, MAX_QTY, quoteMessage, type QuoteLine } from '../../lib/quote'
 import {
   clearQuote,
@@ -67,6 +67,12 @@ export function QuotePanel() {
             </ul>
 
             <div className="flex shrink-0 flex-col gap-3 border-t border-border bg-surface p-5">
+              {/* Above the button, unlike the line below it: this is a
+                  condition the buyer should read before pressing, not a
+                  description of what pressing does. The second sentence is
+                  what keeps it from reading as a door slammed shut - a clinic
+                  outside the country still has someone to ask. */}
+              <p className="text-center text-xs text-fg-subtle">{DELIVERY.quote}</p>
               <ButtonLink
                 href={whatsappUrl(quoteMessage(lines))}
                 size="lg"

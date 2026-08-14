@@ -16,6 +16,24 @@ export const SITE = {
 } as const
 
 /**
+ * Delivery is national only, and the site never said so. The country appeared
+ * as an address in the footer and as flavour in the hero copy, both of which
+ * read as where SALU is rather than how far it ships, so a buyer outside the
+ * country had no way to find out before opening a chat.
+ *
+ * Three surfaces carry it, phrased for the room each one is in: the catalog
+ * where browsing starts, the product where the decision is made, and the quote
+ * panel as the last stop before WhatsApp.
+ */
+export const DELIVERY = {
+  catalog: 'Cotizamos y despachamos únicamente dentro de República Dominicana.',
+  product: 'Entrega en toda República Dominicana',
+  quote:
+    'Despachamos solo dentro de República Dominicana. Si estás fuera del país, escríbenos igual y te decimos si podemos ayudarte.',
+  footer: 'Entregas solo dentro del territorio dominicano',
+} as const
+
+/**
  * WhatsApp is the primary conversion channel for this business, so it gets a
  * helper rather than a hardcoded URL in six places.
  *

@@ -1,9 +1,15 @@
 import Link from 'next/link'
-import { EnvelopeSimple, MapPin } from '@phosphor-icons/react/ssr'
+import { EnvelopeSimple, MapPin, Truck } from '@phosphor-icons/react/ssr'
 import { Logo } from './Logo'
 import { WhatsAppIcon } from '../../lib/icons'
 import { ButtonLink } from '@/components/ui/button'
-import { SITE, NAV_LINKS, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
+import {
+  SITE,
+  NAV_LINKS,
+  DELIVERY,
+  whatsappUrl,
+  WHATSAPP_MESSAGES,
+} from '../../lib/site'
 
 /**
  * Author credit. Not part of `SITE`: these are the builder's details, not the
@@ -102,6 +108,19 @@ export function Footer() {
             <p className="flex items-center gap-2.5 text-sm text-fg-muted">
               <MapPin size={16} aria-hidden="true" className="shrink-0 text-accent-deep" />
               {SITE.country}
+            </p>
+            {/* The line above answers "where are they"; on its own it was read
+                as the answer to "how far do they ship", which is a different
+                question with a narrower answer. This one says it outright.
+                `items-start` because the sentence wraps to two lines on a
+                phone and a centred icon would then float mid-paragraph. */}
+            <p className="flex items-start gap-2.5 text-sm text-fg-muted">
+              <Truck
+                size={16}
+                aria-hidden="true"
+                className="mt-1 shrink-0 text-accent-deep"
+              />
+              {DELIVERY.footer}
             </p>
           </div>
         </div>
