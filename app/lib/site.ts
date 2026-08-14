@@ -12,6 +12,7 @@ export const SITE = {
   phoneDisplay: '+1 829 763 1855',
   phoneE164: '18297631855',
   whatsapp: 'https://wa.me/18297631855',
+  city: 'Santiago de los Caballeros',
   country: 'República Dominicana',
 } as const
 

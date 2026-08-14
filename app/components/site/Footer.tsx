@@ -107,7 +107,7 @@ export function Footer() {
             </a>
             <p className="flex items-center gap-2.5 text-sm text-fg-muted">
               <MapPin size={16} aria-hidden="true" className="shrink-0 text-accent-deep" />
-              {SITE.country}
+              {SITE.city}, {SITE.country}
             </p>
             {/* The line above answers "where are they"; on its own it was read
                 as the answer to "how far do they ship", which is a different
