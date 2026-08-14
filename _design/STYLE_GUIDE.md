@@ -1237,7 +1237,7 @@ CTA         →  Teal button on dark — final conversion action peak
   </div>
   <div class="cinfo-text">
     <div class="cinfo-label">Teléfono</div>
-    <div class="cinfo-value">+54 11 4000-7890</div>
+    <div class="cinfo-value">+1 829 763 1855</div>
   </div>
 </div>
 
