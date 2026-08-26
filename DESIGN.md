@@ -256,9 +256,6 @@ Prefer a `1px` border plus negative space over a shadow. Use elevation only wher
 | Stat count-up | 1.4s on enter, tabular-nums | The numbers are the message |
 | Button press | `scale(0.97)`, `--dur-press` | Feedback |
 | Tile hover | image `scale(1.03)`, border to accent | Affordance |
-| Form states | pending to success | State transition |
-| Disclosure open/close | height 0 to auto, 340ms in / 240ms out, opacity delayed 60ms on enter | A native `<details>` snaps; the layout jumped hundreds of pixels in one frame |
-| Disclosure glyph | plus rotates 135° into a cross, critically damped spring | One glyph doing both states, no hard cut between two icons |
 | Mobile nav sheet | fade + 8px travel, links stagger at 40ms | The sheet arrives rather than cutting in; the cascade shows reading order |
 | Product dialog, desktop | fade + `translateY(4px)` + `scale(0.98)`, 240ms in / 160ms out | A panel that cuts in over the grid reads as a page change rather than a layer above it. `0.98` and not `0.95`: the surface is large, and a deep scale on a large surface reads as a zoom |
 | Product dialog, mobile | fade + `translateY(16px)` from the bottom edge, same 240/160 | Enough travel to say where it came from, nowhere near a full off-screen slide |

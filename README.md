@@ -27,8 +27,6 @@ Copy `.env.example` to `.env.local`.
 
 | Variable | Required | Notes |
 |---|---|---|
-| `RESEND_API_KEY` | For the contact form | Without it the form renders and validates but cannot send, and shows the email and WhatsApp fallback instead. |
-| `CONTACT_FROM_EMAIL` | Optional | Verified Resend sender, e.g. `SALU <web@yourdomain.com>`. Falls back to Resend's shared onboarding sender. |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Optional | Defaults to the project ID in `sanity.config.ts`. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Optional | Defaults to `production`. |
 
@@ -63,7 +61,6 @@ layout shift.
 
 ```
 app/
-  actions/contact.ts        server action: validate, rate limit, send via Resend
   productos/
     page.tsx                catalog grid
     [slug]/                 standalone product page
@@ -72,7 +69,7 @@ app/
     product/                ProductDetail, ProductSpecs, ProductMedia, gallery, modal
     sections/               one file per landing page section
     site/                   Nav, Footer, WhatsAppFab, Logo
-    ui/                     Button, Field, Section, ProductTile, PhotoSlot, Reveal, CountUp
+    ui/                     Button, Section, ProductTile, PhotoSlot, Reveal, CountUp
   lib/
     site.ts                 contact details, nav links, stats
     types.ts                Sanity types and the category list

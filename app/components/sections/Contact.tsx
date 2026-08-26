@@ -1,24 +1,27 @@
 import { EnvelopeSimple, ArrowUpRight } from '@phosphor-icons/react/ssr'
 import { WhatsAppIcon } from '../../lib/icons'
 import { Card } from '@/components/ui/card'
-import ContactForm from '../ContactForm'
 import { Section, SectionHead } from '../ui/Section'
 import { Reveal } from '../ui/Reveal'
-import { Disclosure } from '@/components/ui/disclosure'
 import { SITE, whatsappUrl, WHATSAPP_MESSAGES } from '../../lib/site'
 
 /**
- * WhatsApp first, form second.
+ * Two channels, both of them a link out. Nothing is submitted to this site.
  *
  * This section used to present the contact form as the main event, with
  * WhatsApp listed beside it as a phone number in a row of details. That
  * inverted the business: WhatsApp is where this company actually closes, and a
  * form asks for five fields and an email round trip before anyone talks.
  *
- * The hierarchy is now honest. WhatsApp is a full panel in the brand fill,
- * sized like the decision it is, opening a chat that already states the intent.
- * The form stays for buyers who prefer to send a list and wait, collapsed,
- * framed as the alternative it is.
+ * The form is gone entirely. Accepting name, email, phone and organisation made
+ * SALU a data controller, which means publishing a privacy policy and a data
+ * handling notice for a channel almost nobody used. `mailto:` moves the whole
+ * exchange to the visitor's own mail client, so the site receives no field and
+ * has nothing to declare.
+ *
+ * Both panels are now the same shape and the same height: brand fill for
+ * WhatsApp because that is where the money is, surface fill for email as the
+ * slower alternative.
  *
  * Position 7, after the proof sections. `#contact` is unchanged so every
  * existing CTA still lands here.
@@ -77,43 +80,43 @@ export function Contact() {
           </a>
         </Reveal>
 
-        <Reveal delay={0.08} className="flex h-full flex-col gap-6">
-          <Card asChild
+        {/* The slow path. Same silhouette as the WhatsApp panel so the column
+            does not read as a leftover, and it opens the visitor's own mail
+            client rather than posting anywhere. */}
+        <Reveal delay={0.08}>
+          <Card
+            asChild
             className={[
-              'group flex-row items-center gap-4 p-6',
+              'group h-full justify-between gap-10 p-8 sm:p-10',
               'transition-[border-color,transform,box-shadow] duration-[180ms] ease-[var(--ease-out)]',
               'hover-fine:border-accent hover-fine:-translate-y-0.5 hover-fine:shadow-md',
+              'focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--color-focus)]',
               'motion-reduce:transition-none motion-reduce:hover-fine:translate-y-0',
             ].join(' ')}
           >
-          <a href={`mailto:${SITE.email}`}>
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-teal-100 text-accent-deep">
-              <EnvelopeSimple size={24} aria-hidden="true" />
-            </span>
-            <span className="flex min-w-0 flex-col">
-              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-fg-subtle">
-                Correo electrónico
+            <a href={`mailto:${SITE.email}`}>
+              <span className="flex items-start justify-between gap-4">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-teal-100 text-accent-deep">
+                  <EnvelopeSimple size={24} aria-hidden="true" />
+                </span>
+                <ArrowUpRight
+                  size={20}
+                  aria-hidden="true"
+                  className="text-fg-subtle transition-transform duration-[180ms] ease-[var(--ease-out)] hover-fine:group-hover:-translate-y-0.5 hover-fine:group-hover:translate-x-0.5 motion-reduce:transition-none"
+                />
               </span>
-              <span className="truncate text-fg">{SITE.email}</span>
-            </span>
-            <ArrowUpRight
-              size={20}
-              aria-hidden="true"
-              className="ml-auto shrink-0 text-fg-subtle transition-transform duration-[180ms] ease-[var(--ease-out)] hover-fine:group-hover:-translate-y-0.5 hover-fine:group-hover:translate-x-0.5 motion-reduce:transition-none"
-            />
-          </a>
+
+              <span className="flex min-w-0 flex-col gap-2">
+                <span className="text-h3 font-semibold text-fg">Escríbenos por correo</span>
+                <span className="text-sm text-fg-muted">
+                  Te respondemos en horario laboral.
+                </span>
+                <span className="mt-3 truncate text-lg font-semibold text-accent-deep">
+                  {SITE.email}
+                </span>
+              </span>
+            </a>
           </Card>
-
-          {/* Collapsed by default. The form is the slow path, so it should not
-              out-shout the fast one just by being the tallest thing on screen. */}
-          <Disclosure
-            title="O envíanos un mensaje detallado"
-            hint="Ideal si necesitas cotizar una lista de productos."
-            className="flex-1 rounded-lg border border-border bg-surface shadow-sm"
-          >
-            <ContactForm />
-          </Disclosure>
-
         </Reveal>
       </div>
     </Section>
