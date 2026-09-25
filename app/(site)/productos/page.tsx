@@ -10,14 +10,15 @@ import CatalogClient from '../../components/CatalogClient'
 
 export const revalidate = 60
 
+const title = 'Catálogo de productos veterinarios'
 const description =
-  'Explora el catálogo completo de productos farmacéuticos, biológicos y consumibles veterinarios de SALU División Veterinaria.'
+  'Medicamentos, biológicos y consumibles veterinarios certificados de SALU División Veterinaria. Cotiza por WhatsApp, con entrega en toda República Dominicana.'
 
 export const metadata: Metadata = {
-  title: 'Catálogo de Productos',
+  title,
   description,
   alternates: { canonical: '/productos' },
-  openGraph: { ...baseOpenGraph, title: `Catálogo de Productos | ${SITE_NAME}`, description },
+  openGraph: { ...baseOpenGraph, title: `${title} | ${SITE_NAME}`, description },
 }
 
 export default async function ProductosPage() {

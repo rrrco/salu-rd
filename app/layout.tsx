@@ -35,14 +35,20 @@ export const viewport: Viewport = {
   themeColor: '#062428',
 }
 
+/** Aimed at how buyers search: "distribuidor de productos veterinarios" plus
+ *  the country. Every claim is on the page: the city is in the footer, the
+ *  national delivery in the footer and the catalog. */
+const homeTitle = 'SALU División Veterinaria | Distribuidor de productos veterinarios en República Dominicana'
+const homeDescription =
+  'Distribuidor de productos veterinarios en Santiago de los Caballeros. Medicamentos, biológicos y consumibles certificados para clínicas, hospitales y distribuidores, con entrega en toda República Dominicana.'
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: 'SALU División Veterinaria | Productos y Medicamentos Veterinarios',
+    default: homeTitle,
     template: '%s | SALU División Veterinaria',
   },
-  description:
-    'SALU División Veterinaria provee productos farmacéuticos certificados, biológicos y consumibles veterinarios a clínicas, hospitales y distribuidores en República Dominicana.',
+  description: homeDescription,
   keywords: [
     'productos veterinarios',
     'medicamentos veterinarios',
@@ -51,12 +57,7 @@ export const metadata: Metadata = {
     'antibióticos veterinarios',
     'antiparasitarios',
   ],
-  openGraph: {
-    ...baseOpenGraph,
-    title: 'SALU División Veterinaria | Productos y Medicamentos Veterinarios',
-    description:
-      'Productos farmacéuticos certificados, biológicos y consumibles veterinarios para clínicas, hospitales y distribuidores en República Dominicana.',
-  },
+  openGraph: { ...baseOpenGraph, title: homeTitle, description: homeDescription },
   // Pages never set `twitter`, so this reaches all of them. Next fills the
   // title, description and image in from each page's `openGraph`.
   twitter: { card: 'summary_large_image' },
@@ -64,7 +65,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={poppins.variable}>
+    // es-DO rather than es: Bing reads the region off this attribute when it
+    // decides which country's results a page belongs in.
+    <html lang="es-DO" className={poppins.variable}>
       <head>
         {/* Scroll reveals server-render at opacity 0 and are revealed on
             hydration. Without this, a visitor with JavaScript disabled gets a
