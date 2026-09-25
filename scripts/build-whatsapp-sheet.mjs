@@ -35,7 +35,9 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = opt('out', join(REPO_ROOT, 'public/catalogo-whatsapp.html'))
 const DATASET = opt('dataset', process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production')
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '90vh2vk9'
-const SITE = 'https://saludivisionveterinaria.com'
+// Keep in step with `SITE.url` in app/lib/site.ts. This file is plain Node and
+// cannot import the TypeScript module.
+const SITE = 'https://salu-rd.com'
 
 /**
  * Copy a product still lacking a `description` in the Studio. Rendered with a
