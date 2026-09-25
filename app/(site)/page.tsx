@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Hero } from '../components/sections/Hero'
 import { FeaturedProducts } from '../components/sections/FeaturedProducts'
 import { Purpose } from '../components/sections/Purpose'
@@ -8,8 +9,13 @@ import { CtaBand } from '../components/sections/CtaBand'
 import { client } from '../lib/sanity'
 import { productsQuery } from '../lib/queries'
 import type { SanityProduct } from '../lib/types'
+import { homeJsonLd } from '../lib/seo'
 
 export const revalidate = 60
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 /**
  * Eight sections, eight distinct layout families, no family repeated.
@@ -30,6 +36,11 @@ export default async function Home() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Escaping `<` keeps a value from ever closing the script tag early.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd).replace(/</g, '\\u003c') }}
+      />
       {/* The figures now live inside the hero, layered on the gradient, as
           they did in the original design. */}
       <Hero />

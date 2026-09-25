@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CaretLeft, Truck } from '@phosphor-icons/react/ssr'
 import { DELIVERY } from '../../lib/site'
+import { SITE_NAME, baseOpenGraph } from '../../lib/seo'
 import { client } from '../../lib/sanity'
 import { allProductsQuery } from '../../lib/queries'
 import type { SanityProduct } from '../../lib/types'
@@ -9,10 +10,14 @@ import CatalogClient from '../../components/CatalogClient'
 
 export const revalidate = 60
 
+const description =
+  'Explora el catálogo completo de productos farmacéuticos, biológicos y consumibles veterinarios de SALU División Veterinaria.'
+
 export const metadata: Metadata = {
   title: 'Catálogo de Productos',
-  description:
-    'Explora el catálogo completo de productos farmacéuticos, biológicos y consumibles veterinarios de SALU División Veterinaria.',
+  description,
+  alternates: { canonical: '/productos' },
+  openGraph: { ...baseOpenGraph, title: `Catálogo de Productos | ${SITE_NAME}`, description },
 }
 
 export default async function ProductosPage() {

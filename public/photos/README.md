@@ -41,3 +41,15 @@ retina en los dos recortes y pesa menos de 500KB.
 > pero queda corto del ancho recomendado, así que en monitores grandes todavía se
 > ve algo suave. Además viene ya recortada a 21:9, por lo que en móvil (4:5) el
 > encuadre central deja al veterinario fuera y solo se ve el rebaño.
+
+## Imagen para compartir
+
+`public/og-image.jpg` es la imagen que muestran WhatsApp y las redes al compartir
+el inicio o el catálogo. Sale de `delivery.jpg`: un recorte de 1500x787 desde
+y=631, centrado en las cajas SALU y sin la placa del camión, reducido a 1200x630
+a calidad 82 (≈220KB). Si cambias `delivery.jpg`, genera este archivo otra vez:
+
+```bash
+sips -c 787 1500 --cropOffset 631 0 public/photos/delivery.jpg --out /tmp/og.jpg
+sips -z 630 1200 -s format jpeg -s formatOptions 82 /tmp/og.jpg --out public/og-image.jpg
+```

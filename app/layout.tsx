@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
+import { SITE } from './lib/site'
+import { baseOpenGraph } from './lib/seo'
 
 /**
  * Non-Apple fallback.
@@ -34,7 +36,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saludivisionveterinaria.com'),
+  metadataBase: new URL(SITE.url),
   title: {
     default: 'SALU División Veterinaria | Productos y Medicamentos Veterinarios',
     template: '%s | SALU División Veterinaria',
@@ -50,13 +52,14 @@ export const metadata: Metadata = {
     'antiparasitarios',
   ],
   openGraph: {
-    type: 'website',
-    locale: 'es_DO',
-    siteName: 'SALU División Veterinaria',
+    ...baseOpenGraph,
     title: 'SALU División Veterinaria | Productos y Medicamentos Veterinarios',
     description:
       'Productos farmacéuticos certificados, biológicos y consumibles veterinarios para clínicas, hospitales y distribuidores en República Dominicana.',
   },
+  // Pages never set `twitter`, so this reaches all of them. Next fills the
+  // title, description and image in from each page's `openGraph`.
+  twitter: { card: 'summary_large_image' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

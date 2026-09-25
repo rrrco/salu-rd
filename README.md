@@ -71,11 +71,14 @@ app/
     site/                   Nav, Footer, WhatsAppFab, Logo
     ui/                     Button, Section, ProductTile, PhotoSlot, Reveal, CountUp
   lib/
-    site.ts                 contact details, nav links, stats
+    site.ts                 production URL, contact details, nav links, stats
+    seo.ts                  shared share-preview fields, home structured data
     types.ts                Sanity types and the category list
     image.ts                urlFor() wrapper, honours hotspot
     icons.tsx               iconKey to Phosphor icon map
     queries.ts              GROQ
     sanity.ts               client
   globals.css               all design tokens
+  sitemap.ts                /sitemap.xml, one entry per product
+  robots.ts                 /robots.txt
 ```

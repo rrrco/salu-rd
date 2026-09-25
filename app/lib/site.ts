@@ -6,6 +6,10 @@
  * misspelled in production.
  */
 export const SITE = {
+  /** The production origin, as Vercel serves it. Canonicals, the sitemap and
+   *  structured data all resolve against this. The code used to say
+   *  `saludivisionveterinaria.com`, a domain nobody ever registered. */
+  url: 'https://salu-rd.com',
   name: 'SALU',
   division: 'División Veterinaria',
   email: 'salusrl.dv@gmail.com',

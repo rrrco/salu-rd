@@ -70,6 +70,14 @@ export const productSlugsQuery = groq`
   *[_type == "product" && defined(slug.current)].slug.current
 `
 
+/** Feeds `app/sitemap.ts`: every routable product and when it last changed. */
+export const sitemapQuery = groq`
+  *[_type == "product" && defined(slug.current)] {
+    "slug": slug.current,
+    _updatedAt
+  }
+`
+
 /**
  * The product page in one round trip.
  *
