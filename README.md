@@ -50,6 +50,11 @@ rendering an empty table.
 Stats, purpose pillars, testimonials and contact details are not in the CMS.
 They live in `app/lib/site.ts` and the section components.
 
+After a deploy that adds, renames or removes products, run
+`node scripts/indexnow.mjs`. It sends every URL in the live sitemap to Bing
+through IndexNow, and ChatGPT search and Copilot answer from Bing's index.
+Google ignores IndexNow and reads the sitemap on its own schedule.
+
 ## Photography
 
 Three editorial photos go in `public/photos/`. See the README there for the shot
