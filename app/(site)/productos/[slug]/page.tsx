@@ -6,6 +6,7 @@ import { client } from '../../../lib/sanity'
 import { productSlugsQuery } from '../../../lib/queries'
 import { getProductPage } from '../../../lib/products'
 import { urlFor } from '../../../lib/image'
+import { baseOpenGraph } from '../../../lib/seo'
 import { ProductDetail } from '../../../components/product/ProductDetail'
 import { ProductTile } from '../../../components/ui/ProductTile'
 
@@ -40,11 +41,14 @@ export async function generateMetadata({
   return {
     title: product.name,
     description,
+    // The stored slug, not the route param: the param arrives percent-encoded,
+    // and the canonical has to match the URL the catalog links to.
+    alternates: { canonical: `/productos/${product.slug?.current ?? slug}` },
     openGraph: {
+      ...baseOpenGraph,
       title: product.name,
       description,
-      type: 'website',
-      images: product.image?.asset ? [{ url: urlFor(product.image, 'natural') }] : undefined,
+      images: product.image?.asset ? [{ url: urlFor(product.image, 'natural') }] : baseOpenGraph.images,
     },
   }
 }
