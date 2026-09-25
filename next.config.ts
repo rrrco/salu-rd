@@ -39,6 +39,19 @@ const nextConfig: NextConfig = {
       static: 180,
     },
   },
+  // Product URLs that no longer exist, pointed at the product that replaced
+  // them. A shared link or an indexed page keeps working instead of landing on
+  // the 404. Add a row here whenever a product is merged or its slug renamed.
+  async redirects() {
+    return [
+      // Merged into one product with both packs (sobre and caja x 25).
+      {
+        source: '/productos/fenbendazol-cv-22-polvo',
+        destination: '/productos/fenbendazol-cv-22',
+        permanent: true,
+      },
+    ]
+  },
   images: {
     // Sanity's CDN already resizes and format-negotiates, so its URLs skip
     // Next's optimizer entirely. Local assets still go through it.

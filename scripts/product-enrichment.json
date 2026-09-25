@@ -96,16 +96,10 @@
   "fenbendazol-cv-22": {
     "description": "Antiparasitario interno de amplio espectro en polvo, adulticida, larvicida y ovicida, con 22 g de fenbendazol por cada 100 g. Indicado para el tratamiento y la prevención de parasitosis gastrointestinales y pulmonares de bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
     "activeIngredient": "Fenbendazol 22 g / 100 g",
-    "presentation": "Caja x 25 sobres de 25 g",
-    "imageLabel": "25 sobres de 25 g",
-    "_src": "label"
-  },
-  "fenbendazol-cv-22-polvo": {
-    "description": "Antiparasitario interno de amplio espectro en polvo, adulticida, larvicida y ovicida, con 22 g de fenbendazol por cada 100 g. Indicado para el tratamiento y la prevención de parasitosis gastrointestinales y pulmonares de bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
-    "activeIngredient": "Fenbendazol 22 g / 100 g",
-    "presentation": "Caja x 25 sobres de 25 g",
+    "presentation": "Sobre de 25 g o caja x 25 sobres",
+    "imageLabel": "25 g",
     "_src": "label",
-    "_dupe": "mismo producto que fenbendazol-cv-22"
+    "_merged": "absorbió fenbendazol-cv-22-polvo; la foto de la caja quedó en la galería y la URL vieja redirige aquí"
   },
   "fenbendazole-cv10": {
     "description": "Antiparasitario interno de amplio espectro en suspensión oral al 10%, adulticida, larvicida y ovicida. Controla infestaciones por Ostertagia, Haemonchus, Trichostrongylus, Nematodirus, Cooperia, Dictyocaulus, Ancylostoma y Toxocara, entre otros, en bovinos, ovinos, equinos, porcinos, aves, caninos y felinos.",
@@ -231,7 +225,7 @@
     "_src": "label"
   },
   "bajante-de-suero-control-flujo": {
-    "description": "Equipo de venoclisis desechable y estéril para la administración de sueros y soluciones por gravedad, con regulador de flujo. De un solo uso, no tóxico y no pirogénico.",
+    "description": "Equipo de venoclisis desechable y estéril para administrar sueros y soluciones por gravedad, con regulador de flujo y goteo de 20 gotas por ml. De un solo uso, no tóxico y no pirogénico.",
     "_src": "label"
   },
   "enrofloxacina-continental-10": {
@@ -265,6 +259,10 @@
   },
   "inncare-latex-disposable-gloves": {
     "description": "Guantes desechables de examen, disponibles en látex y en nitrilo azul libre de polvo. De grado médico, ambidiestros y no estériles, para manejo clínico y de granja.",
+    "_src": "label"
+  },
+  "mascarilla-quirurgica-desechable": {
+    "description": "Mascarilla quirúrgica desechable de tres capas, color azul, con elásticos para las orejas. De un solo uso, para manejo clínico y de granja.",
     "_src": "label"
   },
   "intermedic-disposable-needle": {
